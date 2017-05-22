@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//HE"
+        "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
+<html lang="he" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no"/>
+
+    <title>new track</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+<div class="top">
+    <div class="col-xs-4"><a href="/logout" class="pull-left"><i class="fa fa-power-off"></i></a></div>
+    <div class="col-xs-4"><p>מסלול חדש</p></div>
+    <div class="col-xs-4"><a href="/setting" class="pull-right"><i class="fa fa-cog"></i></a></div>
+</div>
+<div class="center clearfix" style="margin-top: 0">
+    <h2 class="text-center">{{ company }}</h2>
+    <div class="col-md-3"></div>
+    <div class="send col-md-6">
+        <form action="/new_track/{{ company }}" method="post">
+            <div class="form-group">
+                <input type="number" class="form-control" name="price" placeholder="מחיר"/>
+                <input type="text" class="form-control" name="name" placeholder="שם המסלול"/>
+                <textarea class="form-control" placeholder="תיאור" name="description"></textarea>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-block btn-primary" type="submit">שלח</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3"></div>
+
+</div>
+<div class="bottom"><a href="/"><i class="fa fa-home" aria-hidden="true"></i></a></div>
+
+</body>
+</html>

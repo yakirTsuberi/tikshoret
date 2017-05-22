@@ -1,0 +1,124 @@
+html {
+    background: url(/static/images/background.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+body {
+    direction: rtl;
+    color: #333333;
+    background-color: inherit;
+}
+
+.top {
+    height: 55px;
+    background-color: rgba(59, 59, 59, 0.7);
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    color: white;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.top p {
+    text-align: center;
+    font-size: 21px;
+}
+
+.top .col-xs-4 {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.top i {
+    font-size: 24px;
+    margin: 5px;
+    color: white;
+}
+
+.center {
+    margin-top: 55px;
+    padding: 50px 0;
+}
+
+.bottom {
+    height: 50px;
+    background-color: rgba(59, 59, 59, 0.7);
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    text-align: center;
+    font-size: 32px;
+}
+
+.bottom i {
+    color: white;
+}
+
+.btn-default {
+    margin-bottom: 10px;
+    font-size: 19px;
+    height: 80px;
+    padding: 10px;
+    border: solid 1px #6f6f6f;
+    border-radius: 5px;
+    color: #6f6f6f;
+    background-color: rgba(255, 255, 255, 0.7);
+
+}
+
+.btn-default:hover {
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-color: #333;
+
+}
+
+.btn-default img {
+    height: 100%;
+    width: auto;
+}
+
+.list-company {
+    padding: 0 10px;
+}
+
+.list-company i {
+    margin-top: 11px;
+}
+
+.send {
+    color: #656565;
+    margin: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 3px;
+}
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.btn-add {
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    box-shadow: -3px 5px 5px rgba(21, 21, 21, 0.3);
+}
+
+.list-sales {
+    display: flow-root;
+    padding: 10px;
+    margin-top: 10px;
+    color: #6f6f6f;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: solid 1px #6f6f6f;
+    border-radius: 5px;
+}
