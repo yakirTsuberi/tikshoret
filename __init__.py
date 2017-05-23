@@ -10,8 +10,9 @@ from htmlmin.main import minify
 # logging.basicConfig(stream=sys.stderr)
 # sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
-from pkgs.database import DBHandler, Manager
-from pkgs.utils import check_client, check_credit_card, get_my_sales
+from pkgs.groups_database import DBGroups
+from pkgs.users_database import DBUsers
+from pkgs.utils import check_client, check_credit_card, get_my_sales, add_agent
 
 login_manager = LoginManager()
 
@@ -25,13 +26,14 @@ class User(UserMixin):
 
 
 @login_manager.user_loader
-def user_loader(manager):
-    db = DBHandler(manager)
-    user = db.get_user(email)
-    if not user:
+def user_loader(email):
+    db = DBUsers()
+    user_db = db.get_user(email)
+    if not user_db:
         return
     user = User()
-    user.id = email
+    user.id = user_db.email
+    user.group = user_db.group
     return user
 
 
@@ -39,7 +41,7 @@ def user_loader(manager):
 def login():
     if request.method == 'GET':
         return render_template('login.xhtml')
-    db = DBHandler()
+    db = DBUsers()
 
     email = request.form.get('email')
     password = request.form.get('pw')
@@ -49,6 +51,7 @@ def login():
         if user_db.pw == password:
             user = User()
             user.id = email
+            user.group = user_db.group
             login_user(user, remember=bool(remember))
             return redirect(url_for('index'))
     return render_template('login.xhtml', massage='True')
@@ -65,13 +68,34 @@ def unauthorized_handler():
     return abort(401)
 
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    db = DBUsers()
+    if request.method == 'POST':
+        pw = request.form.get('pw')
+        re_pw = request.form.get('re_pw')
+        unique_id = request.form.get('secret_token')
+        print(request.form)
+        user = db.get_tmp(unique_id)
+        if pw != re_pw:
+            return render_template('signup.xhtml', massage='הסיסמאות אינן תואמות.', secret_token=unique_id)
+        db.set_user(user.email, pw, user.group)
+        db.delete_tmp(unique_id)
+        return redirect(url_for('index'))
+    unique_id = request.args.get('secret_token')
+    user = db.get_tmp(unique_id)
+    if not user:
+        return 'Bad Request', 401
+
+    return render_template('signup.xhtml', secret_token=unique_id)
+
+
 @app.route('/')
 def index():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
-    db = DBHandler()
-
-    user = db.get_user(current_user.id)
+    db = DBGroups(current_user.group)
+    user = db.get_agent(current_user.id)
     return render_template('index.xhtml', user=user)
 
 
@@ -84,6 +108,7 @@ def setting():
 @app.route('/my_sales')
 @login_required
 def my_sales():
+    db = DBGroups(current_user.group)
     month = request.args.get('month')
     year = request.args.get('year')
     action = request.args.get('action')
@@ -101,7 +126,7 @@ def my_sales():
         date_filter = date_filter - relativedelta(months=1)
         month = date_filter.month
         year = date_filter.year
-    sales = get_my_sales(current_user.id, date_filter)
+    sales = get_my_sales(current_user.group, current_user.id, date_filter)
     sum_price = sum([i[0].price for i in sales])
     return render_template('my_sales.xhtml', sales=sales,
                            month=month, year=year,
@@ -117,12 +142,13 @@ def new_connect():
 @app.route('/new_connect/<company>', methods=['GET', 'POST'])
 @login_required
 def set_company(company):
-    db = DBHandler()
+    db = DBGroups(current_user.group)
 
     tracks = db.get_all_tracks(company)
     if request.method == 'POST':
 
         track = request.form.get('track')
+
         client_id = request.form.get('client_id')
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
@@ -130,12 +156,15 @@ def set_company(company):
         city = request.form.get('city')
         phone = request.form.get('phone')
         email = request.form.get('email')
+
         sim_num = request.form.get('sim_num')
         phone_num = request.form.get('phone_num')
+
         credit_card = request.form.get('credit_card')
         month = request.form.get('month')
         year = request.form.get('year')
         cvv = request.form.get('cvv')
+
         account_num = request.form.get('account_num')
         brunch = request.form.get('brunch')
         bank = request.form.get('bank')
@@ -154,16 +183,22 @@ def set_company(company):
         if not db.get_client(client_id):
             print('not_client')
             db.set_client(client_id, first_name, last_name, address, city, phone, email or None)
-        if not db.get_credit_card(client_id):
-            db.set_credit_card(client_id, credit_card, month, year, cvv, account_num, brunch, bank)
+        if credit_card:
+            if not db.get_credit_card(client_id):
+                db.set_credit_card(client_id, credit_card, month, year, cvv)
+        if account_num:
+            if not db.get_bank_account(client_id):
+                db.set_bank_account(client_id, account_num, brunch, bank)
         db.set_transactions(
             current_user.id,
             db.get_track(company, track).id,
             client_id,
             credit_card,
+            db.get_bank_account(client_id).id,
             datetime.today(),
             sim_num,
-            phone_num)
+            phone_num,
+            0)
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
     return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific)
@@ -178,21 +213,21 @@ def tracks_manger():
 @app.route('/list_tracks/<company>')
 @login_required
 def list_tracks(company):
-    db = DBHandler()
+    db = DBGroups(current_user.group)
 
-    user = db.get_user(current_user.id)
+    agent = db.get_agent(current_user.id)
     tracks = db.get_all_tracks(company=company)
-    return render_template('list_tracks.xhtml', company=company, tracks=tracks, user=user)
+    return render_template('list_tracks.xhtml', company=company, tracks=tracks, user=agent)
 
 
 @app.route('/new_track/<company>', methods=['GET', 'POST'])
 @login_required
 def new_track(company):
     if request.method == 'POST':
-        db = DBHandler()
+        db = DBGroups(current_user.group)
 
-        user = db.get_user(current_user.id)
-        if user.manager == 'True':
+        agent = db.get_agent(current_user.id)
+        if agent.manager > 1:
             price = request.form.get('price')
             name = request.form.get('name')
             description = request.form.get('description')
@@ -204,7 +239,7 @@ def new_track(company):
 @app.route('/clients')
 @login_required
 def clients():
-    db = DBHandler()
+    db = DBGroups(current_user.group)
     clients_list = db.get_all_clients()
     print(clients_list)
     return render_template('list_clients.xhtml', clients_list=clients_list, sum_clients=len(clients_list))
@@ -213,7 +248,7 @@ def clients():
 @app.route('/edit_client/<client_id>', methods=['GET', 'POST'])
 @login_required
 def edit_client(client_id):
-    db = DBHandler()
+    db = DBGroups(current_user.group)
     client = db.get_client(client_id)
     if request.method == 'POST':
         first_name = request.form.get('first_name')
@@ -236,15 +271,25 @@ def edit_client(client_id):
 @app.route('/agents')
 @login_required
 def agents():
-    db = DBHandler()
-    agents_list = db.session.query(Manager.email, Manager.first_name, Manager.last_name).filter(
-        Manager.manager == current_user.id).all()
+    db = DBGroups(current_user.group)
+    agents_list = db.get_all_agents()
     return render_template('list_agents.xhtml', agents_list=agents_list)
 
 
 @app.route('/new_agent', methods=['GET', 'POST'])
 @login_required
 def new_agent():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        manager = request.form.get('manager')
+        phone = request.form.get('phone')
+        db = DBGroups(current_user.group)
+        db.set_agent(email=email, first_name=first_name, last_name=last_name, manager=manager,
+                     first_time=True, phone=phone or None)
+        add_agent(current_user.group, email)
+        return redirect(url_for('agents'))
     return render_template('new_agent.xhtml')
 
 

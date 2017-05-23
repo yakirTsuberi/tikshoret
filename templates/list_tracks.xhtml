@@ -33,7 +33,7 @@
             </div>
 
         {% endfor %}
-        {% if user.manager == 'True' %}
+        {% if user.manager > 1 %}
             <a href="/new_track/{{ company }}" class="btn btn-primary btn-lg btn-add">
                 <i class="fa fa-plus" aria-hidden="true"></i>
             </a>

@@ -1,10 +1,13 @@
 import re
+import hashlib
 
 import googlemaps
 import pycard
 from dateutil.relativedelta import relativedelta
+import yagmail
 
-from pkgs.database import DBHandler, Transactions, Tracks, and_
+from pkgs.groups_database import DBGroups, Transactions, Tracks, and_
+from pkgs.users_database import DBUsers
 
 
 def check_first_name(first_name):
@@ -73,11 +76,11 @@ def check_credit_card(number, month, year, cvv):
     return card.is_mod10_valid and card.is_expired
 
 
-def get_my_sales(user_id, date_filter):
-    db = DBHandler()
+def get_my_sales(group_id, agent_id, date_filter):
+    db = DBGroups(group_id)
     data = db.session.query(
         *Transactions.__table__.columns).filter(
-        Transactions.user_id == user_id).filter(
+        Transactions.agent_id == agent_id).filter(
         and_(Transactions.date_time < date_filter + relativedelta(months=1),
              Transactions.date_time >= date_filter)
     ).all()
@@ -89,5 +92,35 @@ def get_my_sales(user_id, date_filter):
     return result
 
 
+def add_agent(group, email):
+    m = hashlib.md5()
+    m.update(str(group + email).encode())
+    unique_id = m.hexdigest()
+    print(unique_id)
+
+    db = DBUsers()
+    db.set_tmp(unique_id, email, group)
+    subject = 'ישיפון תקשורת - בקשה להצטרפות'
+    html = '''
+    <!DOCTYPE html>
+    <html lang="he">
+<head>
+    <title></title>
+</head>
+<body>
+    <div>
+    <p>שלום %s.</h1>
+    <p>ברוך הבא לישיפון-תקשורת</h3>
+    <p>להשלמת תהליך ההרשמה:</p>
+        <a href="http://127.0.0.1:5000/signup?secret_token=%s">לחץ כאן</button>
+</div>
+</body>
+</html>
+    ''' % (DBGroups(group).get_agent(email).first_name, str(unique_id))
+    yag = yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!')
+    yag.send(to=email, subject=subject, contents=html)
+
+
 if __name__ == '__main__':
-    pass
+    db = DBUsers()
+    print(db.session)
