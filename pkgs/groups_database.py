@@ -1,7 +1,7 @@
 import os
 
 from dateutil.relativedelta import relativedelta
-from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean, ForeignKey, DateTime, and_
+from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime, and_, func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -90,9 +90,9 @@ class DBGroups:
 
     # Agents
     def set_agent(self, email, first_name, last_name, manager, phone=None):
-        self.session.add(Agents(email=email,
-                                first_name=first_name,
-                                last_name=last_name,
+        self.session.add(Agents(email=str(email).lower(),
+                                first_name=str(first_name).title(),
+                                last_name=str(last_name).title(),
                                 phone=phone,
                                 manager=manager))
         self.session.commit()
@@ -128,12 +128,12 @@ class DBGroups:
     # Clients
     def set_client(self, client_id, first_name, last_name, address, city, phone, email=None):
         self.session.add(Clients(client_id=client_id,
-                                 first_name=first_name,
-                                 last_name=last_name,
+                                 first_name=str(first_name).title(),
+                                 last_name=str(last_name).title(),
                                  address=address,
                                  city=city,
                                  phone=phone,
-                                 email=email))
+                                 email=str(email).lower()))
         self.session.commit()
 
     def get_client(self, client_id):
@@ -200,4 +200,5 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    pass
+    db = DBGroups('test')
+    print(db.get_all_transactions(agent_id='yakir@ravtech.co.il'))
