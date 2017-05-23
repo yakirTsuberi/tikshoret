@@ -121,5 +121,10 @@ def add_agent(group, email):
     yag.send(to=email, subject=subject, contents=html)
 
 
+def set_up_group(group, email, pw, first_name, last_name, manager=2, phone=None):
+    DBGroups(group).set_agent(email, first_name, last_name, manager, phone)
+    DBUsers().set_user(email, pw, group)
+
+
 if __name__ == '__main__':
     pass
