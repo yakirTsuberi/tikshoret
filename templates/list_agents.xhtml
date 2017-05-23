@@ -25,7 +25,7 @@
         <div>
             {% for agent in agents_list %}
                 <div class="list-sales">
-                    <a href="/edit_agent/{{ agent.client_id }}" class="btn btn-primary pull-left">
+                    <a href="/edit_agent/{{ agent.email }}" class="btn btn-primary pull-left">
                         <i class="fa fa-pencil fa-2x" aria-hidden="true"> </i>
                     </a>
                     <span><strong>אימייל: </strong>{{ agent.email }}</span>

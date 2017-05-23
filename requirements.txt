@@ -1,0 +1,8 @@
+Flask
+yagmail
+SQLAlchemy
+htmlmin>
+Flask_Login>
+python_dateutil
+googlemaps
+captain-pycard

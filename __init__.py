@@ -272,6 +272,8 @@ def edit_client(client_id):
 @login_required
 def agents():
     db = DBGroups(current_user.group)
+    if db.get_agent(current_user.id).manager < 2:
+        return 'Not Found', 404
     agents_list = db.get_all_agents()
     return render_template('list_agents.xhtml', agents_list=agents_list)
 
@@ -279,27 +281,47 @@ def agents():
 @app.route('/new_agent', methods=['GET', 'POST'])
 @login_required
 def new_agent():
+    db = DBGroups(current_user.group)
+    if db.get_agent(current_user.id).manager < 2:
+        return 'Not Found', 404
     if request.method == 'POST':
         email = request.form.get('email')
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         manager = request.form.get('manager')
         phone = request.form.get('phone')
-        db = DBGroups(current_user.group)
-        db.set_agent(email=email, first_name=first_name, last_name=last_name, manager=manager,
-                     first_time=True, phone=phone or None)
+        db.set_agent(email=email, first_name=first_name, last_name=last_name, manager=manager, phone=phone or None)
         add_agent(current_user.group, email)
         return redirect(url_for('agents'))
     return render_template('new_agent.xhtml')
+
+
+@app.route('/edit_agent/<agent_id>', methods=['GET', 'POST'])
+@login_required
+def edit_agent(agent_id):
+    db = DBGroups(current_user.group)
+    if db.get_agent(current_user.id).manager < 2:
+        return 'Not Found', 404
+    agent = db.get_agent(agent_id)
+    if request.method == 'POST':
+        db.update_agent(agent_id, {k: v for k, v in request.form.items()})
+        return redirect(url_for('agents'))
+    return render_template('edit_agent.xhtml', agent=agent)
+
+
+@app.route('/reward_and_expectation')
+def reward_and_expectation():
+    db = DBGroups(current_user.group)
+    if db.get_agent(current_user.id).manager < 2:
+        return 'Not Found', 404
+    return render_template('reward_and_expectation.xhtml')
 
 
 @app.after_request
 def response_minify_js(response):
     if response.content_type == u'text/javascript':
         response.set_data(
-            minify(response.get_data(as_text=True))
-        )
-
+            minify(response.get_data(as_text=True)))
         return response
     return response
 
@@ -308,9 +330,7 @@ def response_minify_js(response):
 def response_minify_css(response):
     if response.content_type == u'text/css':
         response.set_data(
-            minify(response.get_data(as_text=True))
-        )
-
+            minify(response.get_data(as_text=True)))
         return response
     return response
 

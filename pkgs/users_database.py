@@ -54,6 +54,4 @@ class DBUsers:
 
 
 if __name__ == '__main__':
-    d = DBUsers()
-    print(d.session.query(Users.email).all())
-    # d.session.commit()
+    pass

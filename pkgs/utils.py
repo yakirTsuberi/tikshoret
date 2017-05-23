@@ -122,5 +122,4 @@ def add_agent(group, email):
 
 
 if __name__ == '__main__':
-    db = DBUsers()
-    print(db.session)
+    pass

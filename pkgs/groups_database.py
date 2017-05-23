@@ -17,7 +17,6 @@ class Agents(Base):
     last_name = Column(String)
     phone = Column(String, nullable=True)
     manager = Column(Integer)  # 0=agent, 1=manger, 2=height-manager
-    first_time = Column(Boolean)
 
 
 class Tracks(Base):
@@ -90,13 +89,12 @@ class DBGroups:
         Base.metadata.create_all(self.engine, checkfirst=True)
 
     # Agents
-    def set_agent(self, email, first_name, last_name, manager, first_time, phone=None):
+    def set_agent(self, email, first_name, last_name, manager, phone=None):
         self.session.add(Agents(email=email,
                                 first_name=first_name,
                                 last_name=last_name,
                                 phone=phone,
-                                manager=manager,
-                                first_time=first_time))
+                                manager=manager))
         self.session.commit()
 
     def get_agent(self, email):
@@ -104,6 +102,10 @@ class DBGroups:
 
     def get_all_agents(self):
         return self.session.query(*Agents.__table__.columns).all()
+
+    def update_agent(self, agent_id, values):
+        self.session.query(Agents).filter(Agents.email == agent_id).update(values)
+        self.session.commit()
 
     # Tracks
     def set_track(self, company, price, name, description):
@@ -198,6 +200,4 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    db = DBGroups('yakir@ravtech.co.il')
-    db.session.query(Agents).filter(Agents.id == 2).delete()
-    db.session.commit()
+    pass
