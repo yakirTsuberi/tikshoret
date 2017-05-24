@@ -130,3 +130,15 @@ body {
 .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
     padding: 1px;
 }
+
+.pay_style {
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 0 10px;
+    border: solid 1px;
+    border-radius: 3px;
+}
+
+.pay-fail2 {
+    background-color: rgba(255, 200, 200, 0.7);
+
+}

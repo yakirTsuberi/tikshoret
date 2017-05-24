@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//HE"
-    "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
+        "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
 <html lang="he" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
@@ -15,7 +15,7 @@
 
 <div class="top">
     <div class="col-xs-4"><a href="/logout" class="pull-left"><i class="fa fa-power-off"> </i></a></div>
-    <div class="col-xs-4"><p>המכירות שלי</p></div>
+    <div class="col-xs-4"><p>מצב מכירות</p></div>
     <div class="col-xs-4"><a href="/setting" class="pull-right"><i class="fa fa-cog"> </i></a></div>
 </div>
 <div class="center clearfix">
@@ -23,7 +23,7 @@
     <div class="col-md-6">
         <div>
             {% for sale in sales %}
-                <div class="list-sales">
+                <div class="list-sales pay-fail{{ sale['Transaction'].status }}">
                     <span><strong>תאריך ושעה: </strong>{{ sale['Transaction'].date_time }}</span>
                     <br/>
                     <span><strong>שם לקוח: </strong>{{ sale['Client'].first_name }} {{ sale['Client'].last_name }}</span>
@@ -38,6 +38,33 @@
                     <br/>
                     <span class="pull-right"><strong>מס' סים: </strong>{{ sale['Transaction'].sim_num }}</span>
                     <span class="pull-left"><strong>מס' טלפון: </strong>{{ sale['Transaction'].phone_num }}</span>
+                    <br/>
+                    {% if sale.get('CreditCard') %}
+                        <div class="pay_style">
+                            <h4>כרטיס אשראי</h4>
+                            <span><strong>מספר כרטיס: </strong>{{ sale['CreditCard'].account_num }}</span>
+                            <br/>
+                            <p><strong>תוקף: </strong><span>{{ sale['CreditCard'].month }}/{{ sale['CreditCard'].year }}</span> <strong>cvv: </strong>{{ sale['CreditCard'].cvv }}</p>
+                        </div>
+                    {% endif %}
+                    {% if sale.get('BankAccount') %}
+                        <div class="pay_style">
+                            <h4>חשבון בנק</h4>
+                            <span><strong>מספר חשבון: </strong>{{ sale['BankAccount'].account_num }}</span>
+                            <br/>
+                            <p><strong>סניף: </strong><span>{{ sale['BankAccount'].brunch }}</span> <strong>בנק: </strong>{{ sale['BankAccount'].bank_num }}</p>
+                        </div>
+                    {% endif %}
+                    <form action="/status_sales" method="post" class="form-group" style="margin-top: 10px">
+                        <div class="btn-group">
+                            <button type="submit" name="status" value="1" class="btn btn-success">בוצע</button>
+                            <button type="submit" name="status" value="2" class="btn btn-danger">נכשל</button>
+                        </div>
+                        <label>הערה:
+                            <textarea class="form-control" name="comment">{{ sale['Transaction'].comment }}</textarea>
+                        </label>
+                        <input type="hidden" name="tran_id" value="{{ sale['Transaction'].id }}"/>
+                    </form>
                 </div>
             {% endfor %}
 

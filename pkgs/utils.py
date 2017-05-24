@@ -96,7 +96,6 @@ def add_agent(group, email):
     m = hashlib.md5()
     m.update(str(group + email).encode())
     unique_id = m.hexdigest()
-    print(unique_id)
 
     db = DBUsers()
     db.set_tmp(unique_id, email, group)

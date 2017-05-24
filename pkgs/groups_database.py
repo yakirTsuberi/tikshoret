@@ -1,7 +1,7 @@
 import os
 
 from dateutil.relativedelta import relativedelta
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime, and_, func
+from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime, and_, or_, func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -204,6 +204,10 @@ class DBGroups:
             q = q.filter(Transactions.status == status)
         return q.all()
 
+    def update_transactions(self, _id, values):
+        self.session.query(Transactions).filter(Transactions.id == _id).update(values)
+        self.session.commit()
+
     # Global
     def get_reward(self, date_filter=None):
         result = {}
@@ -221,11 +225,13 @@ class DBGroups:
                 tmp = [(i[1], i[2]) for i in list_db if company == i[1]]
                 list_agent.append(tmp[0] if tmp else (company, 0))
             list_agent.append(('sum', sum([i[1] for i in list_agent])))
-            result[_agent.email] = list_agent
+            name_agent = _agent.first_name[0] + '.' + _agent.last_name
+            result[name_agent] = list_agent
         return result
 
     def get_status_sales(self):
-        q = self.session.query(*Transactions.__table__.columns).all()
+        q = self.session.query(*Transactions.__table__.columns) \
+            .filter(or_(Transactions.status == 0, Transactions.status == 2)).all()
         result = []
         for k, i in enumerate(q):
             tmp = {'Transaction': i}
@@ -240,16 +246,4 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    self = DBGroups('test')
-    q = self.session.query(*Transactions.__table__.columns).all()
-    result = []
-    for k, i in enumerate(q):
-        tmp = {'Transaction': i}
-        tmp['Track'] = self.get_track(id=i.track)
-        tmp['Client'] = self.get_client(i.client_id)
-        if i[4]:
-            tmp['CreditCard'] = self.get_credit_card(i[3])
-        elif [5]:
-            tmp['BankAccount'] = self.get_bank_account(i[3])
-        result.append(tmp)
-    print(result)
+    pass

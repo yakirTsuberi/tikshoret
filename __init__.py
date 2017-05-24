@@ -75,7 +75,6 @@ def signup():
         pw = request.form.get('pw')
         re_pw = request.form.get('re_pw')
         unique_id = request.form.get('secret_token')
-        print(request.form)
         user = db.get_tmp(unique_id)
         if pw != re_pw:
             return render_template('signup.xhtml', massage='הסיסמאות אינן תואמות.', secret_token=unique_id)
@@ -181,7 +180,6 @@ def set_company(company):
                                    company=company,
                                    errors=errors)
         if not db.get_client(client_id):
-            print('not_client')
             db.set_client(client_id, first_name, last_name, address, city, phone, email or None)
         if credit_card:
             if not db.get_credit_card(client_id):
@@ -241,7 +239,6 @@ def new_track(company):
 def clients():
     db = DBGroups(current_user.group)
     clients_list = db.get_all_clients()
-    print(clients_list)
     return render_template('list_clients.xhtml', clients_list=clients_list, sum_clients=len(clients_list))
 
 
@@ -335,12 +332,18 @@ def reward_and_expectation():
     return render_template('reward_and_expectation.xhtml', month=month, year=year, data=data)
 
 
-@app.route('/status_sales')
+@app.route('/status_sales', methods=['GET', 'POST'])
 @login_required
 def status_sales():
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.id).manager < 1:
         return 'Not Found', 404
+    if request.method == 'POST':
+        status = request.form.get('status')
+        comment = request.form.get('comment')
+        tran_id = request.form.get('tran_id')
+        db.update_transactions(tran_id, {'status': int(status),
+                                         'comment': comment})
     sales = db.get_status_sales()
     return render_template('status_sales.xhtml', sales=sales)
 
