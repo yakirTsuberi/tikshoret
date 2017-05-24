@@ -314,7 +314,24 @@ def reward_and_expectation():
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.id).manager < 2:
         return 'Not Found', 404
-    return render_template('reward_and_expectation.xhtml')
+    month = request.args.get('month')
+    year = request.args.get('year')
+    action = request.args.get('action')
+    if not month or not str(month).isdigit() or action == 'today':
+        month = datetime.today().month
+    if not year or not str(year).isdigit() or action == 'today':
+        year = datetime.today().year
+    date_filter = datetime(int(year), int(month), 1)
+
+    if action == 'next':
+        date_filter = date_filter + relativedelta(months=1)
+        month = date_filter.month
+        year = date_filter.year
+    if action == 'back':
+        date_filter = date_filter - relativedelta(months=1)
+        month = date_filter.month
+        year = date_filter.year
+    return render_template('reward_and_expectation.xhtml', month=month, year=year, )
 
 
 @app.after_request

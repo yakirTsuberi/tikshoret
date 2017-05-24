@@ -15,44 +15,52 @@
 
 <div class="top">
     <div class="col-xs-4"><a href="/logout" class="pull-left"><i class="fa fa-power-off"> </i></a></div>
-    <div class="col-xs-4"><p>המכירות שלי</p></div>
+    <div class="col-xs-4"><p>תגמול וצפי</p></div>
     <div class="col-xs-4"><a href="/setting" class="pull-right"><i class="fa fa-cog"> </i></a></div>
 </div>
 <div class="center clearfix" style="margin-top: 0">
     <div class="col-md-3"></div>
     <div class="col-md-6">
         <h3 class="text-center">תאריך: {{ month }}/{{ year }}</h3>
-        <div style="color: #333">
-            <h4 class="pull-right"><span>סה"כ מכירות: </span><strong>{{ sum_sale }}</strong></h4>
-            <h4 class="pull-left"><span>סה"כ בש"ח: </span><strong>{{ sum_price }}</strong></h4>
-        </div>
         <div class="btn-group btn-group-justified">
-            <a href="/my_sales?month={{ month }}&year={{ year }}&action=next" class="btn btn-primary">
+            <a href="/reward_and_expectation?month={{ month }}&year={{ year }}&action=next" class="btn btn-primary">
                 <i class="fa fa-angle-right pull-right fa-2x" aria-hidden="true"> </i>
             </a>
-            <a href="/my_sales?month={{ month }}&year={{ year }}&action=today" class="btn btn-primary">היום</a>
-            <a href="/my_sales?month={{ month }}&year={{ year }}&action=back" class="btn btn-primary">
+            <a href="/reward_and_expectation?month={{ month }}&year={{ year }}&action=today" class="btn btn-primary">היום</a>
+            <a href="/reward_and_expectation?month={{ month }}&year={{ year }}&action=back" class="btn btn-primary">
                 <i class="fa fa-angle-left pull-left fa-2x" aria-hidden="true"> </i>
             </a>
         </div>
         <div>
-            {% for sale in sales %}
-                <div class="list-sales">
-                    <span><strong>תאריך ושעה: </strong>{{ sale[2] }}</span>
-                    <br/>
-                    <span><strong>שם לקוח: </strong>{{ sale[1].first_name }} {{ sale[1].last_name }}</span>
-                    <br/>
-                    <strong>מסלול: </strong>
-                    <a href="/list_tracks/{{ sale[0].company }}">
-                        {{ sale[0].company }} {{ sale[0].name }}
-                        <span class="pull-left">{{ sale[0].price }} ש"ח</span>
-                    </a>
-                    <br/>
-                    <span class="pull-right"><strong>מס' סים: </strong>{{ sale[3] }}</span>
-                    <span class="pull-left"><strong>מס' טלפון: </strong>{{ sale[4] }}</span>
-                </div>
-            {% endfor %}
-
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>סוכן</th>
+                    <th>סלקום</th>
+                    <th>פרטנר</th>
+                    <th>פלאפון</th>
+                    <th>012</th>
+                    <th>הוט</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>John</td>
+                    <td>Doe</td>
+                    <td>john@example.com</td>
+                </tr>
+                <tr>
+                    <td>Mary</td>
+                    <td>Moe</td>
+                    <td>mary@example.com</td>
+                </tr>
+                <tr>
+                    <td>July</td>
+                    <td>Dooley</td>
+                    <td>july@example.com</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="col-md-3"></div>

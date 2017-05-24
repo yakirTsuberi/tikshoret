@@ -24,7 +24,7 @@ class Tracks(Base):
     id = Column(Integer, primary_key=True)
     company = Column(String)
     price = Column(Float)
-    name = Column(String, unique=True)
+    name = Column(String)
     description = Column(String)
 
 
@@ -122,7 +122,7 @@ class DBGroups:
     def get_all_tracks(self, company=None):
         q = self.session.query(*Tracks.__table__.columns)
         if company is not None:
-            q.filter(Tracks.company == company)
+            q = q.filter(Tracks.company == company)
         return q.all()
 
     # Clients
@@ -187,18 +187,33 @@ class DBGroups:
     def get_all_transactions(self, agent_id=None, client_id=None, date=None, status=None):
         q = self.session.query(*Transactions.__table__.columns)
         if agent_id is not None:
-            q.filter(Transactions.agent_id == agent_id)
+            q = q.filter(Transactions.agent_id == agent_id)
         if client_id is not None:
-            q.filter(Transactions.client_id == client_id)
+            q = q.filter(Transactions.client_id == client_id)
         if date is not None:
-            q.filter(
+            q = q.filter(
                 and_(Transactions.date_time < date + relativedelta(months=1),
                      Transactions.date_time >= date))
         if status is not None:
-            q.filter(Transactions.status == status)
+            q = q.filter(Transactions.status == status)
         return q.all()
+
+    # Global
+    def get_reward(self):
+        result = {}
+        for _agent in self.get_all_agents():
+            list_db = self.session.query(Transactions, Tracks.company, func.count()).join(Tracks).filter(
+                Transactions.agent_id == _agent.email).group_by(Tracks.company).all()
+            list_agent = []
+            for company in ['cellcom', 'partner', 'pelephone', '012', 'hot']:
+                tmp = [(i[1], i[2]) for i in list_db if company == i[1]]
+                list_agent.append(tmp[0] if tmp else (company, 0))
+            list_agent.append(sum([i[1] for i in list_agent]))
+            result[_agent.email] = list_agent
+        return result
 
 
 if __name__ == '__main__':
     db = DBGroups('test')
-    print(db.get_all_transactions(agent_id='yakir@ravtech.co.il'))
+    for k, v in db.get_reward().items():
+        print(v)

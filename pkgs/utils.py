@@ -6,8 +6,8 @@ import pycard
 from dateutil.relativedelta import relativedelta
 import yagmail
 
-from pkgs.groups_database import DBGroups, Transactions, Tracks, and_
-from pkgs.users_database import DBUsers
+from .groups_database import DBGroups, Transactions, Tracks, and_
+from .users_database import DBUsers
 
 
 def check_first_name(first_name):
