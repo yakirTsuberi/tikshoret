@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//HE"
+    "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
+<html lang="he" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no"/>
+
+    <title>my sales</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+
+<div class="top">
+    <div class="col-xs-4"><a href="/logout" class="pull-left"><i class="fa fa-power-off"> </i></a></div>
+    <div class="col-xs-4"><p>המכירות שלי</p></div>
+    <div class="col-xs-4"><a href="/setting" class="pull-right"><i class="fa fa-cog"> </i></a></div>
+</div>
+<div class="center clearfix">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div>
+            {% for sale in sales %}
+                <div class="list-sales">
+                    <span><strong>תאריך ושעה: </strong>{{ sale['Transaction'].date_time }}</span>
+                    <br/>
+                    <span><strong>שם לקוח: </strong>{{ sale['Client'].first_name }} {{ sale['Client'].last_name }}</span>
+                    <br/>
+                    <span><strong>תעודת זהות: </strong>{{ sale['Client'].client_id }}</span>
+                    <br/>
+                    <strong>מסלול: </strong>
+                    <a href="/list_tracks/{{ sale['Track'].company }}">
+                        {{ sale['Track'].company }} {{ sale['Track'].name }}
+                        <span class="pull-left">{{ sale['Track'].price }} ש"ח</span>
+                    </a>
+                    <br/>
+                    <span class="pull-right"><strong>מס' סים: </strong>{{ sale['Transaction'].sim_num }}</span>
+                    <span class="pull-left"><strong>מס' טלפון: </strong>{{ sale['Transaction'].phone_num }}</span>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+<div class="bottom"><a href="/"><i class="fa fa-home" aria-hidden="true"> </i></a></div>
+
+</body>
+</html>

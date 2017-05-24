@@ -49,7 +49,14 @@
             </div>
             <div class="col-xs-6">
                 <a href="/reward_and_expectation" class="btn btn-default btn-block">
-                    <i class="fa fa-address-card" aria-hidden="true"></i><br/>תגמול וצפי
+                    <i class="fa fa-table" aria-hidden="true"></i><br/>תגמול וצפי
+                </a>
+            </div>
+        {% endif %}
+        {% if user.manager > 1 %}
+            <div class="col-xs-6">
+                <a href="/status_sales" class="btn btn-default btn-block">
+                    <i class="fa fa-table" aria-hidden="true"></i><br/>מצב מכירות
                 </a>
             </div>
         {% endif %}

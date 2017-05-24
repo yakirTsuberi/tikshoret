@@ -191,7 +191,7 @@ def set_company(company):
                 db.set_bank_account(client_id, account_num, brunch, bank)
         db.set_transactions(
             current_user.id,
-            db.get_track(company, track).id,
+            db.get_track(company=company, name=track).id,
             client_id,
             credit_card,
             db.get_bank_account(client_id).id,
@@ -331,7 +331,18 @@ def reward_and_expectation():
         date_filter = date_filter - relativedelta(months=1)
         month = date_filter.month
         year = date_filter.year
-    return render_template('reward_and_expectation.xhtml', month=month, year=year, )
+    data = db.get_reward(date_filter)
+    return render_template('reward_and_expectation.xhtml', month=month, year=year, data=data)
+
+
+@app.route('/status_sales')
+@login_required
+def status_sales():
+    db = DBGroups(current_user.group)
+    if db.get_agent(current_user.id).manager < 1:
+        return 'Not Found', 404
+    sales = db.get_status_sales()
+    return render_template('status_sales.xhtml', sales=sales)
 
 
 @app.after_request

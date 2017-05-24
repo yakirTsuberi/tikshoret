@@ -115,9 +115,15 @@ class DBGroups:
                                 description=description))
         self.session.commit()
 
-    def get_track(self, company, name):
-        return self.session.query(*Tracks.__table__.columns).filter(Tracks.name == name).filter(
-            Tracks.company == company).first()
+    def get_track(self, company=None, name=None, id=None):
+        q = self.session.query(*Tracks.__table__.columns)
+        if name is not None:
+            q = q.filter(Tracks.name == name)
+        if company is not None:
+            q = q.filter(Tracks.company == company)
+        if id is not None:
+            q = q.filter(Tracks.id == id)
+        return q.first()
 
     def get_all_tracks(self, company=None):
         q = self.session.query(*Tracks.__table__.columns)
@@ -199,21 +205,51 @@ class DBGroups:
         return q.all()
 
     # Global
-    def get_reward(self):
+    def get_reward(self, date_filter=None):
         result = {}
         for _agent in self.get_all_agents():
             list_db = self.session.query(Transactions, Tracks.company, func.count()).join(Tracks).filter(
-                Transactions.agent_id == _agent.email).group_by(Tracks.company).all()
+                Transactions.agent_id == _agent.email)
+            if date_filter is not None:
+                list_db = list_db.filter(
+                    and_(Transactions.date_time < date_filter + relativedelta(months=1),
+                         Transactions.date_time >= date_filter)
+                )
+            list_db = list_db.group_by(Tracks.company).all()
             list_agent = []
             for company in ['cellcom', 'partner', 'pelephone', '012', 'hot']:
                 tmp = [(i[1], i[2]) for i in list_db if company == i[1]]
                 list_agent.append(tmp[0] if tmp else (company, 0))
-            list_agent.append(sum([i[1] for i in list_agent]))
+            list_agent.append(('sum', sum([i[1] for i in list_agent])))
             result[_agent.email] = list_agent
+        return result
+
+    def get_status_sales(self):
+        q = self.session.query(*Transactions.__table__.columns).all()
+        result = []
+        for k, i in enumerate(q):
+            tmp = {'Transaction': i}
+            tmp['Track'] = self.get_track(id=i.track)
+            tmp['Client'] = self.get_client(i.client_id)
+            if i[4]:
+                tmp['CreditCard'] = self.get_credit_card(i[3])
+            elif [5]:
+                tmp['BankAccount'] = self.get_bank_account(i[3])
+            result.append(tmp)
         return result
 
 
 if __name__ == '__main__':
-    db = DBGroups('test')
-    for k, v in db.get_reward().items():
-        print(v)
+    self = DBGroups('test')
+    q = self.session.query(*Transactions.__table__.columns).all()
+    result = []
+    for k, i in enumerate(q):
+        tmp = {'Transaction': i}
+        tmp['Track'] = self.get_track(id=i.track)
+        tmp['Client'] = self.get_client(i.client_id)
+        if i[4]:
+            tmp['CreditCard'] = self.get_credit_card(i[3])
+        elif [5]:
+            tmp['BankAccount'] = self.get_bank_account(i[3])
+        result.append(tmp)
+    print(result)
