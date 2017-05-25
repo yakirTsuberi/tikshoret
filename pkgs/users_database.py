@@ -26,7 +26,9 @@ class Tmp(Base):
 
 class DBUsers:
     def __init__(self):
-        self.engine = create_engine('sqlite:///{}/users.db'.format(LOCAL_PATH),
+        if not os.path.exists(LOCAL_PATH + '/data'):
+            os.mkdir(LOCAL_PATH + '/data')
+        self.engine = create_engine('sqlite:///{}/data/users.db'.format(LOCAL_PATH),
                                     connect_args={'check_same_thread': False})
         session = sessionmaker(bind=self.engine)
         self.session = session()
