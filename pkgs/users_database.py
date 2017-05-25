@@ -35,6 +35,7 @@ class DBUsers:
 
     def create_all_tables(self):
         Base.metadata.create_all(self.engine, checkfirst=True)
+        os.system('chown -R www-data ' + LOCAL_PATH + '/data')
 
     def set_user(self, email, pw, group):
         self.session.add(Users(email=email, pw=pw, group=group))

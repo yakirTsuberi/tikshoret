@@ -81,7 +81,7 @@ class DBGroups:
         self.engine = create_engine('sqlite:///{}/data/{}.db'.format(LOCAL_PATH, group_id),
                                     connect_args={'check_same_thread': False})
         self.create_all_tables()
-
+        os.system('chown -R www-data ' + LOCAL_PATH + '/data')
         session = sessionmaker(bind=self.engine)
         self.session = session()
 
