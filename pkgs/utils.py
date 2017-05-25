@@ -1,13 +1,15 @@
+import random
 import re
 import hashlib
+import string
 
 import googlemaps
 import pycard
 from dateutil.relativedelta import relativedelta
 import yagmail
 
-from .groups_database import DBGroups, Transactions, Tracks, and_
-from .users_database import DBUsers
+from groups_database import DBGroups, Transactions, Tracks, and_
+from users_database import DBUsers
 
 
 def check_first_name(first_name):
@@ -92,32 +94,17 @@ def get_my_sales(group_id, agent_id, date_filter):
     return result
 
 
-def add_agent(group, email):
+def add_agent(group, email, host_url):
+    random_str = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
     m = hashlib.md5()
-    m.update(str(group + email).encode())
+    m.update(str(random_str + group + email).encode('utf-8'))
     unique_id = m.hexdigest()
 
     db = DBUsers()
     db.set_tmp(unique_id, email, group)
-    subject = 'ישיפון תקשורת - בקשה להצטרפות'
-    html = '''
-    <!DOCTYPE html>
-    <html lang="he">
-<head>
-    <title></title>
-</head>
-<body>
-    <div>
-    <p>שלום %s.</h1>
-    <p>ברוך הבא לישיפון-תקשורת</h3>
-    <p>להשלמת תהליך ההרשמה:</p>
-        <a href="http://127.0.0.1:5000/signup?secret_token=%s">לחץ כאן</button>
-</div>
-</body>
-</html>
-    ''' % (DBGroups(group).get_agent(email).first_name, str(unique_id))
     yag = yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!')
-    yag.send(to=email, subject=subject, contents=html)
+    yag.send(to=email, subject='Welcome to YishaiPhone!',
+             contents=host_url + 'signup?secret_token=' + str(unique_id))
 
 
 def set_up_group(group, email, pw, first_name, last_name, manager=2, phone=None):
@@ -128,4 +115,4 @@ def set_up_group(group, email, pw, first_name, last_name, manager=2, phone=None)
 
 
 if __name__ == '__main__':
-    pass
+    set_up_group('ישיפון', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')

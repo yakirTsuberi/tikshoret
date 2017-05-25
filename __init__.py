@@ -42,7 +42,6 @@ def login():
     if request.method == 'GET':
         return render_template('login.xhtml')
     db = DBUsers()
-
     email = request.form.get('email')
     password = request.form.get('pw')
     remember = request.form.getlist('rememberMe')
@@ -288,7 +287,7 @@ def new_agent():
         manager = request.form.get('manager')
         phone = request.form.get('phone')
         db.set_agent(email=email, first_name=first_name, last_name=last_name, manager=manager, phone=phone or None)
-        add_agent(current_user.group, email)
+        add_agent(current_user.group, email, request.host_url)
         return redirect(url_for('agents'))
     return render_template('new_agent.xhtml')
 
