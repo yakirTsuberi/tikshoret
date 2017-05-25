@@ -1,5 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea
-.db
 __pycache__/
-.pyc
+*.pyc
+pkgs/data/
