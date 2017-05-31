@@ -5,20 +5,22 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from flask import Flask, request, redirect, url_for, render_template, abort
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
+from flask.ext.cache import Cache
 from htmlmin.main import minify
 
-logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
+# logging.basicConfig(stream=sys.stderr)
+# sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
-from .pkgs.groups_database import DBGroups
-from .pkgs.users_database import DBUsers
-from .pkgs.utils import check_client, check_credit_card, get_my_sales, add_agent
+from pkgs.groups_database import DBGroups
+from pkgs.users_database import DBUsers
+from pkgs.utils import check_client, check_credit_card, get_my_sales, add_agent
 
 login_manager = LoginManager()
 
 app = Flask(__name__)
 
 login_manager.init_app(app)
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 
 class User(UserMixin):
@@ -38,6 +40,7 @@ def user_loader(email):
 
 
 @app.route('/login', methods=['GET', 'POST'])
+@cache.cached(60)
 def login():
     if request.method == 'GET':
         return render_template('login.xhtml')
@@ -89,6 +92,7 @@ def signup():
 
 
 @app.route('/')
+@cache.cached(60)
 def index():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
@@ -133,12 +137,14 @@ def my_sales():
 
 @app.route('/new_connect')
 @login_required
+@cache.cached(60)
 def new_connect():
     return render_template('list_company.xhtml', action='new_connect')
 
 
 @app.route('/new_connect/<company>', methods=['GET', 'POST'])
 @login_required
+@cache.cached(60)
 def set_company(company):
     db = DBGroups(current_user.group)
 
@@ -203,6 +209,7 @@ def set_company(company):
 
 @app.route('/tracks_manger')
 @login_required
+@cache.cached(60)
 def tracks_manger():
     return render_template('list_company.xhtml', action='list_tracks')
 
@@ -219,6 +226,7 @@ def list_tracks(company):
 
 @app.route('/new_track/<company>', methods=['GET', 'POST'])
 @login_required
+@cache.cached(60)
 def new_track(company):
     if request.method == 'POST':
         db = DBGroups(current_user.group)
@@ -243,6 +251,7 @@ def clients():
 
 @app.route('/edit_client/<client_id>', methods=['GET', 'POST'])
 @login_required
+@cache.cached(60)
 def edit_client(client_id):
     db = DBGroups(current_user.group)
     client = db.get_client(client_id)
@@ -276,6 +285,7 @@ def agents():
 
 @app.route('/new_agent', methods=['GET', 'POST'])
 @login_required
+@cache.cached(60)
 def new_agent():
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.id).manager < 2:
@@ -294,6 +304,7 @@ def new_agent():
 
 @app.route('/edit_agent/<agent_id>', methods=['GET', 'POST'])
 @login_required
+@cache.cached(60)
 def edit_agent(agent_id):
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.id).manager < 2:
@@ -306,6 +317,8 @@ def edit_agent(agent_id):
 
 
 @app.route('/reward_and_expectation')
+@login_required
+@cache.cached(60)
 def reward_and_expectation():
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.id).manager < 2:
