@@ -60,14 +60,16 @@
                 <input class="form-control" name="phone" placeholder="טלפון" type="text"/>
                 <input class="form-control" name="email" placeholder="אימייל" type="email"/>
             </div>
-            <div class="panel panel-primary">
-                <div class="panel-heading" style="color: white">מסלול</div>
-                <div class="panel-body">
-                    <input class="form-control" name="sim_num" placeholder="מספר סים" type="text" required="required"/>
-                    <input class="form-control" name="phone_num" placeholder="מספר לניוד" type="text"
-                           required="required"/>
-                </div>
-            </div>
+            <div id="container"></div>
+            <div><button class="btn btn-info" type="button" onclick="add_connect()">הוסף קו</button></div>
+{#            <div class="panel panel-primary">#}
+{#                <div class="panel-heading">מסלול</div>#}
+{#                <div class="panel-body">#}
+{#                    <input class="form-control" name="sim_num" placeholder="מספר סים" type="text" required="required"/>#}
+{#                    <input class="form-control" name="phone_num" placeholder="מספר לניוד" type="text"#}
+{#                           required="required"/>#}
+{#                </div>#}
+{#            </div>#}
             <div class="form-group">
                 <label>כרטיס אשראי</label>
                 <input class="form-control" type="text" name="credit_card" placeholder="מספר כרטיס"/>
@@ -110,6 +112,7 @@
 
 </div>
 <div class="bottom"><a href="/"><i class="fa fa-home" aria-hidden="true"></i></a></div>
-
+<script src="/static/javascript/myjs.js">
+</script>
 </body>
 </html>

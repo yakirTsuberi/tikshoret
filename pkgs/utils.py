@@ -114,5 +114,9 @@ def set_up_group(group, email, pw, first_name, last_name, manager=2, phone=None)
     db_users.set_user(email, pw, group)
 
 
+def sum_connections(forms):
+    return len([i for i in forms if str(i).startswith('sim_num')])
+
+
 if __name__ == '__main__':
-    set_up_group('ישיפון', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
+    set_up_group('test', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')

@@ -13,7 +13,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
-from .pkgs.utils import check_client, check_credit_card, get_my_sales, add_agent
+from .pkgs.utils import check_client, check_credit_card, get_my_sales, add_agent, sum_connections
 
 login_manager = LoginManager()
 
@@ -161,8 +161,8 @@ def set_company(company):
         phone = request.form.get('phone')
         email = request.form.get('email')
 
-        sim_num = request.form.get('sim_num')
-        phone_num = request.form.get('phone_num')
+        # sim_num = request.form.get('sim_num')
+        # phone_num = request.form.get('phone_num')
 
         credit_card = request.form.get('credit_card')
         month = request.form.get('month')
@@ -184,24 +184,25 @@ def set_company(company):
                                    tracks=tracks,
                                    company=company,
                                    errors=errors)
-        if not db.get_client(client_id):
-            db.set_client(client_id, first_name, last_name, address, city, phone, email or None)
-        if credit_card:
-            if not db.get_credit_card(client_id):
-                db.set_credit_card(client_id, credit_card, month, year, cvv)
-        if account_num:
-            if not db.get_bank_account(client_id):
-                db.set_bank_account(client_id, account_num, brunch, bank)
-        db.set_transactions(
-            current_user.id,
-            db.get_track(company=company, name=track).id,
-            client_id,
-            credit_card,
-            db.get_bank_account(client_id).id,
-            datetime.today(),
-            sim_num,
-            phone_num,
-            0)
+        for i in range(1, sum_connections(request.form)):
+            if not db.get_client(client_id):
+                db.set_client(client_id, first_name, last_name, address, city, phone, email or None)
+            if credit_card:
+                if not db.get_credit_card(client_id):
+                    db.set_credit_card(client_id, credit_card, month, year, cvv)
+            if account_num:
+                if not db.get_bank_account(client_id):
+                    db.set_bank_account(client_id, account_num, brunch, bank)
+            db.set_transactions(
+                current_user.id,
+                db.get_track(company=company, name=track).id,
+                client_id,
+                credit_card,
+                db.get_bank_account(client_id).id,
+                datetime.today(),
+                request.form.get('sim_num' + str(i)),
+                request.form.get('phone_num' + str(i)),
+                0)
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
     return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific)
