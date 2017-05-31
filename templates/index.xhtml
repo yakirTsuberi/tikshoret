@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, user-scalable=no"/>
-    <meta http-equiv="Cache-control" content="public"/>
     <title>home</title>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css"/>
@@ -48,7 +47,7 @@
                 </a>
             </div>
             <div class="col-xs-6">
-                <a href="/reward_and_expectation" class="btn btn-default btn-block">
+                <a href="/reward_and_expectation" class="btn btn-default btn-block" onclick="loading()">
                     <i class="fa fa-table" aria-hidden="true"></i><br/>תגמול וצפי
                 </a>
             </div>
@@ -64,6 +63,13 @@
     <div class="col-md-3"></div>
 </div>
 <div class="bottom"></div>
+<div id="pageloader">
+    <div>
+        <img src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif"
+             alt="processing..."/>
+    </div>
+</div>
+<script src="/static/javascript/myjs.js"></script>
 
 </body>
 </html>

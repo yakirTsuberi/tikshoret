@@ -12,3 +12,6 @@ function add_connect() {
     div.innerHTML = html;
     container.appendChild(div);
 }
+function loading() {
+    document.getElementById('pageloader').style.visibility = 'visible';
+}
