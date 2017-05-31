@@ -11,9 +11,9 @@ from htmlmin.main import minify
 logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
-from pkgs.groups_database import DBGroups
-from pkgs.users_database import DBUsers
-from pkgs.utils import check_client, check_credit_card, get_my_sales, add_agent, sum_connections
+from .pkgs.groups_database import DBGroups
+from .pkgs.users_database import DBUsers
+from .pkgs.utils import check_client, check_credit_card, get_my_sales, add_agent, sum_connections
 
 login_manager = LoginManager()
 
