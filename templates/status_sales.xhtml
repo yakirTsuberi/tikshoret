@@ -8,6 +8,10 @@
 
     <title>my sales</title>
 
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/static/style.css"/>
 </head>
 <body>
 
@@ -42,7 +46,9 @@
                             <h4>כרטיס אשראי</h4>
                             <span><strong>מספר כרטיס: </strong>{{ sale['CreditCard'].account_num }}</span>
                             <br/>
-                            <p><strong>תוקף: </strong><span>{{ sale['CreditCard'].month }}/{{ sale['CreditCard'].year }}</span> <strong>cvv: </strong>{{ sale['CreditCard'].cvv }}</p>
+                            <p>
+                                <strong>תוקף: </strong><span>{{ sale['CreditCard'].month }}/{{ sale['CreditCard'].year }}</span>
+                                <strong>cvv: </strong>{{ sale['CreditCard'].cvv }}</p>
                         </div>
                     {% endif %}
                     {% if sale.get('BankAccount') %}
@@ -50,7 +56,8 @@
                             <h4>חשבון בנק</h4>
                             <span><strong>מספר חשבון: </strong>{{ sale['BankAccount'].account_num }}</span>
                             <br/>
-                            <p><strong>סניף: </strong><span>{{ sale['BankAccount'].brunch }}</span> <strong>בנק: </strong>{{ sale['BankAccount'].bank_num }}</p>
+                            <p><strong>סניף: </strong><span>{{ sale['BankAccount'].brunch }}</span>
+                                <strong>בנק: </strong>{{ sale['BankAccount'].bank_num }}</p>
                         </div>
                     {% endif %}
                     <form action="/status_sales" method="post" class="form-group" style="margin-top: 10px">
@@ -72,25 +79,5 @@
 </div>
 <div class="bottom"><a href="/"><i class="fa fa-home" aria-hidden="true"> </i></a></div>
 
-<noscript id="deferred-styles">
-    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/static/font-awesome/css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/static/style.css"/>
-</noscript>
-<script>
-    var loadDeferredStyles = function () {
-        var addStylesNode = document.getElementById("deferred-styles");
-        var replacement = document.createElement("div");
-        replacement.innerHTML = addStylesNode.textContent;
-        document.body.appendChild(replacement);
-        addStylesNode.parentElement.removeChild(addStylesNode);
-    };
-    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
-        webkitRequestAnimationFrame || msRequestAnimationFrame;
-    if (raf) raf(function () {
-        window.setTimeout(loadDeferredStyles, 0);
-    });
-    else window.addEventListener('load', loadDeferredStyles);
-</script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//HE"
-    "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
+        "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
 <html lang="he" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
@@ -8,6 +8,10 @@
 
     <title>my sales</title>
 
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/static/style.css"/>
 </head>
 <body>
 
@@ -57,25 +61,5 @@
 </div>
 <div class="bottom"><a href="/"><i class="fa fa-home" aria-hidden="true"> </i></a></div>
 
-<noscript id="deferred-styles">
-    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/static/font-awesome/css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/static/style.css"/>
-</noscript>
-<script>
-    var loadDeferredStyles = function () {
-        var addStylesNode = document.getElementById("deferred-styles");
-        var replacement = document.createElement("div");
-        replacement.innerHTML = addStylesNode.textContent;
-        document.body.appendChild(replacement);
-        addStylesNode.parentElement.removeChild(addStylesNode);
-    };
-    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
-        webkitRequestAnimationFrame || msRequestAnimationFrame;
-    if (raf) raf(function () {
-        window.setTimeout(loadDeferredStyles, 0);
-    });
-    else window.addEventListener('load', loadDeferredStyles);
-</script>
 </body>
 </html>
