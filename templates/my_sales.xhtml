@@ -39,7 +39,7 @@
         </div>
         <div>
             {% for sale in sales %}
-                <div class="list-sales">
+                <div class="list-sales clearfix">
                     <span><strong>תאריך ושעה: </strong>{{ sale[2] }}</span>
                     <br/>
                     <span><strong>שם לקוח: </strong>{{ sale[1].first_name }} {{ sale[1].last_name }}</span>
