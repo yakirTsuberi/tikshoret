@@ -319,7 +319,6 @@ def edit_agent(agent_id):
 
 @app.route('/reward_and_expectation')
 @login_required
-@cache.cached(60)
 def reward_and_expectation():
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.id).manager < 2:
