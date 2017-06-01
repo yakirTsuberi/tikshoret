@@ -13,7 +13,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
-from .pkgs.utils import check_client, check_credit_card, get_my_sales, add_agent, sum_connections
+from .pkgs.utils import check_client, check_credit_card, get_my_sales, add_agent, sum_connections, SIM_START_WITH
 
 login_manager = LoginManager()
 
@@ -205,7 +205,8 @@ def set_company(company):
                 0)
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
-    return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific)
+    return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific,
+                           start_sim=SIM_START_WITH.get(company))
 
 
 @app.route('/tracks_manger')

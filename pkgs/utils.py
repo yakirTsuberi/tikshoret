@@ -11,6 +11,9 @@ import yagmail
 from groups_database import DBGroups, Transactions, Tracks, and_
 from users_database import DBUsers
 
+SIM_START_WITH = {'cellcom': '89972020', 'partner': '89972010', '012': '89972010', 'pelephone': '8997250',
+                  'hot': '89972071'}
+
 
 def check_first_name(first_name):
     return 1 < len(first_name) < 12
