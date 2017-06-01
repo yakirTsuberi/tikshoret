@@ -29,11 +29,11 @@
             <h4 class="pull-left"><span>סה"כ בש"ח: </span><strong>{{ sum_price }}</strong></h4>
         </div>
         <div class="btn-group btn-group-justified">
-            <a href="/my_sales?month={{ month }}&year={{ year }}&action=next" class="btn btn-primary">
+            <a href="/my_sales?month={{ month }}&year={{ year }}&action=back" class="btn btn-primary">
                 <i class="fa fa-angle-right pull-right fa-2x" aria-hidden="true"> </i>
             </a>
             <a href="/my_sales?month={{ month }}&year={{ year }}&action=today" class="btn btn-primary">היום</a>
-            <a href="/my_sales?month={{ month }}&year={{ year }}&action=back" class="btn btn-primary">
+            <a href="/my_sales?month={{ month }}&year={{ year }}&action=next" class="btn btn-primary">
                 <i class="fa fa-angle-left pull-left fa-2x" aria-hidden="true"> </i>
             </a>
         </div>
@@ -53,7 +53,7 @@
                     <span class="pull-right"><strong>מס' סים: </strong>{{ sale[3] }}</span>
                     <span class="pull-left"><strong>מס' טלפון: </strong>{{ sale[4] }}</span>
                     <br/>
-                    <strong>הערות: </strong>{{ sale[6] or '' }}
+                    <strong>הערות: </strong>{{ sale[6] }}
                 </div>
             {% endfor %}
 
