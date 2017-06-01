@@ -184,7 +184,7 @@ def set_company(company):
                                    tracks=tracks,
                                    company=company,
                                    errors=errors)
-        for i in range(1, sum_connections(request.form)):
+        for i in range(1, sum_connections(request.form) + 1):
             if not db.get_client(client_id):
                 db.set_client(client_id, first_name, last_name, address, city, phone, email or None)
             if credit_card:
@@ -228,7 +228,6 @@ def list_tracks(company):
 
 @app.route('/new_track/<company>', methods=['GET', 'POST'])
 @login_required
-@cache.cached(60)
 def new_track(company):
     if request.method == 'POST':
         db = DBGroups(current_user.group)

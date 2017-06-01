@@ -138,9 +138,11 @@ body {
     border-radius: 3px;
 }
 
-.pay-fail2 {
+.pay-status1{
+    background-color: rgba(200, 255, 200, 0.7);;
+}
+.pay-status2 {
     background-color: rgba(255, 200, 200, 0.7);
-
 }
 
 .panel {

@@ -39,7 +39,7 @@
         </div>
         <div>
             {% for sale in sales %}
-                <div class="list-sales clearfix">
+                <div class="list-sales clearfix pay-status{{ sale[5] }}">
                     <span><strong>תאריך ושעה: </strong>{{ sale[2] }}</span>
                     <br/>
                     <span><strong>שם לקוח: </strong>{{ sale[1].first_name }} {{ sale[1].last_name }}</span>
@@ -52,6 +52,8 @@
                     <br/>
                     <span class="pull-right"><strong>מס' סים: </strong>{{ sale[3] }}</span>
                     <span class="pull-left"><strong>מס' טלפון: </strong>{{ sale[4] }}</span>
+                    <br/>
+                    <strong>הערות: </strong>{{ sale[6] or '' }}
                 </div>
             {% endfor %}
 

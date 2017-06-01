@@ -93,7 +93,9 @@ def get_my_sales(group_id, agent_id, date_filter):
                db.get_client(i.client_id),
                i.date_time.strftime("%Y-%m-%d %H:%M %p"),
                i.sim_num,
-               i.phone_num) for i in data]
+               i.phone_num,
+               i.status,
+               i.comment) for i in data]
     return result
 
 
