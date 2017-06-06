@@ -255,6 +255,17 @@ def edit_track(track_id):
     return render_template('edit_track.xhtml', track=track)
 
 
+@app.route('/delete_track/<track_id>')
+@login_required
+def delete_track(track_id):
+    db = DBGroups(current_user.group)
+    track = db.get_track(id=track_id)
+    agent = db.get_agent(current_user.id)
+    if agent.manager > 1:
+        db.delete_track(track_id)
+    return redirect(url_for('list_tracks', company=track.company))
+
+
 @app.route('/clients')
 @login_required
 def clients():

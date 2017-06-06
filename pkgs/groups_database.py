@@ -248,6 +248,10 @@ class DBGroups:
             result.append(tmp)
         return result
 
+    def delete_track(self, track_id):
+        self.session.query(Tracks).filter(Tracks.id == track_id).delete()
+        self.session.commit()
+
 
 if __name__ == '__main__':
     pass
