@@ -5,51 +5,41 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, user-scalable=no"/>
+    <meta http-equiv="Cache-control" content="public"/>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/static/style.css"/>
-    <title>list tracks</title>
+    <title>edit track</title>
 
 </head>
 <body>
 
 <div class="top">
     <div class="col-xs-4"><a href="/logout" class="pull-left"><i class="fa fa-power-off"></i></a></div>
-    <div class="col-xs-4"><p>מסלולים</p></div>
+    <div class="col-xs-4"><p>עריכת מסלול</p></div>
     <div class="col-xs-4"><a href="/setting" class="pull-right"><i class="fa fa-cog"></i></a></div>
 </div>
 <div class="center clearfix" style="margin-top: 0">
-    <h2 class="text-center">{{ company }}</h2>
+    <h2 class="text-center">עריכת מסלול</h2>
     <div class="col-md-3"></div>
     <div class="send col-md-6">
-        {% for track in tracks %}
-
-            <div class="panel panel-primary">
-                <div class="panel-heading">{{ track.name }}<span class="pull-left">{{ track.price }} ש"ח</span>
-                </div>
-                <div class="panel-body" style="color: black">
-                    {% if user.manager > 1 %}
-                        <a href="/edit_track/{{ track.id }}" class="btn btn-primary pull-left">
-                            <i class="fa fa-pencil fa-2x" aria-hidden="true"> </i>
-                        </a>
-                    {% endif %}
-
-                    <a href="/new_connect/{{ company }}?track_specific={{ track.name }}">{{ track.description }}</a>
-                </div>
+        <form action="/edit_track/{{ track.id }}" method="post">
+            <div class="form-group">
+                <input type="number" class="form-control" name="price" value="{{ track.price }}" placeholder="מחיר"/>
+                <input type="text" class="form-control" name="name" value="{{ track.name }}" placeholder="שם המסלול"/>
+                <textarea class="form-control" placeholder="תיאור" name="description">{{ track.description }}</textarea>
             </div>
-
-        {% endfor %}
-        {% if user.manager > 1 %}
-            <a href="/new_track/{{ company }}" class="btn btn-primary btn-lg btn-add">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-            </a>
-        {% endif %}
-
+            <div class="form-group">
+                <button class="btn btn-block btn-primary" type="submit">שלח</button>
+            </div>
+        </form>
     </div>
+    <div class="col-md-3"></div>
+
 </div>
-<div class="col-md-3"></div>
 <div class="bottom"><a href="/"><i class="fa fa-home" aria-hidden="true"></i></a></div>
+
 
 </body>
 </html>

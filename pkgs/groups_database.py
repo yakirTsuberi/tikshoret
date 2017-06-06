@@ -125,6 +125,10 @@ class DBGroups:
             q = q.filter(Tracks.id == id)
         return q.first()
 
+    def update_track(self, track_id, values):
+        self.session.query(Tracks).filter(Tracks.id == track_id).update(values)
+        self.session.commit()
+
     def get_all_tracks(self, company=None):
         q = self.session.query(*Tracks.__table__.columns)
         if company is not None:

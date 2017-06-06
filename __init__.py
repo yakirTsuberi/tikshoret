@@ -242,6 +242,19 @@ def new_track(company):
     return render_template('new_track.xhtml', company=company)
 
 
+@app.route('/edit_track/<track_id>', methods=['GET', 'POST'])
+@login_required
+def edit_track(track_id):
+    db = DBGroups(current_user.group)
+    track = db.get_track(id=track_id)
+    if request.method == 'POST':
+        agent = db.get_agent(current_user.id)
+        if agent.manager > 1:
+            db.update_track(track_id, {k: v for k, v in request.form.items()})
+        return redirect(url_for('list_tracks', company=track.company))
+    return render_template('edit_track.xhtml', track=track)
+
+
 @app.route('/clients')
 @login_required
 def clients():
@@ -252,7 +265,6 @@ def clients():
 
 @app.route('/edit_client/<client_id>', methods=['GET', 'POST'])
 @login_required
-@cache.cached(60)
 def edit_client(client_id):
     db = DBGroups(current_user.group)
     client = db.get_client(client_id)
