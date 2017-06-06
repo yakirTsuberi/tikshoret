@@ -40,7 +40,6 @@ def user_loader(email):
 
 
 @app.route('/login', methods=['GET', 'POST'])
-@cache.cached(60)
 def login():
     if request.method == 'GET':
         return render_template('login.xhtml')
@@ -92,7 +91,6 @@ def signup():
 
 
 @app.route('/')
-@cache.cached(60)
 def index():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
