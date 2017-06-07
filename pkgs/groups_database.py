@@ -252,6 +252,10 @@ class DBGroups:
         self.session.query(Tracks).filter(Tracks.id == track_id).delete()
         self.session.commit()
 
+    def delete_agent(self, email):
+        self.session.query(Agents).filter(Agents.email == email).delete()
+        self.session.commit()
+
 
 if __name__ == '__main__':
     pass

@@ -59,6 +59,10 @@ class DBUsers:
         self.session.query(Users).filter(Users.email == email).update({'pw': pw})
         self.session.commit()
 
+    def delete_user(self, email):
+        self.session.query(Users).filter(Users.email == email).delete()
+        self.session.commit()
+
 
 if __name__ == '__main__':
     pass

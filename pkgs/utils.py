@@ -123,5 +123,16 @@ def sum_connections(forms):
     return len([i for i in forms if str(i).startswith('sim_num')])
 
 
+def remove_user(email):
+    user_db = DBUsers()
+    user = user_db.get_user(email)
+    agent_db = DBGroups(user.group)
+
+    agent_db.delete_agent(email)
+    user_db.delete_user(email)
+
+
 if __name__ == '__main__':
-    set_up_group('test', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
+    # set_up_group('test', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
+    # remove_user('tsuberyr@gmail.com')
+    pass
