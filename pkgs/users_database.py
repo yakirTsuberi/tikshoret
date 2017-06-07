@@ -55,6 +55,10 @@ class DBUsers:
         self.session.query(Tmp).filter(Tmp.unique_id == unique_id).delete()
         self.session.commit()
 
+    def update_password(self, email, pw):
+        self.session.query(Users).filter(Users.email == email).update({'pw': pw})
+        self.session.commit()
+
 
 if __name__ == '__main__':
     pass

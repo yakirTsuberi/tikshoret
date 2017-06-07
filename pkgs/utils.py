@@ -99,7 +99,7 @@ def get_my_sales(group_id, agent_id, date_filter):
     return result
 
 
-def add_agent(group, email, host_url):
+def send_mail(group, email, host_url, msg='Welcome to YishaiPhone!'):
     random_str = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
     m = hashlib.md5()
     m.update(str(random_str + group + email).encode('utf-8'))
@@ -108,8 +108,8 @@ def add_agent(group, email, host_url):
     db = DBUsers()
     db.set_tmp(unique_id, email, group)
     yag = yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!')
-    yag.send(to=email, subject='Welcome to YishaiPhone!',
-             contents=host_url + 'signup?secret_token=' + str(unique_id))
+    yag.send(to=email, subject=msg,
+             contents=host_url + '?secret_token=' + str(unique_id))
 
 
 def set_up_group(group, email, pw, first_name, last_name, manager=2, phone=None):

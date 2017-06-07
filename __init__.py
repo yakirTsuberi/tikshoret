@@ -13,7 +13,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
-from .pkgs.utils import check_client, check_credit_card, get_my_sales, add_agent, sum_connections, SIM_START_WITH
+from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH
 
 login_manager = LoginManager()
 
@@ -76,18 +76,46 @@ def signup():
         pw = request.form.get('pw')
         re_pw = request.form.get('re_pw')
         unique_id = request.form.get('secret_token')
-        user = db.get_tmp(unique_id)
+        tmp_user = db.get_tmp(unique_id)
         if pw != re_pw:
             return render_template('signup.xhtml', massage='הסיסמאות אינן תואמות.', secret_token=unique_id)
-        db.set_user(user.email, pw, user.group)
+        db.set_user(tmp_user.email, pw, tmp_user.group)
         db.delete_tmp(unique_id)
+
+        user_db = db.get_user(tmp_user.email)
+        user = User()
+        user.id = tmp_user.email
+        user.group = user_db.group
+        login_user(user)
+
         return redirect(url_for('index'))
     unique_id = request.args.get('secret_token')
-    user = db.get_tmp(unique_id)
-    if not user:
+    tmp_user = db.get_tmp(unique_id)
+    if not tmp_user:
         return 'Bad Request', 401
 
     return render_template('signup.xhtml', secret_token=unique_id)
+
+
+@app.route('/update_password', methods=['GET', 'POST'])
+def update_password():
+    db = DBUsers()
+    if request.method == 'POST':
+        pw = request.form.get('pw')
+        re_pw = request.form.get('re_pw')
+        unique_id = request.form.get('secret_token')
+        tmp_user = db.get_tmp(unique_id)
+        if pw != re_pw:
+            return render_template('update_password.xhtml', massage='הסיסמאות אינן תואמות.', secret_token=unique_id)
+        db.update_password(tmp_user.email, pw)
+        db.delete_tmp(unique_id)
+        return redirect(url_for('index'))
+    unique_id = request.args.get('secret_token')
+    tmp_user = db.get_tmp(unique_id)
+    if not tmp_user:
+        return 'Bad Request', 401
+
+    return render_template('update_password.xhtml', secret_token=unique_id)
 
 
 @app.route('/')
@@ -306,7 +334,6 @@ def agents():
 
 @app.route('/new_agent', methods=['GET', 'POST'])
 @login_required
-@cache.cached(60)
 def new_agent():
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.id).manager < 2:
@@ -318,14 +345,13 @@ def new_agent():
         manager = request.form.get('manager')
         phone = request.form.get('phone')
         db.set_agent(email=email, first_name=first_name, last_name=last_name, manager=manager, phone=phone or None)
-        add_agent(current_user.group, email, request.host_url)
+        send_mail(current_user.group, email, request.host_url + 'signup')
         return redirect(url_for('agents'))
     return render_template('new_agent.xhtml')
 
 
 @app.route('/edit_agent/<agent_id>', methods=['GET', 'POST'])
 @login_required
-@cache.cached(60)
 def edit_agent(agent_id):
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.id).manager < 2:
@@ -335,6 +361,20 @@ def edit_agent(agent_id):
         db.update_agent(agent_id, {k: v for k, v in request.form.items()})
         return redirect(url_for('agents'))
     return render_template('edit_agent.xhtml', agent=agent)
+
+
+@app.route('/forget_my_password', methods=['GET', 'POST'])
+def forget_my_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = DBUsers().get_user(email)
+        if not user:
+            return render_template('forget_my_password.xhtml',
+                                   msg='משתמש לא נמצא, נא נסה שוב.')
+        send_mail(user.group, email, request.host_url + 'update_password', 'שיחזור סיסמה')
+        return render_template('forget_my_password.xhtml',
+                               msg='השיחזור הצליח! נשלח לך מייל עם קישור לבחירת סיסמה חדשה.')
+    return render_template('forget_my_password.xhtml', msg='נא הכנס את כתובת האימייל שלך.')
 
 
 @app.route('/reward_and_expectation')
