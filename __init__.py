@@ -142,7 +142,6 @@ def new_connect():
 
 @app.route('/new_connect/<company>', methods=['GET', 'POST'])
 @login_required
-@cache.cached(60)
 def set_company(company):
     db = DBGroups(current_user.group)
 
