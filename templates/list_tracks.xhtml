@@ -34,13 +34,15 @@
                             <a href="/edit_track/{{ track.id }}" class="btn btn-primary">
                                 <i class="fa fa-pencil" aria-hidden="true"> </i>
                             </a>
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" data-book-id="{{ track.id }}">
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModal"
+                                    data-book-id="{{ track.id }}">
                                 <i class="fa fa-trash" aria-hidden="true"> </i>
                             </button>
                         </div>
                     {% endif %}
 
-                    <a href="/new_connect/{{ company }}?track_specific={{ track.name }}">{{ track.description }}</a>
+                    <a name="description"
+                       href="/new_connect/{{ company }}?track_specific={{ track.name }}">{{ track.description |safe  }}</a>
                 </div>
             </div>
 
@@ -78,13 +80,18 @@
     </div>
 </div>
 <script>
-    $('#myModal').on('show.bs.modal', function(e) {
+    var descriptions = document.getElementsByTagName('description');
+    console.log(descriptions);
+    descriptions.forEach(function (element) {
+        console.log(element);
+    });
+    $('#myModal').on('show.bs.modal', function (e) {
 
-    //get data-id attribute of the clicked element
-    var bookId = $(e.relatedTarget).data('book-id');
-    //populate the textbox
-    $(e.currentTarget).find('a[id="delete"]').attr("href", "/delete_track/" + bookId);
-});
+        //get data-id attribute of the clicked element
+        var bookId = $(e.relatedTarget).data('book-id');
+        //populate the textbox
+        $(e.currentTarget).find('a[id="delete"]').attr("href", "/delete_track/" + bookId);
+    });
 </script>
 </body>
 </html>

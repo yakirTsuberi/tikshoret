@@ -28,7 +28,8 @@
             <div class="form-group">
                 <input type="number" class="form-control" name="price" value="{{ track.price }}" placeholder="מחיר"/>
                 <input type="text" class="form-control" name="name" value="{{ track.name }}" placeholder="שם המסלול"/>
-                <textarea class="form-control" placeholder="תיאור" name="description">{{ track.description }}</textarea>
+                <label>תיאור: </label>
+                <textarea name="description" style="width: 100%;">{{ track.description }}</textarea>
             </div>
             <div class="form-group">
                 <button class="btn btn-block btn-primary" type="submit">שלח</button>
@@ -40,6 +41,14 @@
 </div>
 <div class="bottom"><a href="/"><i class="fa fa-home" aria-hidden="true"></i></a></div>
 
+<script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>
+<script type="text/javascript">
+    //<![CDATA[
+    bkLib.onDomLoaded(function () {
+        nicEditors.allTextAreas()
+    });
+    //]]>
+</script>
 
 </body>
 </html>
