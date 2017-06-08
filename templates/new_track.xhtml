@@ -29,6 +29,12 @@
                 <input type="number" class="form-control" name="price" placeholder="מחיר"/>
                 <input type="text" class="form-control" name="name" placeholder="שם המסלול"/>
                 <label>תיאור: </label>
+                <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>
+                <script type="text/javascript">
+                    bkLib.onDomLoaded(function () {
+                        nicEditors.allTextAreas()
+                    });
+                </script>
                 <textarea name="description" style="width: 100%;"> </textarea>
                 {#                <textarea class="form-control" placeholder="תיאור" name="description"></textarea>#}
             </div>
@@ -41,14 +47,7 @@
 
 </div>
 <div class="bottom"><a href="/"><i class="fa fa-home" aria-hidden="true"></i></a></div>
-<script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>
-<script type="text/javascript">
-    //<![CDATA[
-    bkLib.onDomLoaded(function () {
-        nicEditors.allTextAreas()
-    });
-    //]]>
-</script>
+
 
 </body>
 </html>
