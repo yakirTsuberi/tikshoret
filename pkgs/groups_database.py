@@ -167,7 +167,6 @@ class DBGroups:
 
     def get_credit_card(self, client_id):
         q = self.session.query(*CreditCard.__table__.columns).filter(CreditCard.client_id == client_id).first()
-        print('GET_CREDIT_CARD - ', q)
         return q
 
     # BankAccount
@@ -240,7 +239,6 @@ class DBGroups:
             .filter(or_(Transactions.status == 0, Transactions.status == 2)).all()
         result = []
         for k, i in enumerate(q):
-            print(i)
             tmp = {'Transaction': i,
                    'Track': self.get_track(_id=i.track),
                    'Client': self.get_client(i.client_id)}
