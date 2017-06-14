@@ -138,13 +138,25 @@ body {
     border-radius: 3px;
 }
 
-.pay-status1{
+.pay-status1 {
     background-color: rgba(200, 255, 200, 0.7);;
 }
+
 .pay-status2 {
     background-color: rgba(255, 200, 200, 0.7);
 }
 
 .panel {
     margin-bottom: 10px;
+}
+
+.btn-download {
+    position: fixed;
+    right: 20px;
+    bottom: 70px;
+    text-align: center;
+    border-radius: 28px;
+}
+.btn-download p {
+    margin: 0;
 }
