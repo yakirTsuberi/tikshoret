@@ -139,7 +139,7 @@ def remove_full_stack_transaction(email, _id):
     db = DBGroups(user.group)
     transaction = db.session.query(Transactions)
     ta = transaction.all()
-    print([i.id for i in ta])
+    print([(i.id, i.client_id) for i in ta])
     transaction = transaction.filter(Transactions.id == _id).first()
     if transaction:
         db.delete_credit_card(transaction.credit_card_id)
