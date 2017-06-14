@@ -133,23 +133,24 @@ def remove_user(email):
     user_db.delete_user(email)
 
 
-def remove_full_stack_transaction(email, _id):
+def remove_full_stack_transaction(email, _id=None):
     user_db = DBUsers()
     user = user_db.get_user(email)
     db = DBGroups(user.group)
     transaction = db.session.query(Transactions)
     ta = transaction.all()
     print([(i.id, i.client_id) for i in ta])
-    transaction = transaction.filter(Transactions.id == _id).first()
-    if transaction:
-        db.delete_credit_card(transaction.credit_card_id)
-        db.delete_bank_account(transaction.bank_account_id)
-        db.delete_client(transaction.client_id)
-        db.delete_transaction(_id)
+    if _id is not None:
+        transaction = transaction.filter(Transactions.id == _id)
+    for t in transaction:
+        db.delete_credit_card(t.credit_card_id)
+        db.delete_bank_account(t.bank_account_id)
+        db.delete_client(t.client_id)
+        db.delete_transaction(t.id)
 
 
 if __name__ == '__main__':
     # set_up_group('test', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
     # remove_user('tsuberyr@gmail.com')
-    # remove_full_stack_transaction('yakir@ravtech.co.il', 0)
+    # remove_full_stack_transaction('yakir@ravtech.co.il')
     pass
