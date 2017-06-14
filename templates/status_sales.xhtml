@@ -44,7 +44,7 @@
                     {% if sale.get('CreditCard') %}
                         <div class="pay_style">
                             <h4>כרטיס אשראי</h4>
-                            <span><strong>מספר כרטיס: </strong>{{ sale['CreditCard'].account_num }}</span>
+                            <span><strong>מספר כרטיס: </strong>{{ sale['CreditCard'].card_number }}</span>
                             <br/>
                             <p>
                                 <strong>תוקף: </strong><span>{{ sale['CreditCard'].month }}/{{ sale['CreditCard'].year }}</span>

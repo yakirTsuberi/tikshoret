@@ -115,14 +115,14 @@ class DBGroups:
                                 description=description))
         self.session.commit()
 
-    def get_track(self, company=None, name=None, id=None):
+    def get_track(self, company=None, name=None, _id=None):
         q = self.session.query(*Tracks.__table__.columns)
         if name is not None:
             q = q.filter(Tracks.name == name)
         if company is not None:
             q = q.filter(Tracks.company == company)
-        if id is not None:
-            q = q.filter(Tracks.id == id)
+        if _id is not None:
+            q = q.filter(Tracks.id == _id)
         return q.first()
 
     def update_track(self, track_id, values):
@@ -166,7 +166,9 @@ class DBGroups:
         self.session.commit()
 
     def get_credit_card(self, client_id):
-        self.session.query(*CreditCard.__table__.columns).filter(CreditCard.client_id == client_id).first()
+        q = self.session.query(*CreditCard.__table__.columns).filter(CreditCard.client_id == client_id).first()
+        print('GET_CREDIT_CARD - ', q)
+        return q
 
     # BankAccount
     def set_bank_account(self, client_id, account_num, brunch, bank_num):
@@ -238,10 +240,11 @@ class DBGroups:
             .filter(or_(Transactions.status == 0, Transactions.status == 2)).all()
         result = []
         for k, i in enumerate(q):
-            tmp = {'Transaction': i}
-            tmp['Track'] = self.get_track(id=i.track)
-            tmp['Client'] = self.get_client(i.client_id)
-            if i[4]:
+            print(i)
+            tmp = {'Transaction': i,
+                   'Track': self.get_track(_id=i.track),
+                   'Client': self.get_client(i.client_id)}
+            if i.credit_card_id:
                 tmp['CreditCard'] = self.get_credit_card(i[3])
             elif [5]:
                 tmp['BankAccount'] = self.get_bank_account(i[3])
@@ -254,6 +257,22 @@ class DBGroups:
 
     def delete_agent(self, email):
         self.session.query(Agents).filter(Agents.email == email).delete()
+        self.session.commit()
+
+    def delete_transaction(self, _id):
+        self.session.query(Transactions).filter(Transactions.id == _id).delete()
+        self.session.commit()
+
+    def delete_client(self, client_id):
+        self.session.query(Clients).filter(Clients.client_id == client_id).delete()
+        self.session.commit()
+
+    def delete_credit_card(self, _id):
+        self.session.query(CreditCard).filter(CreditCard.id == _id).delete()
+        self.session.commit()
+
+    def delete_bank_account(self, _id):
+        self.session.query(BankAccount).filter(BankAccount.id == _id).delete()
         self.session.commit()
 
 

@@ -209,21 +209,30 @@ def set_company(company):
                                    tracks=tracks,
                                    company=company,
                                    errors=errors)
+        print([credit_card, month, year, cvv])
+
+        credit_card_id = None
+        account_num_id = None
         for i in range(1, sum_connections(request.form) + 1):
             if not db.get_client(client_id):
                 db.set_client(client_id, first_name, last_name, address, city, phone, email or None)
+            print('CREDIT_CARD - ', credit_card)
             if credit_card:
                 if not db.get_credit_card(client_id):
+                    print('!!!!!!!!!CREDIT_CARD!!!!!!!!!')
                     db.set_credit_card(client_id, credit_card, month, year, cvv)
+                credit_card_id = db.get_credit_card(client_id).id
+                print(credit_card_id)
             if account_num:
                 if not db.get_bank_account(client_id):
                     db.set_bank_account(client_id, account_num, brunch, bank)
+                account_num_id = db.get_bank_account(client_id).id
             db.set_transactions(
                 current_user.id,
                 db.get_track(company=company, name=track).id,
                 client_id,
-                credit_card,
-                db.get_bank_account(client_id).id,
+                credit_card_id,
+                account_num_id,
                 datetime.today(),
                 request.form.get('sim_num' + str(i)),
                 request.form.get('phone_num' + str(i)),
@@ -271,7 +280,7 @@ def new_track(company):
 @login_required
 def edit_track(track_id):
     db = DBGroups(current_user.group)
-    track = db.get_track(id=track_id)
+    track = db.get_track(_id=track_id)
     if request.method == 'POST':
         agent = db.get_agent(current_user.id)
         if agent.manager > 1:
@@ -284,7 +293,7 @@ def edit_track(track_id):
 @login_required
 def delete_track(track_id):
     db = DBGroups(current_user.group)
-    track = db.get_track(id=track_id)
+    track = db.get_track(_id=track_id)
     agent = db.get_agent(current_user.id)
     if agent.manager > 1:
         db.delete_track(track_id)

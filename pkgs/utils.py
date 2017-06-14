@@ -43,6 +43,7 @@ def check_phone(phone: str):
     return phone[:2] in num and 11 > len(phone) > 7
 
 
+# noinspection PyUnresolvedReferences
 def check_address(address, city):
     gmaps = googlemaps.Client('AIzaSyDv4GEWHbxhtpmMBkf4lNIP6wwi5nXwlfM')
     if gmaps.geocode('Israel, ' + city + ', ' + address) and not address.isdigit():
@@ -54,9 +55,9 @@ def check_email(email):
     return not not re.match("[^@]+@[^@]+\.[^@]+", email)
 
 
-def check_client(id, first_name, last_name, address, city, phone, email):
+def check_client(_id, first_name, last_name, address, city, phone, email):
     errors = []
-    if not check_client_id(id):
+    if not check_client_id(_id):
         errors.append('תעודת זהות')
     if not check_first_name(first_name):
         errors.append('שם פרטי')
@@ -132,7 +133,23 @@ def remove_user(email):
     user_db.delete_user(email)
 
 
+def remove_full_stack_transaction(email, _id):
+    user_db = DBUsers()
+    user = user_db.get_user(email)
+    db = DBGroups(user.group)
+    transaction = db.session.query(Transactions)
+    ta = transaction.all()
+    print([i.id for i in ta])
+    transaction = transaction.filter(Transactions.id == _id).first()
+    if transaction:
+        db.delete_credit_card(transaction.credit_card_id)
+        db.delete_bank_account(transaction.bank_account_id)
+        db.delete_client(transaction.client_id)
+        db.delete_transaction(_id)
+
+
 if __name__ == '__main__':
     # set_up_group('test', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
     # remove_user('tsuberyr@gmail.com')
+    # remove_full_stack_transaction('yakir@ravtech.co.il', 0)
     pass

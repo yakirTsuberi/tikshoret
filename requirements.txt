@@ -1,3 +1,5 @@
+pycard
+dateutil
 Flask
 yagmail
 SQLAlchemy
