@@ -142,7 +142,7 @@ def remove_full_stack_transaction(email, _id=None):
     print([(i.id, i.client_id) for i in ta])
     if _id is not None:
         transaction = transaction.filter(Transactions.id == _id)
-    for t in transaction:
+    for t in transaction.all():
         db.delete_credit_card(t.credit_card_id)
         db.delete_bank_account(t.bank_account_id)
         db.delete_client(t.client_id)
