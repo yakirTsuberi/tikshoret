@@ -100,8 +100,11 @@ class DBGroups:
     def get_agent(self, email):
         return self.session.query(*Agents.__table__.columns).filter(Agents.email == email).first()
 
-    def get_all_agents(self):
-        return self.session.query(*Agents.__table__.columns).all()
+    def get_all_agents(self, manager=None):
+        q = self.session.query(*Agents.__table__.columns)
+        if manager is not None:
+            q.filter(Agents.manager == manager)
+        return q.all()
 
     def update_agent(self, agent_id, values):
         self.session.query(Agents).filter(Agents.email == agent_id).update(values)

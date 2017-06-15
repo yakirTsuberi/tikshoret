@@ -237,6 +237,10 @@ def set_company(company):
                 request.form.get('sim_num' + str(i)),
                 request.form.get('phone_num' + str(i)),
                 0)
+        for agent in db.get_all_agents(manager=2):
+            c = 'סוכן: ' + current_user.id
+            k = 'לקוח: ' + client_id
+            YAG.send(to=agent.email, subject='חיבור חדש', contents=c + '\n' + k)
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
     return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific,

@@ -14,6 +14,7 @@ from users_database import DBUsers
 SIM_START_WITH = {'cellcom': '89972020', 'partner': '89972010', '012': '89972010', 'pelephone': '8997250',
                   'hot': '89972071'}
 
+YAG = yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!')
 
 def check_first_name(first_name):
     return 1 < len(first_name) < 12
@@ -108,8 +109,8 @@ def send_mail(group, email, host_url, msg='Welcome to YishaiPhone!'):
 
     db = DBUsers()
     db.set_tmp(unique_id, email, group)
-    yag = yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!')
-    yag.send(to=email, subject=msg,
+
+    YAG.send(to=email, subject=msg,
              contents=host_url + '?secret_token=' + str(unique_id))
 
 
