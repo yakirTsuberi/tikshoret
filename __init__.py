@@ -13,7 +13,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
-from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH
+from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, YAG
 
 login_manager = LoginManager()
 
