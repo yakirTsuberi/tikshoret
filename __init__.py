@@ -440,7 +440,7 @@ def status_sales():
         db.update_transactions(tran_id, {'status': int(status),
                                          'comment': comment})
         tran_data = db.get_transaction(tran_id)
-        YAG.send(tran_data.agent_id, subject='Connection Status',
+        YAG.send(to=tran_data.agent_id, subject='Connection Status',
                  contents='The connection you wrote to {} {}'.format(tran_data.client_id,
                                                                      'Success' if int(status) == 1 else 'Fail'))
     sales = db.get_status_sales()
