@@ -178,6 +178,7 @@ def set_company(company):
 
         track = request.form.get('track')
 
+        # Client
         client_id = request.form.get('client_id')
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
@@ -186,30 +187,38 @@ def set_company(company):
         phone = request.form.get('phone')
         email = request.form.get('email')
 
-        # sim_num = request.form.get('sim_num')
-        # phone_num = request.form.get('phone_num')
-
+        # CreditCard
         credit_card = request.form.get('credit_card')
         month = request.form.get('month')
         year = request.form.get('year')
         cvv = request.form.get('cvv')
 
+        # BankAccount
         account_num = request.form.get('account_num')
         brunch = request.form.get('brunch')
         bank = request.form.get('bank')
+
+        # Check Client
         errors = check_client(client_id, first_name, last_name, address, city, phone, email)
+
+        # Check CreditCard
         if all([credit_card, month, year, cvv]):
             checked_credit_card = check_credit_card(credit_card, month, year, cvv)
             if not checked_credit_card:
-                errors.append('כרטיס אשראי')
+                errors.append('credit_card')
         if not all([credit_card, month, year, cvv]) and not all([account_num, brunch, bank]):
-            errors.append('חייב למלאות כרטיס אשראי או פרטי בנק')
+            errors.append('credit_card')
+            errors.append('bank')
+
         if errors:
+            tmp = {k: v for k, v in request.form.items() if k != 'credit_card'}
+
             return render_template('new_connect.xhtml',
                                    tracks=tracks,
                                    company=company,
-                                   errors=errors)
-        print([credit_card, month, year, cvv])
+                                   errors=errors,
+                                   data=tmp,
+                                   start_sim=SIM_START_WITH.get(company))
 
         credit_card_id = None
         account_num_id = None
@@ -244,7 +253,7 @@ def set_company(company):
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
     return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific,
-                           start_sim=SIM_START_WITH.get(company))
+                           start_sim=SIM_START_WITH.get(company), data={})
 
 
 @app.route('/tracks_manger')

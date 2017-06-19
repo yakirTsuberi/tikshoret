@@ -12,6 +12,11 @@ body {
     background-color: inherit;
 }
 
+.form-error {
+    border-color: #e96666;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(233, 102, 102, 0.6);
+}
+
 .top {
     height: 55px;
     background-color: rgba(59, 59, 59, 0.7);
@@ -158,6 +163,8 @@ body {
     text-align: center;
     border-radius: 28px;
 }
+
 .btn-download p {
     margin: 0;
 }
+

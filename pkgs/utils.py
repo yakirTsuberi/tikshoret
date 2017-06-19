@@ -59,18 +59,19 @@ def check_email(email):
 def check_client(_id, first_name, last_name, address, city, phone, email):
     errors = []
     if not check_client_id(_id):
-        errors.append('תעודת זהות')
+        errors.append('client_id')
     if not check_first_name(first_name):
-        errors.append('שם פרטי')
+        errors.append('first_name')
     if not check_last_name(last_name):
-        errors.append('שם משפחה')
+        errors.append('last_name')
     if not check_address(address, city):
-        errors.append('כתובת / עיר')
+        errors.append('address')
+        errors.append('city')
     if not check_phone(phone):
-        errors.append('טלפון')
+        errors.append('phone')
     if email:
         if not check_email(email):
-            errors.append('אימייל')
+            errors.append('email')
     return errors
 
 
