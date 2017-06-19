@@ -44,7 +44,10 @@
                     {% if sale.get('CreditCard') %}
                         <div class="pay_style">
                             <h4>כרטיס אשראי</h4>
-                            <span><strong>מספר כרטיס: </strong>{{ sale['CreditCard'].card_number }}</span>
+                            <span><strong>מספר כרטיס: </strong>
+                                <a data-toggle="tooltip" data-placement="left" title="העתק!"
+                                   onclick="copyToClipboard({{ sale['CreditCard'].card_number }})">
+                                {{ sale['CreditCard'].card_number }}</a></span>
                             <br/>
                             <p>
                                 <strong>תוקף: </strong><span>{{ sale['CreditCard'].month }}/{{ sale['CreditCard'].year }}</span>
@@ -54,7 +57,10 @@
                     {% if sale.get('BankAccount') %}
                         <div class="pay_style">
                             <h4>חשבון בנק</h4>
-                            <span><strong>מספר חשבון: </strong>{{ sale['BankAccount'].account_num }}</span>
+                            <span><strong>מספר חשבון: </strong>
+                                <a data-toggle="tooltip" data-placement="left" title="העתק!"
+                                   onclick="copyToClipboard({{ sale['BankAccount'].account_num }})">
+                                    {{ sale['BankAccount'].account_num }}</a></span>
                             <br/>
                             <p><strong>סניף: </strong><span>{{ sale['BankAccount'].brunch }}</span>
                                 <strong>בנק: </strong>{{ sale['BankAccount'].bank_num }}</p>
@@ -85,9 +91,30 @@
         <a href="/"><i class="fa fa-home" aria-hidden="true"></i></a>
     </div>
     <div class="col-xs-4">
-
+        <textarea id="copy" style="position: fixed; bottom: -10000px;"></textarea>
     </div>
 </div>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    function copyToClipboard(text) {
+        console.log(text);
+        var te = document.getElementById('copy');
+        te.value = text;
+        console.log(text, te.value);
+        te.select();
+        try {
+            var successful = document.execCommand('copy');
+            console.log(successful);
+            var msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Copying text command was ' + msg);
+        } catch (err) {
+            console.log('Oops, unable to copy');
+        }
+    }
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 </body>
 </html>
