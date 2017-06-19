@@ -7,6 +7,7 @@ from flask import Flask, request, redirect, url_for, render_template, abort
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
 from flask.ext.cache import Cache
 from htmlmin.main import minify
+import yagmail
 
 logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
@@ -440,7 +441,7 @@ def status_sales():
         db.update_transactions(tran_id, {'status': int(status),
                                          'comment': comment})
         tran_data = db.get_transaction(tran_id)
-        YAG.send(to=tran_data.agent_id, subject='Connection Status',
+        yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=tran_data.agent_id, subject='Connection Status',
                  contents='The connection you wrote to {} {}'.format(tran_data.client_id,
                                                                      'Success' if int(status) == 1 else 'Fail'))
     sales = db.get_status_sales()
