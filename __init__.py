@@ -1,6 +1,6 @@
 import sys
 import logging
-from datetime import datetime
+import datetime
 
 from dateutil.relativedelta import relativedelta
 from flask import Flask, request, redirect, url_for, render_template, abort
@@ -141,10 +141,10 @@ def my_sales():
     year = request.args.get('year')
     action = request.args.get('action')
     if not month or not str(month).isdigit() or action == 'today':
-        month = datetime.today().month
+        month = datetime.datetime.today().month
     if not year or not str(year).isdigit() or action == 'today':
-        year = datetime.today().year
-    date_filter = datetime(int(year), int(month), 1)
+        year = datetime.datetime.today().year
+    date_filter = datetime.datetime(int(year), int(month), 1)
 
     if action == 'next':
         date_filter = date_filter + relativedelta(months=1)
@@ -242,7 +242,7 @@ def set_company(company):
                 client_id,
                 credit_card_id,
                 account_num_id,
-                datetime.today(),
+                datetime.datetime.today(),
                 request.form.get('sim_num' + str(i)),
                 request.form.get('phone_num' + str(i)),
                 0)
@@ -409,10 +409,10 @@ def reward_and_expectation():
     year = request.args.get('year')
     action = request.args.get('action')
     if not month or not str(month).isdigit() or action == 'today':
-        month = datetime.today().month
+        month = datetime.datetime.today().month
     if not year or not str(year).isdigit() or action == 'today':
-        year = datetime.today().year
-    date_filter = datetime(int(year), int(month), 1)
+        year = datetime.datetime.today().year
+    date_filter = datetime.datetime(int(year), int(month), 1)
 
     if action == 'next':
         date_filter = date_filter + relativedelta(months=1)
@@ -436,8 +436,13 @@ def status_sales():
         status = request.form.get('status')
         comment = request.form.get('comment')
         tran_id = request.form.get('tran_id')
+
         db.update_transactions(tran_id, {'status': int(status),
                                          'comment': comment})
+        tran_data = db.get_transaction(tran_id)
+        YAG.send(tran_data.agent_id, subject='Connection Status',
+                 contents='The connection you wrote to {} {}'.format(tran_data.client_id,
+                                                                     'Success' if int(status) == 1 else 'Fail'))
     sales = db.get_status_sales()
     return render_template('status_sales.xhtml', sales=sales)
 

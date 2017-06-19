@@ -212,6 +212,12 @@ class DBGroups:
             q = q.filter(Transactions.status == status)
         return q.all()
 
+    def get_transaction(self, transaction_id=None):
+        q = self.session.query(*Transactions.__table__.columns)
+        if transaction_id is not None:
+            q.filter(Transactions.id == transaction_id)
+        return q.first()
+
     def update_transactions(self, _id, values):
         self.session.query(Transactions).filter(Transactions.id == _id).update(values)
         self.session.commit()
