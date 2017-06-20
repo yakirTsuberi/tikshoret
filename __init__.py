@@ -5,7 +5,6 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from flask import Flask, request, redirect, url_for, render_template, abort
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
-from flask.ext.cache import Cache
 from htmlmin.main import minify
 import yagmail
 
@@ -22,7 +21,6 @@ login_manager = LoginManager()
 app = Flask(__name__)
 
 login_manager.init_app(app)
-cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 
 class User(UserMixin):
@@ -165,7 +163,6 @@ def my_sales():
 
 @app.route('/new_connect')
 @login_required
-@cache.cached(60)
 def new_connect():
     return render_template('list_company.xhtml', action='new_connect')
 
@@ -260,7 +257,6 @@ def set_company(company):
 
 @app.route('/tracks_manger')
 @login_required
-@cache.cached(60)
 def tracks_manger():
     return render_template('list_company.xhtml', action='list_tracks')
 
