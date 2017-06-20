@@ -171,10 +171,12 @@ def new_connect():
 @login_required
 def set_company(company):
     db = DBGroups(current_user.group)
+    all_c = db.get_all_clients()
+    logging.error(all_c)
     clients_list = [[client, db.get_bank_account(client.client_id),
                      [v[-4:].rjust(len(v), "*") if k == 2 else v for k, v in
                       enumerate(db.get_credit_card(client.client_id))]]
-                    for client in db.get_all_clients()]
+                    for client in all_c]
     tracks = db.get_all_tracks(company)
     if request.method == 'POST':
 
