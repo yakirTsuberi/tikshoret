@@ -2,6 +2,7 @@ import random
 import re
 import hashlib
 import string
+import os
 
 import googlemaps
 import pycard
@@ -11,10 +12,17 @@ import yagmail
 from groups_database import DBGroups, Transactions, Tracks, and_
 from users_database import DBUsers
 
+LOCAL_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
+
 SIM_START_WITH = {'cellcom': '89972020', 'partner': '89972010', '012': '89972010', 'pelephone': '8997250',
                   'hot': '89972071'}
 
 YAG = yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!')
+
+
+def get_news():
+    return open(LOCAL_PATH + '/news.txt', encoding='utf8').read().split('\n')
+
 
 def check_first_name(first_name):
     return 1 < len(first_name) < 12

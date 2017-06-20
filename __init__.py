@@ -14,7 +14,8 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
-from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, YAG
+from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, YAG, \
+    get_news
 
 login_manager = LoginManager()
 
@@ -125,7 +126,7 @@ def index():
         return redirect(url_for('login'))
     db = DBGroups(current_user.group)
     user = db.get_agent(current_user.id)
-    return render_template('index.xhtml', user=user)
+    return render_template('index.xhtml', user=user, news=get_news())
 
 
 @app.route('/setting')
@@ -442,8 +443,9 @@ def status_sales():
                                          'comment': comment})
         tran_data = db.get_transaction(tran_id)
         yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=tran_data.agent_id, subject='Connection Status',
-                 contents='The connection you wrote to {} {}'.format(tran_data.client_id,
-                                                                     'Success' if int(status) == 1 else 'Fail'))
+                                                                  contents='The connection you wrote to {} {}'.format(
+                                                                      tran_data.client_id,
+                                                                      'Success' if int(status) == 1 else 'Fail'))
     sales = db.get_status_sales()
     return render_template('status_sales.xhtml', sales=sales)
 
