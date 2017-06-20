@@ -172,11 +172,19 @@ def new_connect():
 def set_company(company):
     db = DBGroups(current_user.group)
     all_c = db.get_all_clients()
-    logging.error(all_c)
-    clients_list = [[client, db.get_bank_account(client.client_id),
-                     [v[-4:].rjust(len(v), "*") if k == 2 else v for k, v in
-                      enumerate(db.get_credit_card(client.client_id))]]
-                    for client in all_c]
+    clients_list = []
+    for c in all_c:
+        ba = db.get_bank_account(c.client_id) or []
+        cc = db.get_credit_card(c.client_id) or []
+        if cc:
+            tmp = []
+            for k, v in enumerate(cc):
+                if k == 2:
+                    tmp.append(v[-4:].rjust(len(v), "*"))
+                else:
+                    tmp.append(v)
+            cc = tmp
+        clients_list.append([c, ba, cc])
     tracks = db.get_all_tracks(company)
     if request.method == 'POST':
 
