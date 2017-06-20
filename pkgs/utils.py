@@ -163,4 +163,8 @@ if __name__ == '__main__':
     # set_up_group('test', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
     # remove_user('tsuberyr@gmail.com')
     # remove_full_stack_transaction('yakir@ravtech.co.il', 0)
+    yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to='yakir@ravtech.co.il', subject='Connection Status',
+                                                              contents='The connection you wrote to {} {}'.format(
+                                                                  '302747480',
+                                                                  'Success' if int(1) == 1 else 'Fail'))
     pass
