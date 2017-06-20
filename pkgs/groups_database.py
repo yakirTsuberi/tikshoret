@@ -215,7 +215,7 @@ class DBGroups:
     def get_transaction(self, transaction_id=None):
         q = self.session.query(*Transactions.__table__.columns)
         if transaction_id is not None:
-            q.filter(Transactions.id == transaction_id)
+            q = q.filter(Transactions.id == transaction_id)
         return q.first()
 
     def update_transactions(self, _id, values):
