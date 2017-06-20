@@ -149,7 +149,6 @@ def remove_full_stack_transaction(email, _id=None):
     db = DBGroups(user.group)
     transaction = db.session.query(Transactions)
     ta = transaction.all()
-    print([(i.id, i.client_id) for i in ta])
     if _id is not None:
         transaction = transaction.filter(Transactions.id == _id)
     for t in transaction.all():

@@ -282,6 +282,10 @@ class DBGroups:
         self.session.query(BankAccount).filter(BankAccount.id == _id).delete()
         self.session.commit()
 
+    def get_secure_credit_card(self, last_num):
+        return self.session.query(CreditCard.card_number).filter(
+            CreditCard.card_number.like('%' + last_num)).first().card_number
+
 
 if __name__ == '__main__':
     pass

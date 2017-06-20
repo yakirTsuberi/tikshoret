@@ -1,3 +1,4 @@
+import json
 import sys
 import logging
 import datetime
@@ -171,7 +172,10 @@ def new_connect():
 @login_required
 def set_company(company):
     db = DBGroups(current_user.group)
-
+    clients_list = [[client, db.get_bank_account(client.client_id),
+                     [v[-4:].rjust(len(v), "*") if k == 2 else v for k, v in
+                      enumerate(db.get_credit_card('302747480'))]]
+                    for client in db.get_all_clients()]
     tracks = db.get_all_tracks(company)
     if request.method == 'POST':
 
@@ -202,6 +206,8 @@ def set_company(company):
 
         # Check CreditCard
         if all([credit_card, month, year, cvv]):
+            if ('*' in credit_card):
+                credit_card = db.get_secure_credit_card(credit_card[-4:])
             checked_credit_card = check_credit_card(credit_card, month, year, cvv)
             if not checked_credit_card:
                 errors.append('credit_card')
@@ -211,26 +217,23 @@ def set_company(company):
 
         if errors:
             tmp = {k: v for k, v in request.form.items() if k != 'credit_card'}
-
             return render_template('new_connect.xhtml',
                                    tracks=tracks,
                                    company=company,
                                    errors=errors,
                                    data=tmp,
-                                   start_sim=SIM_START_WITH.get(company))
+                                   start_sim=SIM_START_WITH.get(company),
+                                   clients=clients_list)
 
         credit_card_id = None
         account_num_id = None
         for i in range(1, sum_connections(request.form) + 1):
             if not db.get_client(client_id):
                 db.set_client(client_id, first_name, last_name, address, city, phone, email or None)
-            print('CREDIT_CARD - ', credit_card)
             if credit_card:
                 if not db.get_credit_card(client_id):
-                    print('!!!!!!!!!CREDIT_CARD!!!!!!!!!')
                     db.set_credit_card(client_id, credit_card, month, year, cvv)
                 credit_card_id = db.get_credit_card(client_id).id
-                print(credit_card_id)
             if account_num:
                 if not db.get_bank_account(client_id):
                     db.set_bank_account(client_id, account_num, brunch, bank)
@@ -252,7 +255,7 @@ def set_company(company):
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
     return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific,
-                           start_sim=SIM_START_WITH.get(company), data={})
+                           start_sim=SIM_START_WITH.get(company), data={}, clients=clients_list)
 
 
 @app.route('/tracks_manger')

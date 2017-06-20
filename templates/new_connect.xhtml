@@ -39,6 +39,16 @@
                 </select>
             </div>
             <div class="form-group">
+                <label>לקוח קיים</label>
+                <input id="client" name="exist_client" type="text" list="clients" class="form-control"/>
+                <datalist id="clients">
+                    {% for client in clients %}
+                        <option data-value="{{ client }}"
+                                value="{{ client[0][2] }} {{ client[0][3] }} {{ client[0][1] }}"></option>
+                    {% endfor %}
+                </datalist>
+            </div>
+            <div class="form-group" id="client_input">
                 <label>פרטי לקוח</label>
                 <input class="form-control {{ 'form-error' if 'client_id' in errors }}" name="client_id"
                        placeholder="תעודת זהות" type="text" value="{{ data.get('client_id') or '' }}"
@@ -80,7 +90,7 @@
                 </button>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="credit_card_input">
                 <label>כרטיס אשראי</label>
                 <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="text" name="credit_card"
                        placeholder="מספר כרטיס"/>
@@ -102,7 +112,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="bank_input">
                 <label>חשבון בנק</label>
                 <div class="row" style="margin: 0">
                     <div class="col-xs-6 nopadding">
@@ -146,6 +156,42 @@
 </div>
 
 <script src="/static/javascript/myjs.js">
+</script>
+<script>
+    var exist_client = document.getElementsByName("exist_client")[0];
+    function fill_all(inputs, data, cnt) {
+        for (var i in inputs) {
+            if (data[i] !== undefined) {
+                inputs[i].value = data[cnt] === 'none' ? '' : data[cnt];
+            }
+            cnt += 1;
+
+        }
+    }
+    function clean_all() {
+        var all_input = document.getElementsByTagName('input');
+        for (i in all_input) {
+            if (!all_input[i].name.startsWith('sim_num')) {
+                all_input[i].value = null
+            }
+        }
+    }
+    exist_client.addEventListener('change', function () {
+        var client_input = document.getElementById('client_input').getElementsByTagName('input');
+        var credit_card_input = document.getElementById('credit_card_input').getElementsByTagName('input');
+        var bank_input = document.getElementById('bank_input').getElementsByTagName('input');
+        var shownVal = document.getElementById("client").value;
+        var value2send = document.querySelector("#clients option[value='" + shownVal + "']");
+        if (value2send) {
+            var data_client = JSON.parse(value2send.dataset.value.split('(').join('[').split(')').join(']').split("'").join('"'));
+
+            fill_all(client_input, data_client[0], 1);
+            fill_all(bank_input, data_client[1], 2);
+            fill_all(credit_card_input, data_client[2], 2);
+        } else {
+            clean_all()
+        }
+    });
 </script>
 </body>
 </html>
