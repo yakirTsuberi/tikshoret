@@ -438,7 +438,8 @@ def status_sales():
         db.update_transactions(tran_id, {'status': int(status),
                                          'comment': comment})
         tran_data = db.get_transaction(tran_id)
-        yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to='yakir@ravtech.co.il', subject='Connection Status',
+        logging.error(tran_data)
+        yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=tran_data.agent_id, subject='Connection Status',
                                                                   contents='The connection you wrote to {} {}'.format(
                                                                       tran_data.client_id,
                                                                       'Success' if int(status) == 1 else 'Fail'))
