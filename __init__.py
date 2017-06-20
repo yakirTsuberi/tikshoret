@@ -433,11 +433,11 @@ def status_sales():
     if request.method == 'POST':
         status = request.form.get('status')
         comment = request.form.get('comment')
-        tran_id = request.form.get('tran_id')
+        tran_id = int(request.form.get('tran_id'))
 
         db.update_transactions(tran_id, {'status': int(status),
                                          'comment': comment})
-        logging.error('tran_id: ' + tran_id)
+        logging.error('tran_id: ' + str(tran_id))
         tran_data = db.get_transaction(tran_id)
         logging.error(tran_data)
         yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=tran_data.agent_id, subject='Connection Status',
