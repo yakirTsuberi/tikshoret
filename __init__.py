@@ -437,6 +437,7 @@ def status_sales():
 
         db.update_transactions(tran_id, {'status': int(status),
                                          'comment': comment})
+        logging.error('tran_id: ' + tran_id)
         tran_data = db.get_transaction(tran_id)
         logging.error(tran_data)
         yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=tran_data.agent_id, subject='Connection Status',
