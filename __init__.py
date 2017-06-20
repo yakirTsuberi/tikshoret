@@ -1,4 +1,3 @@
-import json
 import sys
 import logging
 import datetime
@@ -174,7 +173,7 @@ def set_company(company):
     db = DBGroups(current_user.group)
     clients_list = [[client, db.get_bank_account(client.client_id),
                      [v[-4:].rjust(len(v), "*") if k == 2 else v for k, v in
-                      enumerate(db.get_credit_card('302747480'))]]
+                      enumerate(db.get_credit_card(client.client_id))]]
                     for client in db.get_all_clients()]
     tracks = db.get_all_tracks(company)
     if request.method == 'POST':
