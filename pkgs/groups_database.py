@@ -117,6 +117,7 @@ class DBGroups:
             self.session.commit()
         except Exception as e:
             logging.error(e)
+            print(e)
             self.session.rollback()
 
     # Tracks
