@@ -30,7 +30,9 @@
                     <br/>
                     <span><strong>שם לקוח: </strong>{{ sale['Client'].first_name }} {{ sale['Client'].last_name }}</span>
                     <br/>
-                    <span><strong>תעודת זהות: </strong>{{ sale['Client'].client_id }}</span>
+                    <span><strong>תעודת זהות: </strong><a data-toggle="tooltip" data-placement="left" title="העתק!"
+                                   onclick="copyToClipboard({{ sale['Client'].client_id }})">
+                                    {{ sale['Client'].client_id }}</a></span>
                     <br/>
                     <strong>מסלול: </strong>
                     <a href="/list_tracks/{{ sale['Track'].company }}">
@@ -38,8 +40,12 @@
                         <span class="pull-left">{{ sale['Track'].price }} ש"ח</span>
                     </a>
                     <br/>
-                    <span class="pull-right"><strong>מס' סים: </strong>{{ sale['Transaction'].sim_num }}</span>
-                    <span class="pull-left"><strong>מס' טלפון: </strong>{{ sale['Transaction'].phone_num }}</span>
+                    <span class="pull-right"><strong>מס' סים: </strong><a data-toggle="tooltip" data-placement="left" title="העתק!"
+                                   onclick="copyToClipboard({{ sale['Transaction'].sim_num }})">
+                                    {{ sale['Transaction'].sim_num }}</a></span>
+                    <span class="pull-left"><strong>מס' טלפון: </strong><a data-toggle="tooltip" data-placement="left" title="העתק!"
+                                   onclick="copyToClipboard({{ sale['Transaction'].phone_num }})">
+                                    {{ sale['Transaction'].phone_num }}</a></span>
                     <br/>
                     {% if sale.get('CreditCard') %}
                         <div class="pay_style">
