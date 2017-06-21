@@ -90,12 +90,15 @@ class DBGroups:
 
     # Agents
     def set_agent(self, email, first_name, last_name, manager, phone=None):
-        self.session.add(Agents(email=str(email).lower(),
-                                first_name=str(first_name).title(),
-                                last_name=str(last_name).title(),
-                                phone=phone,
-                                manager=manager))
-        self.session.commit()
+        try:
+            self.session.add(Agents(email=str(email).lower(),
+                                    first_name=str(first_name).title(),
+                                    last_name=str(last_name).title(),
+                                    phone=phone,
+                                    manager=manager))
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def get_agent(self, email):
         return self.session.query(*Agents.__table__.columns).filter(Agents.email == email).first()
@@ -107,16 +110,22 @@ class DBGroups:
         return q.all()
 
     def update_agent(self, agent_id, values):
-        self.session.query(Agents).filter(Agents.email == agent_id).update(values)
-        self.session.commit()
+        try:
+            self.session.query(Agents).filter(Agents.email == agent_id).update(values)
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     # Tracks
     def set_track(self, company, price, name, description):
-        self.session.add(Tracks(company=company,
-                                price=price,
-                                name=name,
-                                description=description))
-        self.session.commit()
+        try:
+            self.session.add(Tracks(company=company,
+                                    price=price,
+                                    name=name,
+                                    description=description))
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def get_track(self, company=None, name=None, _id=None):
         q = self.session.query(*Tracks.__table__.columns)
@@ -129,8 +138,11 @@ class DBGroups:
         return q.first()
 
     def update_track(self, track_id, values):
-        self.session.query(Tracks).filter(Tracks.id == track_id).update(values)
-        self.session.commit()
+        try:
+            self.session.query(Tracks).filter(Tracks.id == track_id).update(values)
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def get_all_tracks(self, company=None):
         q = self.session.query(*Tracks.__table__.columns)
@@ -140,14 +152,17 @@ class DBGroups:
 
     # Clients
     def set_client(self, client_id, first_name, last_name, address, city, phone, email=None):
-        self.session.add(Clients(client_id=client_id,
-                                 first_name=str(first_name).title(),
-                                 last_name=str(last_name).title(),
-                                 address=address,
-                                 city=city,
-                                 phone=phone,
-                                 email=str(email).lower()))
-        self.session.commit()
+        try:
+            self.session.add(Clients(client_id=client_id,
+                                     first_name=str(first_name).title(),
+                                     last_name=str(last_name).title(),
+                                     address=address,
+                                     city=city,
+                                     phone=phone,
+                                     email=str(email).lower()))
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def get_client(self, client_id):
         return self.session.query(*Clients.__table__.columns).filter(Clients.client_id == client_id).first()
@@ -156,17 +171,23 @@ class DBGroups:
         return self.session.query(*Clients.__table__.columns).all()
 
     def update_client(self, client_id, values):
-        self.session.query(Clients).filter(Clients.client_id == client_id).update(values)
-        self.session.commit()
+        try:
+            self.session.query(Clients).filter(Clients.client_id == client_id).update(values)
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     # CreditCard
     def set_credit_card(self, client_id, card_number, month, year, cvv):
-        self.session.add(CreditCard(client_id=client_id,
-                                    card_number=card_number,
-                                    month=month,
-                                    year=year,
-                                    cvv=cvv))
-        self.session.commit()
+        try:
+            self.session.add(CreditCard(client_id=client_id,
+                                        card_number=card_number,
+                                        month=month,
+                                        year=year,
+                                        cvv=cvv))
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def get_credit_card(self, client_id):
         q = self.session.query(*CreditCard.__table__.columns).filter(CreditCard.client_id == client_id).first()
@@ -174,11 +195,14 @@ class DBGroups:
 
     # BankAccount
     def set_bank_account(self, client_id, account_num, brunch, bank_num):
-        self.session.add(BankAccount(client_id=client_id,
-                                     account_num=account_num,
-                                     brunch=brunch,
-                                     bank_num=bank_num))
-        self.session.commit()
+        try:
+            self.session.add(BankAccount(client_id=client_id,
+                                         account_num=account_num,
+                                         brunch=brunch,
+                                         bank_num=bank_num))
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def get_bank_account(self, client_id):
         return self.session.query(*BankAccount.__table__.columns).filter(BankAccount.client_id == client_id).first()
@@ -186,17 +210,20 @@ class DBGroups:
     # Transactions
     def set_transactions(self, agent_id, track, client_id, credit_card_id,
                          bank_account_id, date_time, sim_num, phone_num, status, comment=None):
-        self.session.add(Transactions(agent_id=agent_id,
-                                      track=track,
-                                      client_id=client_id,
-                                      credit_card_id=credit_card_id,
-                                      bank_account_id=bank_account_id,
-                                      date_time=date_time,
-                                      sim_num=sim_num,
-                                      phone_num=phone_num,
-                                      status=status,
-                                      comment=comment))
-        self.session.commit()
+        try:
+            self.session.add(Transactions(agent_id=agent_id,
+                                          track=track,
+                                          client_id=client_id,
+                                          credit_card_id=credit_card_id,
+                                          bank_account_id=bank_account_id,
+                                          date_time=date_time,
+                                          sim_num=sim_num,
+                                          phone_num=phone_num,
+                                          status=status,
+                                          comment=comment))
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def get_all_transactions(self, agent_id=None, client_id=None, date=None, status=None):
         q = self.session.query(*Transactions.__table__.columns)
@@ -219,8 +246,11 @@ class DBGroups:
         return q.first()
 
     def update_transactions(self, _id, values):
-        self.session.query(Transactions).filter(Transactions.id == _id).update(values)
-        self.session.commit()
+        try:
+            self.session.query(Transactions).filter(Transactions.id == _id).update(values)
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     # Global
     def get_reward(self, date_filter=None):
@@ -259,28 +289,46 @@ class DBGroups:
         return result
 
     def delete_track(self, track_id):
-        self.session.query(Tracks).filter(Tracks.id == track_id).delete()
-        self.session.commit()
+        try:
+            self.session.query(Tracks).filter(Tracks.id == track_id).delete()
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def delete_agent(self, email):
-        self.session.query(Agents).filter(Agents.email == email).delete()
-        self.session.commit()
+        try:
+            self.session.query(Agents).filter(Agents.email == email).delete()
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def delete_transaction(self, _id):
-        self.session.query(Transactions).filter(Transactions.id == _id).delete()
-        self.session.commit()
+        try:
+            self.session.query(Transactions).filter(Transactions.id == _id).delete()
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def delete_client(self, client_id):
-        self.session.query(Clients).filter(Clients.client_id == client_id).delete()
-        self.session.commit()
+        try:
+            self.session.query(Clients).filter(Clients.client_id == client_id).delete()
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def delete_credit_card(self, _id):
-        self.session.query(CreditCard).filter(CreditCard.id == _id).delete()
-        self.session.commit()
+        try:
+            self.session.query(CreditCard).filter(CreditCard.id == _id).delete()
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def delete_bank_account(self, _id):
-        self.session.query(BankAccount).filter(BankAccount.id == _id).delete()
-        self.session.commit()
+        try:
+            self.session.query(BankAccount).filter(BankAccount.id == _id).delete()
+            self.session.commit()
+        except:
+            self.session.rollback()
 
     def get_secure_credit_card(self, last_num):
         return self.session.query(CreditCard.card_number).filter(
