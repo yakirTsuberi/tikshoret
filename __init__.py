@@ -6,7 +6,6 @@ from dateutil.relativedelta import relativedelta
 from flask import Flask, request, redirect, url_for, render_template, abort
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
 from htmlmin.main import minify
-import yagmail
 
 logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
@@ -14,7 +13,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
-    get_news, set_news, remove_full_stack_transaction
+    get_news, set_news, remove_full_stack_transaction, send_basic_mail
 
 login_manager = LoginManager()
 
@@ -136,7 +135,6 @@ def setting():
 @app.route('/my_sales')
 @login_required
 def my_sales():
-    db = DBGroups(current_user.group)
     month = request.args.get('month')
     year = request.args.get('year')
     action = request.args.get('action')
@@ -215,7 +213,7 @@ def set_company(company):
 
         # Check CreditCard
         if all([credit_card, month, year, cvv]):
-            if ('*' in credit_card):
+            if '*' in credit_card:
                 credit_card = db.get_secure_credit_card(credit_card[-4:])
             checked_credit_card = check_credit_card(credit_card, month, year, cvv)
             if not checked_credit_card:
@@ -260,8 +258,7 @@ def set_company(company):
         for agent in db.get_all_agents(manager=2):
             c = 'Agent: ' + current_user.id
             k = 'Client: ' + client_id
-            yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=agent.email, subject='New Connect',
-                                                                      contents=c + '\n' + k)
+            send_basic_mail(to=agent.email, subject='New Connect', contents=c + '\n' + k)
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
     return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific,
@@ -451,10 +448,10 @@ def status_sales():
         db.update_transactions(tran_id, {'status': int(status),
                                          'comment': comment})
         tran_data = db.get_transaction(tran_id)
-        yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=tran_data.agent_id, subject='Connection Status',
-                                                                  contents='The connection you wrote to {} {}'.format(
-                                                                      tran_data.client_id,
-                                                                      'Success' if int(status) == 1 else 'Fail'))
+        send_basic_mail(to=tran_data.agent_id, subject='Connection Status',
+                        contents='The connection you wrote to {} {}'.format(
+                            tran_data.client_id,
+                            'Success' if int(status) == 1 else 'Fail'))
     sales = db.get_status_sales()
     return render_template('status_sales.xhtml', sales=sales)
 

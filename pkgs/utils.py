@@ -3,6 +3,7 @@ import re
 import hashlib
 import string
 import os
+import threading
 
 import googlemaps
 import pycard
@@ -120,9 +121,14 @@ def send_mail(group, email, host_url, msg='Welcome to YishaiPhone!'):
 
     db = DBUsers()
     db.set_tmp(unique_id, email, group)
+    send_basic_mail(to=email, subject=msg, contents=host_url + '?secret_token=' + str(unique_id))
 
-    yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=email, subject=msg,
-                                                              contents=host_url + '?secret_token=' + str(unique_id))
+
+def send_basic_mail(to, subject, contents):
+    def send():
+        yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=to, subject=subject, contents=contents)
+
+    threading.Thread(target=lambda: send()).start()
 
 
 def set_up_group(group, email, pw, first_name, last_name, manager=2, phone=None):
