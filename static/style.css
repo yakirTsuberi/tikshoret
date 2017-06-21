@@ -168,3 +168,12 @@ body {
     margin: 0;
 }
 
+#myCarousel {
+    height: 30px;
+}
+
+@media screen and (min-width: 768px) {
+    .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next, .carousel-control .icon-prev {
+        margin-top: -16px;
+    }
+}
