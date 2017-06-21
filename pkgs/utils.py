@@ -166,5 +166,5 @@ def remove_full_stack_transaction(email, _id=None):
 if __name__ == '__main__':
     # set_up_group('test', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
     # remove_user('tsuberyr@gmail.com')
-    # remove_full_stack_transaction('yakir@ravtech.co.il', 0)
+    # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     pass
