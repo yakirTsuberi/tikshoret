@@ -14,7 +14,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, YAG, \
-    get_news
+    get_news, remove_full_stack_transaction
 
 login_manager = LoginManager()
 
@@ -456,6 +456,15 @@ def status_sales():
                                                                       'Success' if int(status) == 1 else 'Fail'))
     sales = db.get_status_sales()
     return render_template('status_sales.xhtml', sales=sales)
+
+
+@app.route('/remove_sale/<_id>', methods=['GET'])
+@login_required
+def remove_sale(_id):
+    db = DBGroups(current_user.group)
+    if db.get_agent(current_user.id).manager > 1:
+        remove_full_stack_transaction(current_user.id, _id)
+    return redirect(url_for('status_sales'))
 
 
 @app.after_request

@@ -149,12 +149,13 @@ def remove_full_stack_transaction(email, _id=None):
     db = DBGroups(user.group)
     transaction = db.session.query(Transactions)
     ta = transaction.all()
+    print(ta)
     if _id is not None:
         transaction = transaction.filter(Transactions.id == _id)
     for t in transaction.all():
-        db.delete_credit_card(t.credit_card_id)
-        db.delete_bank_account(t.bank_account_id)
-        db.delete_client(t.client_id)
+        # db.delete_credit_card(t.credit_card_id)
+        # db.delete_bank_account(t.bank_account_id)
+        # db.delete_client(t.client_id)
         db.delete_transaction(t.id)
 
 

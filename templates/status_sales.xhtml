@@ -68,8 +68,15 @@
                     {% endif %}
                     <form action="/status_sales" method="post" class="form-group" style="margin-top: 10px">
                         <div class="btn-group">
-                            <button type="submit" name="status" value="1" class="btn btn-success">בוצע</button>
-                            <button type="submit" name="status" value="2" class="btn btn-danger">נכשל</button>
+                            <button type="submit" name="status" value="1" class="btn btn-success"><i
+                                    class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>
+                            <button type="submit" name="status" value="2" class="btn btn-warning"><i
+                                    class="fa fa-thumbs-o-down" aria-hidden="true"></i></button>
+                            {#                            <a href="/remove_sale/{{ sale['Transaction'].id }}" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></a>#}
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModal"
+                                    data-book-id="{{ sale['Transaction'].id }}" type="button">
+                                <i class="fa fa-trash-o" aria-hidden="true"> </i>
+                            </button>
                         </div>
                         <br/>
                         <label>הערה:
@@ -96,7 +103,37 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">מחק מכירה</h4>
+            </div>
+            <div class="modal-body">
+                <p>בטוח שברצונך למחוק?</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger" id="delete">מחק</a>
+                <button type="button" class="btn btn-success" data-dismiss="modal">לא, אל תמחק</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 <script>
+
+    $('#myModal').on('show.bs.modal', function (e) {
+
+        //get data-id attribute of the clicked element
+        var bookId = $(e.relatedTarget).data('book-id');
+        //populate the textbox
+        $(e.currentTarget).find('a[id="delete"]').attr("href", "/remove_sale/" + bookId);
+    });
+
+
     function copyToClipboard(text) {
         console.log(text);
         var te = document.getElementById('copy');
