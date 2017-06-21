@@ -24,6 +24,10 @@ def get_news():
     return open(LOCAL_PATH + '/news.txt', encoding='utf8').read().split('\n')
 
 
+def set_news(news_list):
+    open(LOCAL_PATH + '/news.txt', 'w', encoding='utf8').write('\n'.join(news_list))
+
+
 def check_first_name(first_name):
     return 1 < len(first_name) < 12
 

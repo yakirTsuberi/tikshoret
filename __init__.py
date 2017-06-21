@@ -14,7 +14,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, YAG, \
-    get_news, remove_full_stack_transaction
+    get_news, set_news, remove_full_stack_transaction
 
 login_manager = LoginManager()
 
@@ -465,6 +465,17 @@ def remove_sale(_id):
     if db.get_agent(current_user.id).manager > 1:
         remove_full_stack_transaction(current_user.id, _id)
     return redirect(url_for('status_sales'))
+
+
+@app.route('/massages', methods=['GET', 'POST'])
+@login_required
+def massages():
+    db = DBGroups(current_user.group)
+    if db.get_agent(current_user.id).manager < 2:
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        set_news([v for _, v in request.form.items()])
+    return render_template('massages.xhtml', massage=[(k, v) for k, v in enumerate(get_news())])
 
 
 @app.after_request
