@@ -123,7 +123,7 @@ def send_mail(group, email, host_url, msg='Welcome to YishaiPhone!'):
     db = DBUsers()
     db.set_tmp(unique_id, email, group)
 
-    YAG.send(to=email, subject=msg,
+    yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=email, subject=msg,
              contents=host_url + '?secret_token=' + str(unique_id))
 
 
