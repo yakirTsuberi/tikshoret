@@ -13,7 +13,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
-from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, YAG, \
+from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
     get_news, set_news, remove_full_stack_transaction
 
 login_manager = LoginManager()
@@ -260,7 +260,8 @@ def set_company(company):
         for agent in db.get_all_agents(manager=2):
             c = 'Agent: ' + current_user.id
             k = 'Client: ' + client_id
-            YAG.send(to=agent.email, subject='New Connect', contents=c + '\n' + k)
+            yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=agent.email, subject='New Connect',
+                                                                      contents=c + '\n' + k)
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
     return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific,

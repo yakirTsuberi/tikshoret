@@ -17,8 +17,6 @@ LOCAL_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 SIM_START_WITH = {'cellcom': '89972020', 'partner': '89972010', '012': '89972010', 'pelephone': '8997250',
                   'hot': '89972071'}
 
-YAG = yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!')
-
 
 def get_news():
     return open(LOCAL_PATH + '/news.txt', encoding='utf8').read().split('\n')
@@ -124,7 +122,7 @@ def send_mail(group, email, host_url, msg='Welcome to YishaiPhone!'):
     db.set_tmp(unique_id, email, group)
 
     yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!').send(to=email, subject=msg,
-             contents=host_url + '?secret_token=' + str(unique_id))
+                                                              contents=host_url + '?secret_token=' + str(unique_id))
 
 
 def set_up_group(group, email, pw, first_name, last_name, manager=2, phone=None):
