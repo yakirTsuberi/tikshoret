@@ -8,12 +8,12 @@ from flask_login import LoginManager, login_user, logout_user, UserMixin, curren
 from htmlmin.main import minify
 import yagmail
 
-logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
+# logging.basicConfig(stream=sys.stderr)
+# sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
-from .pkgs.groups_database import DBGroups
-from .pkgs.users_database import DBUsers
-from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, YAG, \
+from pkgs.groups_database import DBGroups
+from pkgs.users_database import DBUsers
+from pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, YAG, \
     get_news, set_news, remove_full_stack_transaction
 
 login_manager = LoginManager()

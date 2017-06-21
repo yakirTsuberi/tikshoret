@@ -1,5 +1,6 @@
 import os
 
+import logging
 from dateutil.relativedelta import relativedelta
 from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime, and_, or_, func
 from sqlalchemy.orm import sessionmaker
@@ -97,7 +98,8 @@ class DBGroups:
                                     phone=phone,
                                     manager=manager))
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def get_agent(self, email):
@@ -113,7 +115,8 @@ class DBGroups:
         try:
             self.session.query(Agents).filter(Agents.email == agent_id).update(values)
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     # Tracks
@@ -124,7 +127,8 @@ class DBGroups:
                                     name=name,
                                     description=description))
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def get_track(self, company=None, name=None, _id=None):
@@ -141,7 +145,8 @@ class DBGroups:
         try:
             self.session.query(Tracks).filter(Tracks.id == track_id).update(values)
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def get_all_tracks(self, company=None):
@@ -161,7 +166,8 @@ class DBGroups:
                                      phone=phone,
                                      email=str(email).lower()))
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def get_client(self, client_id):
@@ -174,7 +180,8 @@ class DBGroups:
         try:
             self.session.query(Clients).filter(Clients.client_id == client_id).update(values)
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     # CreditCard
@@ -186,7 +193,8 @@ class DBGroups:
                                         year=year,
                                         cvv=cvv))
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def get_credit_card(self, client_id):
@@ -201,7 +209,8 @@ class DBGroups:
                                          brunch=brunch,
                                          bank_num=bank_num))
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def get_bank_account(self, client_id):
@@ -222,7 +231,8 @@ class DBGroups:
                                           status=status,
                                           comment=comment))
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def get_all_transactions(self, agent_id=None, client_id=None, date=None, status=None):
@@ -249,7 +259,8 @@ class DBGroups:
         try:
             self.session.query(Transactions).filter(Transactions.id == _id).update(values)
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     # Global
@@ -292,42 +303,48 @@ class DBGroups:
         try:
             self.session.query(Tracks).filter(Tracks.id == track_id).delete()
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def delete_agent(self, email):
         try:
             self.session.query(Agents).filter(Agents.email == email).delete()
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def delete_transaction(self, _id):
         try:
             self.session.query(Transactions).filter(Transactions.id == _id).delete()
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def delete_client(self, client_id):
         try:
             self.session.query(Clients).filter(Clients.client_id == client_id).delete()
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def delete_credit_card(self, _id):
         try:
             self.session.query(CreditCard).filter(CreditCard.id == _id).delete()
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def delete_bank_account(self, _id):
         try:
             self.session.query(BankAccount).filter(BankAccount.id == _id).delete()
             self.session.commit()
-        except:
+        except Exception as e:
+            logging.error(e)
             self.session.rollback()
 
     def get_secure_credit_card(self, last_num):
@@ -336,4 +353,5 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    pass
+    db = DBGroups(' yishaiphone-prodaction.db')
+    db.update_agent('yakir@ravtech.co.il', {'manager': 2})
