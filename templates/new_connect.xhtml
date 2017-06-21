@@ -72,15 +72,41 @@
                        placeholder="אימייל" value="{{ data.get('email') or '' }}"
                        type="email"/>
             </div>
-            <div id="container">
-                <div class="panel panel-primary">
-                    <div class="panel-heading"><span>מסלול</span><span class="pull-left">1</span></div>
-                    <div class="panel-body"><input value="{{ start_sim }}" class="form-control" name="sim_num1"
-                                                   placeholder="מספר סים" type="text" required="required"/><input
-                            class="form-control" name="phone_num1" placeholder="מספר לניוד" type="text"
-                            required="required"/></div>
+            {% if not data %}
+                <div id="container">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><span>מסלול</span><span class="pull-left">1</span></div>
+                        <div class="panel-body"><input value="{{ start_sim }}" class="form-control" name="sim_num1"
+                                                       placeholder="מספר סים" type="text" required="required"/><input
+                                class="form-control" name="phone_num1" placeholder="מספר לניוד" type="text"
+                                required="required"/></div>
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <div id="container">
+                    {% for d in data %}
+                        {% if d[:-1] == 'sim_num' %}
+                            <div class="panel panel-primary">
+                                <div class="panel-heading"><span>מסלול</span><span class="pull-left">{{ d[-1] }}</span>
+                                </div>
+                                <div class="panel-body">
+                                    <input value="{{ data.get(d) }}" class="form-control" name="{{ d }}"
+                                           placeholder="מספר סים" type="text"
+                                           required="required"/>
+                                    <input
+                                            class="form-control" name="phone_num{{ d[-1] }}"
+                                            value="{{ data.get('phone_num' + d[-1]) }}"
+                                            placeholder="מספר לניוד" type="text"
+                                            required="required"/>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
             <div class="btn-group">
                 <button class="btn btn-info" type="button" onclick="add_connect()">
                     <i class="fa fa-plus" aria-hidden="true"> </i>
@@ -154,9 +180,6 @@
 
     </div>
 </div>
-
-<script src="/static/javascript/myjs.js">
-</script>
 <script>
     var exist_client = document.getElementsByName("exist_client")[0];
     function fill_all(inputs, data, cnt) {
@@ -192,6 +215,23 @@
             clean_all()
         }
     });
+
+    var connections = document.querySelectorAll('input[name^="sim_num"]').length;
+    var container = document.getElementById('container');
+    function add_connect() {
+        var div = document.createElement('div');
+        connections += 1;
+        var start_sim = document.getElementsByName('sim_num1')[0].value;
+        var html = '<div class="panel panel-primary"><div class="panel-heading"><span>מסלול</span><span class="pull-left">' + connections + '</span></div><div class="panel-body"><input value="' + start_sim + '" class="form-control" name="sim_num' + connections.toString() + '" placeholder="מספר סים" type="text" required="required"/><input class="form-control" name="phone_num' + connections.toString() + '" placeholder="מספר לניוד" type="text" required="required"/></div></div>';
+        div.innerHTML = html;
+        container.appendChild(div);
+    }
+    function remove_connect() {
+        if (container.children.length > 1) {
+            container.removeChild(container.lastElementChild);
+            connections -= 1
+        }
+    }
 </script>
 </body>
 </html>
