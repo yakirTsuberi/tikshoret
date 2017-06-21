@@ -35,10 +35,8 @@
                                     {{ sale['Client'].client_id }}</a></span>
                     <br/>
                     <strong>מסלול: </strong>
-                    <a href="/list_tracks/{{ sale['Track'].company }}">
                         {{ sale['Track'].company }} {{ sale['Track'].name }}
                         <span class="pull-left">{{ sale['Track'].price }} ש"ח</span>
-                    </a>
                     <br/>
                     <span class="pull-right"><strong>מס' סים: </strong><a data-toggle="tooltip" data-placement="left" title="העתק!"
                                    onclick="copyToClipboard({{ sale['Transaction'].sim_num }})">
@@ -78,7 +76,6 @@
                                     class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>
                             <button type="submit" name="status" value="2" class="btn btn-warning"><i
                                     class="fa fa-thumbs-o-down" aria-hidden="true"></i></button>
-                            {#                            <a href="/remove_sale/{{ sale['Transaction'].id }}" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></a>#}
                             <button class="btn btn-danger" data-toggle="modal" data-target="#myModal"
                                     data-book-id="{{ sale['Transaction'].id }}" type="button">
                                 <i class="fa fa-trash-o" aria-hidden="true"> </i>
