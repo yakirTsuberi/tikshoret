@@ -354,5 +354,4 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    db = DBGroups('yishaiphone-prodaction.db')
-    db.update_agent('yakir@ravtech.co.il', {'manager': 2})
+    pass
