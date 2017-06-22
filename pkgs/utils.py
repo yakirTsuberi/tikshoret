@@ -128,7 +128,10 @@ def send_mail(group, email, host_url, msg='Welcome to YishaiPhone!'):
 
 def send_basic_mail(to, subject, contents):
     def send():
-        os.system('python3 ' + LOCAL_PATH + '/send_email.py -t "{}" -s "{}" -c "{}"'.format(to, subject, contents))
+        os.system('python3 ' + LOCAL_PATH + '/send_email.py -t "{}" -s "{}" -c "{}"'.format(
+            to,
+            u' '.join(str(subject).split(' ')).encode('utf-8'),
+            u' '.join(str(contents).split(' ')).encode('utf-8')))
 
     threading.Thread(target=lambda: send()).start()
 
