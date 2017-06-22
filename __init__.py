@@ -263,8 +263,8 @@ def set_company(company):
             send_basic_mail(to=agent.email, subject='חיבור חדש', contents=c)
         if agent_connect.manager < 2:
             send_basic_mail(to=current_user.id, subject='חיבור חדש', contents=c)
-        if request.form.get('email'):
-            send_basic_mail(to=current_user.id, subject='חיבור חדש', contents=c)
+        if email:
+            send_basic_mail(to=email, subject='חיבור חדש', contents=c)
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
     return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific,
