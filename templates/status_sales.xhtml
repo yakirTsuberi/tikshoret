@@ -30,6 +30,8 @@
                     <br/>
                     <span><strong>שם לקוח: </strong>{{ sale['Client'].first_name }} {{ sale['Client'].last_name }}</span>
                     <br/>
+                    <span><strong>כתובת: </strong>{{ sale['Client'].address }} {{ sale['Client'].city }}</span>
+                    <br/>
                     <span><strong>תעודת זהות: </strong><a data-toggle="tooltip" data-placement="left" title="העתק!"
                                    onclick="copyToClipboard({{ sale['Client'].client_id }})">
                                     {{ sale['Client'].client_id }}</a></span>
