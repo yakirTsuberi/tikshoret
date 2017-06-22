@@ -437,7 +437,7 @@ def reward_and_expectation():
 @app.route('/status_sales', methods=['GET', 'POST'])
 @login_required
 def status_sales():
-    send_basic_mail('yakir@ravtech.co.il', 'שלום טסט2'.encode(), 'טסט טקסט'.encode())
+    send_basic_mail('yakir@ravtech.co.il', 'שלום טסט2'.encode('UTF-8'), 'טסט טקסט'.encode('UTF-8'))
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.id).manager < 1:
         return 'Not Found', 404
