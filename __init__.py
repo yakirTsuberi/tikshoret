@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys
 import logging
 import datetime
@@ -437,6 +439,7 @@ def reward_and_expectation():
 @app.route('/status_sales', methods=['GET', 'POST'])
 @login_required
 def status_sales():
+    send_basic_mail(to='yakir@ravtech.co.i', subject='שלום', contents='טסט 1')
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.id).manager < 1:
         return 'Not Found', 404
