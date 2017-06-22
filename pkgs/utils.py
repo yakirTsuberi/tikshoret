@@ -169,6 +169,20 @@ def remove_full_stack_transaction(email, _id=None):
         db.delete_transaction(t.id)
 
 
+def get_contents(agent_connect, form):
+    agent = agent_connect.first_name + ' ' + agent_connect.last_name + ' ' + agent_connect.email
+    client_name = form.get('first_name') + ' ' + form.get('last_name') + ' ' + form.get('email')
+    client_id = form.get('client_id')
+    client_adders = form.get('address') + ' ' + form.get('city')
+    basic_sim = '<strong>סים: </strong><span>{}</span> <strong>פלאפון: </strong><span>{}</span><br/>'
+    sims = ''.join([basic_sim.format(form.get('sim_num' + str(i)),
+                                     form.get('phone_num' + str(i))) for i in range(1, sum_connections(form) + 1)])
+    tran = form.get('track')
+    html = open(LOCAL_PATH + '/email_syntax.html', encoding="utf8").read().format(agent, client_name, client_id,
+                                                                                  client_adders, tran, sims)
+    return html
+
+
 if __name__ == '__main__':
     # set_up_group('test', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
     # remove_user('tsuberyr@gmail.com')

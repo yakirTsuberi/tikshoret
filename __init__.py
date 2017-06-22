@@ -15,7 +15,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
-    get_news, set_news, remove_full_stack_transaction, send_basic_mail
+    get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents
 
 login_manager = LoginManager()
 
@@ -257,15 +257,10 @@ def set_company(company):
                 request.form.get('sim_num' + str(i)),
                 request.form.get('phone_num' + str(i)),
                 0)
+        agent_connect = db.get_agent(current_user.id)
+        c = get_contents(agent_connect, request.form)
         for agent in db.get_all_agents(manager=2):
-            c = 'סוכן: ' + current_user.id
-            sim = '\n'.join(
-                [request.form.get('sim_num' + str(i)) + ' ' + request.form.get('phone_num' + str(i)) for i in
-                 range(1, sum_connections(request.form) + 1)])
-            k = 'לקוח:\n\t {} {}\n\t תעודת זהות: {}\n\t כתובת: {} {}\n קוים:\n {}'.format(first_name, last_name,
-                                                                                          client_id, address, city,
-                                                                                          sim)
-            send_basic_mail(to=agent.email, subject='New Connect', contents=c + '\n' + k)
+            send_basic_mail(to=agent.email, subject='חיבור חדש', contents=c)
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
     return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific,
