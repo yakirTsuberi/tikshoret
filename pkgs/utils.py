@@ -128,7 +128,7 @@ def send_mail(group, email, host_url, msg='Welcome to YishaiPhone!'):
 
 def send_basic_mail(to, subject, contents):
     def send():
-        yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!', encoding='UTF-8').send(to=to, subject=subject,
+        yagmail.SMTP('yishaiphone@gmail.com', 'yP1q2w3e4r!', encoding='ascii').send(to=to, subject=subject,
                                                                                contents=contents)
 
     threading.Thread(target=lambda: send()).start()
