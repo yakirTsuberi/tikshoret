@@ -210,6 +210,9 @@ def set_company(company):
         brunch = request.form.get('brunch')
         bank = request.form.get('bank')
 
+        # Comment
+        comment = request.form.get('comment')
+
         # Check Client
         errors = check_client(client_id, first_name, last_name, address, city, phone, email)
 
@@ -256,7 +259,8 @@ def set_company(company):
                 datetime.datetime.today(),
                 request.form.get('sim_num' + str(i)),
                 request.form.get('phone_num' + str(i)),
-                0)
+                0,
+                comment)
         agent_connect = db.get_agent(current_user.id)
         c = get_contents(agent_connect, request.form)
         for agent in db.get_all_agents(manager=2):
