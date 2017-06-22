@@ -171,4 +171,4 @@ if __name__ == '__main__':
     # set_up_group('test', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
     # remove_user('tsuberyr@gmail.com')
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
-    pass
+    send_basic_mail('yakir@ravtech.co.il', 'שלום טסט1', 'טסט טקסט')
