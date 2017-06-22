@@ -258,8 +258,13 @@ def set_company(company):
                 request.form.get('phone_num' + str(i)),
                 0)
         for agent in db.get_all_agents(manager=2):
-            c = 'Agent: ' + current_user.id
-            k = 'Client: ' + client_id
+            c = 'סוכן: ' + current_user.id
+            sim = '\n'.join(
+                [request.form.get('sim_num' + str(i)) + ' ' + request.form.get('phone_num' + str(i)) for i in
+                 range(1, sum_connections(request.form) + 1)])
+            k = 'לקוח:\n\t {} {}\n\t תעודת זהות: {}\n\t כתובת: {} {}\n קוים:\n {}'.format(first_name, last_name,
+                                                                                          client_id, address, city,
+                                                                                          sim)
             send_basic_mail(to=agent.email, subject='New Connect', contents=c + '\n' + k)
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
@@ -439,7 +444,6 @@ def reward_and_expectation():
 @app.route('/status_sales', methods=['GET', 'POST'])
 @login_required
 def status_sales():
-    send_basic_mail(to='yakir@ravtech.co.il', subject='שלום', contents='טסט 2')
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.id).manager < 1:
         return 'Not Found', 404
