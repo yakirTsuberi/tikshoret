@@ -41,7 +41,7 @@
                     </span>
                     <br/>
                     <span><strong>תעודת זהות: </strong><a data-toggle="tooltip" data-placement="left" title="העתק!"
-                                   onclick="copyToClipboard({{ sale['Client'].client_id }})">
+                                   onclick="copyToClipboard('{{ sale['Client'].client_id }}')">
                                     {{ sale['Client'].client_id }}</a></span>
                     <br/>
                     <strong>מסלול: </strong>
@@ -49,10 +49,10 @@
                         <span class="pull-left">{{ sale['Track'].price }} ש"ח</span>
                     <br/>
                     <span class="pull-right"><strong>מס' סים: </strong><a data-toggle="tooltip" data-placement="left" title="העתק!"
-                                   onclick="copyToClipboard({{ sale['Transaction'].sim_num }})">
+                                   onclick="copyToClipboard('{{ sale['Transaction'].sim_num }}')">
                                     {{ sale['Transaction'].sim_num }}</a></span>
                     <span class="pull-left"><strong>מס' טלפון: </strong><a data-toggle="tooltip" data-placement="left" title="העתק!"
-                                   onclick="copyToClipboard({{ sale['Transaction'].phone_num }})">
+                                   onclick="copyToClipboard('{{ sale['Transaction'].phone_num }}')">
                                     {{ sale['Transaction'].phone_num }}</a></span>
                     <br/>
                     {% if sale.get('CreditCard') %}
