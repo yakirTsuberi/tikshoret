@@ -28,9 +28,17 @@
                 <div class="list-sales pay-status{{ sale['Transaction'].status }}">
                     <span><strong>תאריך ושעה: </strong>{{ sale['Transaction'].date_time }}</span>
                     <br/>
-                    <span><strong>שם לקוח: </strong>{{ sale['Client'].first_name }} {{ sale['Client'].last_name }}</span>
+                    <span><strong>שם לקוח: </strong>
+                    <a data-toggle="tooltip" data-placement="left" title="העתק!"
+                                   onclick="copyToClipboard({{ sale['Client'].first_name }} {{ sale['Client'].last_name }})">
+                                {{ sale['Client'].first_name }} {{ sale['Client'].last_name }}</a>
+                    </span>
                     <br/>
-                    <span><strong>כתובת: </strong>{{ sale['Client'].address }} {{ sale['Client'].city }}</span>
+                    <span><strong>כתובת: </strong>
+                    <a data-toggle="tooltip" data-placement="left" title="העתק!"
+                                   onclick="copyToClipboard({{ sale['Client'].address }} {{ sale['Client'].city }})">
+                                {{ sale['Client'].address }} {{ sale['Client'].city }}</a>
+                    </span>
                     <br/>
                     <span><strong>תעודת זהות: </strong><a data-toggle="tooltip" data-placement="left" title="העתק!"
                                    onclick="copyToClipboard({{ sale['Client'].client_id }})">
