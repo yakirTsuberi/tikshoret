@@ -52,34 +52,36 @@
                 <label>פרטי לקוח</label>
                 <input class="form-control {{ 'form-error' if 'client_id' in errors }}" name="client_id"
                        placeholder="תעודת זהות" type="text" value="{{ data.get('client_id') or '' }}"
-                       required="required"/>
+                       required="required" autocomplete="off"/>
                 <input class="form-control {{ 'form-error' if 'first_name' in errors }}" name="first_name"
                        placeholder="שם פרטי" type="text"
-                       value="{{ data.get('first_name') or '' }}" required="required"/>
+                       value="{{ data.get('first_name') or '' }}" required="required" autocomplete="off"/>
                 <input class="form-control {{ 'form-error' if 'last_name' in errors }}" name="last_name"
                        placeholder="שם משפחה" type="text"
-                       value="{{ data.get('last_name') or '' }}" required="required"/>
+                       value="{{ data.get('last_name') or '' }}" required="required" autocomplete="off"/>
                 <input class="form-control {{ 'form-error' if 'address' in errors }}" name="address"
                        placeholder="כתובת" type="text"
-                       value="{{ data.get('address') or '' }}" required="required"/>
+                       value="{{ data.get('address') or '' }}" required="required" autocomplete="off"/>
                 <input class="form-control {{ 'form-error' if 'city' in errors }}" name="city" placeholder="עיר"
                        value="{{ data.get('city') or '' }}"
-                       type="text"/>
+                       type="text" autocomplete="off"/>
                 <input class="form-control {{ 'form-error' if 'phone' in errors }}" name="phone" placeholder="טלפון"
                        value="{{ data.get('phone') or '' }}"
-                       type="text"/>
+                       type="text" autocomplete="off"/>
                 <input class="form-control {{ 'form-error' if 'email' in errors }}" name="email"
                        placeholder="אימייל" value="{{ data.get('email') or '' }}"
-                       type="email"/>
+                       type="email" autocomplete="off"/>
             </div>
             {% if not data %}
                 <div id="container">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><span>מסלול</span><span class="pull-left">1</span></div>
-                        <div class="panel-body"><input value="{{ start_sim }}" class="form-control" name="sim_num1"
-                                                       placeholder="מספר סים" type="text" required="required"/><input
-                                class="form-control" name="phone_num1" placeholder="מספר לניוד" type="text"
-                                required="required"/></div>
+                        <div class="panel-body">
+                            <input value="{{ start_sim }}" class="form-control" name="sim_num1"
+                                   placeholder="מספר סים" type="text" required="required" autocomplete="off"/>
+                            <input class="form-control" name="phone_num1" placeholder="מספר לניוד" type="text"
+                                   required="required" autocomplete="off"/>
+                        </div>
                     </div>
                 </div>
             {% else %}
@@ -162,7 +164,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <textarea class="form-control" placeholder="הערות" name="comment">{{ data.get('comment') or '' }}</textarea>
+                <textarea class="form-control" placeholder="הערות"
+                          name="comment">{{ data.get('comment') or '' }}</textarea>
             </div>
             <div class="form-group">
                 <button class="btn btn-block btn-primary" type="submit">שלח</button>
