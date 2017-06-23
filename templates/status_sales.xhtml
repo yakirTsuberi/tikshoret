@@ -30,13 +30,13 @@
                     <br/>
                     <span><strong>שם לקוח: </strong>
                     <a data-toggle="tooltip" data-placement="left" title="העתק!"
-                                   onclick="copyToClipboard({{ sale['Client'].first_name }} {{ sale['Client'].last_name }})">
+                                   onclick="copyToClipboard('{{ sale['Client'].first_name }} {{ sale['Client'].last_name }}')">
                                 {{ sale['Client'].first_name }} {{ sale['Client'].last_name }}</a>
                     </span>
                     <br/>
                     <span><strong>כתובת: </strong>
                     <a data-toggle="tooltip" data-placement="left" title="העתק!"
-                                   onclick="copyToClipboard({{ sale['Client'].address }} {{ sale['Client'].city }})">
+                                   onclick="copyToClipboard('{{ sale['Client'].address }} {{ sale['Client'].city }}')">
                                 {{ sale['Client'].address }} {{ sale['Client'].city }}</a>
                     </span>
                     <br/>
