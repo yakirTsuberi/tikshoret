@@ -108,7 +108,7 @@ class DBGroups:
     def get_all_agents(self, manager=None):
         q = self.session.query(*Agents.__table__.columns)
         if manager is not None:
-            q.filter(Agents.manager == manager)
+            q = q.filter(Agents.manager == manager)
         return q.all()
 
     def update_agent(self, agent_id, values):
