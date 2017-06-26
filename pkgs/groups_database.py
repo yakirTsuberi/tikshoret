@@ -392,4 +392,4 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    pass
+    print(DBGroups('yishaiphone-prodaction').get_credit_card('54701743'))
