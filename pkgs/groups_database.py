@@ -375,7 +375,4 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    d = DBGroups('yakir@ravtech.co.il')
-    d.add_table(Tags)
-    tag = Column('tag', Integer, ForeignKey(Tags.id))
-    d.add_column(Tracks, tag)
+    pass
