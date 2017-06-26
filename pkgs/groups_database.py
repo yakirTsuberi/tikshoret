@@ -392,4 +392,4 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    DBGroups('test').add_column(Tags, Column('track_id', Integer, ForeignKey(Tracks.id)))
+    DBGroups('yishaiphone-prodaction').add_column(Tags, Column('track_id', Integer, ForeignKey(Tracks.id)))
