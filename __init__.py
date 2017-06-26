@@ -288,7 +288,8 @@ def list_tracks(company):
 
     agent = db.get_agent(current_user.id)
     tracks = db.get_all_tracks(company=company)
-    return render_template('list_tracks.xhtml', company=company, tracks=tracks, user=agent)
+    tags = db.get_all_tags()
+    return render_template('list_tracks.xhtml', company=company, tracks=tracks, user=agent, tags=tags)
 
 
 @app.route('/new_track/<company>', methods=['GET', 'POST'])
@@ -301,8 +302,13 @@ def new_track(company):
         if agent.manager > 1:
             price = request.form.get('price')
             name = request.form.get('name')
+            tag = request.form.get('tag')
             description = request.form.get('description')
+
             db.set_track(company, price, name, description)
+            track_id = db.get_track(company=company, name=name).id
+            if tag:
+                db.set_tag(tag, track_id)
         return redirect(url_for('list_tracks', company=company))
     return render_template('new_track.xhtml', company=company)
 
@@ -312,12 +318,25 @@ def new_track(company):
 def edit_track(track_id):
     db = DBGroups(current_user.group)
     track = db.get_track(_id=track_id)
+    tags = db.get_all_tags(track_id=track.id)
     if request.method == 'POST':
         agent = db.get_agent(current_user.id)
         if agent.manager > 1:
-            db.update_track(track_id, {k: v for k, v in request.form.items()})
+            tmp = {}
+            for k, v in request.form.items():
+                if str(k).startswith('tag'):
+                    tag_id = int(k.replace('tag', ''))
+                    if tag_id > 0:
+                        db.update_tag(tag_id, {'name': v})
+                    else:
+                        if v:
+                            db.set_tag(v, track_id)
+                else:
+                    tmp[k] = v
+            db.update_track(track_id, {k: v for k, v in tmp.items()})
+
         return redirect(url_for('list_tracks', company=track.company))
-    return render_template('edit_track.xhtml', track=track)
+    return render_template('edit_track.xhtml', track=track, tags=tags)
 
 
 @app.route('/delete_track/<track_id>')

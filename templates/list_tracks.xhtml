@@ -42,7 +42,14 @@
                     {% endif %}
 
                     <a name="description"
-                       href="/new_connect/{{ company }}?track_specific={{ track.name }}">{{ track.description |safe  }}</a>
+                       href="/new_connect/{{ company }}?track_specific={{ track.name }}">{{ track.description |safe }}</a>
+                    <br/>
+                    {% for tag in tags %}
+                        {% if tag.track_id == track.id %}
+                            <span class="badge">{{ tag.name }}</span>
+                        {% endif %}
+                    {% endfor %}
+
                 </div>
             </div>
 

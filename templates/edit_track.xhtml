@@ -28,6 +28,13 @@
             <div class="form-group">
                 <input type="number" class="form-control" name="price" value="{{ track.price }}" placeholder="מחיר"/>
                 <input type="text" class="form-control" name="name" value="{{ track.name }}" placeholder="שם המסלול"/>
+                    <label>תגים:</label>
+                {% for tag in tags %}
+                    <input type="text" class="form-control" name="tag{{ tag.id }}" value="{{ tag.name or '' }}"
+                           placeholder="תג"/>
+                {% endfor %}
+
+                <input type="text" class="form-control" name="tag0" value="{{ track.tag or '' }}" placeholder="תג"/>
                 <label>תיאור: </label>
                 <textarea name="description" style="width: 100%;">{{ track.description }}</textarea>
             </div>
