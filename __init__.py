@@ -9,12 +9,12 @@ from flask import Flask, request, redirect, url_for, render_template, abort
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
 from htmlmin.main import minify
 
-# logging.basicConfig(stream=sys.stderr)
-# sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
-from pkgs.groups_database import DBGroups
-from pkgs.users_database import DBUsers
-from pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
+from .pkgs.groups_database import DBGroups
+from .pkgs.users_database import DBUsers
+from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
     get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents
 
 login_manager = LoginManager()
