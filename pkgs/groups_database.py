@@ -20,6 +20,12 @@ class Agents(Base):
     manager = Column(Integer)  # 0=agent, 1=manger, 2=height-manager
 
 
+class Tags(Base):
+    __tablename__ = 'Tags'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+
+
 class Tracks(Base):
     __tablename__ = 'Tracks'
     id = Column(Integer, primary_key=True)
@@ -27,6 +33,7 @@ class Tracks(Base):
     price = Column(Float)
     name = Column(String)
     description = Column(String)
+    tag = Column(Integer, ForeignKey(Tags.id))
 
 
 class Clients(Base):
@@ -121,18 +128,19 @@ class DBGroups:
             self.session.rollback()
 
     # Tracks
-    def set_track(self, company, price, name, description):
+    def set_track(self, company, price, name, description, tag):
         try:
             self.session.add(Tracks(company=company,
                                     price=price,
                                     name=name,
-                                    description=description))
+                                    description=description,
+                                    tag=tag))
             self.session.commit()
         except Exception as e:
             logging.error(e)
             self.session.rollback()
 
-    def get_track(self, company=None, name=None, _id=None):
+    def get_track(self, company=None, name=None, _id=None, tag=None):
         q = self.session.query(*Tracks.__table__.columns)
         if name is not None:
             q = q.filter(Tracks.name == name)
@@ -140,6 +148,8 @@ class DBGroups:
             q = q.filter(Tracks.company == company)
         if _id is not None:
             q = q.filter(Tracks.id == _id)
+        if tag is not None:
+            q = q.filetr(Tracks.tag == tag)
         return q.first()
 
     def update_track(self, track_id, values):
@@ -150,10 +160,12 @@ class DBGroups:
             logging.error(e)
             self.session.rollback()
 
-    def get_all_tracks(self, company=None):
+    def get_all_tracks(self, company=None, tag=None):
         q = self.session.query(*Tracks.__table__.columns)
         if company is not None:
             q = q.filter(Tracks.company == company)
+        if tag is not None:
+            q = q.filter(Tracks.tag == tag)
         return q.all()
 
     # Clients
@@ -352,6 +364,18 @@ class DBGroups:
         return self.session.query(CreditCard.card_number).filter(
             CreditCard.card_number.like('%' + last_num)).first().card_number
 
+    def add_table(self, base):
+        base.__table__.create(bind=self.engine)
+
+    # noinspection SqlNoDataSourceInspection
+    def add_column(self, table, column):
+        column_name = column.compile(dialect=self.engine.dialect)
+        column_type = column.type.compile(self.engine.dialect)
+        self.engine.execute('ALTER TABLE {} ADD COLUMN {} {}'.format(table.__tablename__, column_name, column_type))
+
 
 if __name__ == '__main__':
-    pass
+    d = DBGroups('yakir@ravtech.co.il')
+    d.add_table(Tags)
+    tag = Column('tag', Integer, ForeignKey(Tags.id))
+    d.add_column(Tracks, tag)
