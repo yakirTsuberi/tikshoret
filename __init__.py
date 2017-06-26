@@ -217,15 +217,15 @@ def set_company(company):
         errors = check_client(client_id, first_name, last_name, address, city, phone, email)
 
         # Check CreditCard
-        if all([credit_card, month, year, cvv]):
-            if '*' in credit_card:
-                credit_card = db.get_secure_credit_card(credit_card[-4:])
-            checked_credit_card = check_credit_card(credit_card, month, year, cvv)
-            if not checked_credit_card:
-                errors.append('credit_card')
-        if not all([credit_card, month, year, cvv]) and not all([account_num, brunch, bank]):
-            errors.append('credit_card')
-            errors.append('bank')
+        # if all([credit_card, month, year, cvv]):
+        #     if '*' in credit_card:
+        #         credit_card = db.get_secure_credit_card(credit_card[-4:])
+        #     checked_credit_card = check_credit_card(credit_card, month, year, cvv)
+        #     if not checked_credit_card:
+        #         errors.append('credit_card')
+        # if not all([credit_card, month, year, cvv]) and not all([account_num, brunch, bank]):
+        #     errors.append('credit_card')
+        #     errors.append('bank')
 
         if errors:
             tmp = {k: v for k, v in request.form.items() if k != 'credit_card'}
