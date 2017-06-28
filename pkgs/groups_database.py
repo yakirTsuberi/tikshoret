@@ -405,4 +405,7 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    print(DBGroups('yishaiphone-prodaction').get_all_agents())
+    db = DBGroups('yishaiphone-prodaction')
+    db.delete_agent('yosefbi56@gmail.com')
+
+
