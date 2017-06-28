@@ -65,4 +65,4 @@ class DBUsers:
 
 
 if __name__ == '__main__':
-    pass
+    print(DBUsers().session.query(*Tmp.__table__.columns).all())
