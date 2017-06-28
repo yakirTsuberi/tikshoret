@@ -65,4 +65,4 @@ class DBUsers:
 
 
 if __name__ == '__main__':
-    print(DBUsers().get_user('yosefbi56@gmail.com'))
+    print(DBUsers().session.query(*Users.__table__.columns).all())
