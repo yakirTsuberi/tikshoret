@@ -405,7 +405,7 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    pass
     # db = DBGroups('yishaiphone-prodaction')
+    pass
 
 
