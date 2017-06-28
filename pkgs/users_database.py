@@ -65,4 +65,4 @@ class DBUsers:
 
 
 if __name__ == '__main__':
-    print(DBUsers().delete_tmp('a0cb78639d50e657ea4e89dabaa14fc9'))
+    pass
