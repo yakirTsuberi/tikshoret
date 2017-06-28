@@ -65,4 +65,4 @@ class DBUsers:
 
 
 if __name__ == '__main__':
-    pass
+    print(DBUsers().get_user('yosefbi56@gmail.com'))
