@@ -124,7 +124,6 @@ class DBGroups:
             self.session.commit()
         except Exception as e:
             logging.error(e)
-            print(e)
             self.session.rollback()
 
     # Tracks
@@ -208,7 +207,6 @@ class DBGroups:
 
     def get_all_clients(self, by_agent=None):
         if by_agent is not None:
-            print(by_agent)
             return self.session.query(Transactions, Clients).join(Clients).filter(
                 Transactions.agent_id == by_agent).group_by(Clients.client_id).all()
         return self.session.query(*Clients.__table__.columns).all()
@@ -345,7 +343,6 @@ class DBGroups:
                 elif [5]:
                     tmp['BankAccount'] = self.get_bank_account(i[3])
                 result.append(tmp)
-        print(result)
         return result
 
     def delete_track(self, track_id):
@@ -408,4 +405,4 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    pass
+    print(DBGroups('yishaiphone-prodaction').get_all_agents())
