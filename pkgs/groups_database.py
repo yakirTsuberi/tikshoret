@@ -206,7 +206,11 @@ class DBGroups:
     def get_client(self, client_id):
         return self.session.query(*Clients.__table__.columns).filter(Clients.client_id == client_id).first()
 
-    def get_all_clients(self):
+    def get_all_clients(self, by_agent=None):
+        if by_agent is not None:
+            print(by_agent)
+            return self.session.query(Transactions, Clients).join(Clients).filter(
+                Transactions.agent_id == by_agent).group_by(Clients.client_id).all()
         return self.session.query(*Clients.__table__.columns).all()
 
     def update_client(self, client_id, values):

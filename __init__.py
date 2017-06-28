@@ -354,7 +354,11 @@ def delete_track(track_id):
 @login_required
 def clients():
     db = DBGroups(current_user.group)
-    clients_list = db.get_all_clients()
+    agent = db.get_agent(current_user.id)
+    if agent.manager < 1:
+        clients_list = [client.Clients for client in db.get_all_clients(current_user.id)]
+    else:
+        clients_list = db.get_all_clients()
     return render_template('list_clients.xhtml', clients_list=clients_list, sum_clients=len(clients_list))
 
 
