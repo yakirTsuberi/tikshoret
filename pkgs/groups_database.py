@@ -334,7 +334,8 @@ class DBGroups:
                        'Track': self.get_track(_id=i.track),
                        'Client': self.get_client(i.client_id),
                        'sim_num': (i.sim_num,),
-                       'phone_num': (i.phone_num,)}
+                       'phone_num': (i.phone_num,),
+                       'len': [0]}
                 if i.credit_card_id:
                     tmp['CreditCard'] = self.get_credit_card(i[3])
                 elif [5]:
