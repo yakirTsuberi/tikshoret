@@ -482,10 +482,10 @@ def status_sales():
         db.update_transactions(tran_id, {'status': int(status),
                                          'comment': comment})
         tran_data = db.get_transaction(tran_id)
-        send_basic_mail(to=tran_data.agent_id, subject='Connection Status',
-                        contents='The connection you wrote to {} {}'.format(
-                            tran_data.client_id,
-                            'Success' if int(status) == 1 else 'Fail'))
+        subject = 'מצב חיבור ללקוח: {} -{}-.'.format(tran_data.client_id,
+                                                     'הצליח' if int(status) == 1 else 'נכשל')
+        send_basic_mail(to=tran_data.agent_id, subject=subject,
+                        contents='הערה: {}'.format(comment))
     sales = db.get_status_sales()
     return render_template('status_sales.xhtml', sales=sales)
 
