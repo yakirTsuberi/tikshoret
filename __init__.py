@@ -262,13 +262,14 @@ def set_company(company):
                 0,
                 comment)
         agent_connect = db.get_agent(current_user.id)
-        c = get_contents(agent_connect, request.form)
+        c = get_contents(agent_connect, request.form, company)
+        subject = 'חיבור חדש ללקוח: {} {}'.format(first_name, last_name)
         for agent in db.get_all_agents(manager=2):
-            send_basic_mail(to=agent.email, subject='חיבור חדש', contents=c)
+            send_basic_mail(to=agent.email, subject=subject, contents=c)
         if agent_connect.manager < 2:
-            send_basic_mail(to=current_user.id, subject='חיבור חדש', contents=c)
+            send_basic_mail(to=current_user.id, subject=subject, contents=c)
         if email:
-            send_basic_mail(to=email, subject='חיבור חדש', contents=c)
+            send_basic_mail(to=email, subject=subject, contents=c)
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
     return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific,
