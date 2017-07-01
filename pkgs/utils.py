@@ -18,7 +18,7 @@ from users_database import DBUsers
 LOCAL_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
 SIM_START_WITH = {'cellcom': '89972020', 'partner': '89972010', '012': '89972010', 'pelephone': '8997250',
-                  'hot': '89972071'}
+                  'hot': '89972071', 'rami_levi': '89972020', 'golan': '899720800'}
 
 
 def get_news():
