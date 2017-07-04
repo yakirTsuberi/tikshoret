@@ -35,7 +35,7 @@
 
 <div class="top">
     <div class="col-xs-4"><a href="/logout" class="pull-left"><i class="fa fa-power-off"> </i></a></div>
-    <div class="col-xs-4"><p>המכירות שלי</p></div>
+    <div class="col-xs-4"><p>המכירות של {{ agent_id }}</p></div>
     <div class="col-xs-4"><a href="/setting" class="pull-right"><i class="fa fa-cog"> </i></a></div>
 </div>
 <div class="center clearfix">
@@ -47,11 +47,11 @@
             <h4 class="pull-left"><span>סה"כ בש"ח: </span><strong>{{ sum_price }}</strong></h4>
         </div>
         <div class="btn-group btn-group-justified">
-            <a href="/my_sales?month={{ month }}&year={{ year }}&action=back" class="btn btn-primary">
+            <a href="/my_sales/{{ agent_id }}?month={{ month }}&year={{ year }}&action=back" class="btn btn-primary">
                 <i class="fa fa-angle-right pull-right fa-2x" aria-hidden="true"> </i>
             </a>
-            <a href="/my_sales?month={{ month }}&year={{ year }}&action=today" class="btn btn-primary">החודש</a>
-            <a href="/my_sales?month={{ month }}&year={{ year }}&action=next" class="btn btn-primary">
+            <a href="/my_sales/{{ agent_id }}?month={{ month }}&year={{ year }}&action=today" class="btn btn-primary">החודש</a>
+            <a href="/my_sales/{{ agent_id }}?month={{ month }}&year={{ year }}&action=next" class="btn btn-primary">
                 <i class="fa fa-angle-left pull-left fa-2x" aria-hidden="true"> </i>
             </a>
         </div>
@@ -89,5 +89,6 @@
 
     </div>
 </div>
+
 </body>
 </html>

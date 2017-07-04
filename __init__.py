@@ -134,9 +134,15 @@ def setting():
     return ''
 
 
-@app.route('/my_sales')
+@app.route('/my_sales', defaults={'agent_id': ''})
+@app.route('/my_sales/<agent_id>')
 @login_required
-def my_sales():
+def my_sales(agent_id):
+    db = DBGroups(current_user.group)
+    if db.get_agent(current_user.id).manager > 1:
+        agent_id = agent_id or current_user.id
+    else:
+        agent_id = current_user.id
     month = request.args.get('month')
     year = request.args.get('year')
     action = request.args.get('action')
@@ -154,11 +160,12 @@ def my_sales():
         date_filter = date_filter - relativedelta(months=1)
         month = date_filter.month
         year = date_filter.year
-    sales = get_my_sales(current_user.group, current_user.id, date_filter)
+    sales = get_my_sales(current_user.group, agent_id, date_filter)
     sum_price = sum([i[0].price for i in sales])
     return render_template('my_sales.xhtml', sales=sales,
                            month=month, year=year,
-                           sum_sale=len(sales), sum_price=sum_price)
+                           sum_sale=len(sales), sum_price=sum_price,
+                           agent_id=agent_id)
 
 
 @app.route('/new_connect')
