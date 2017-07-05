@@ -95,7 +95,7 @@
                         <div class="panel-heading"><span>מסלול</span><span class="pull-left">1</span></div>
                         <div class="panel-body">
                             <input value="{{ start_sim }}" class="form-control" name="sim_num1"
-                                   placeholder="מספר סים" type="text" required="required" autocomplete="off"/>
+                                   placeholder="מספר סים" type="number" required="required" autocomplete="off"/>
                             <input class="form-control" name="phone_num1" placeholder="מספר לניוד" type="text"
                                    autocomplete="off"/>
                         </div>
@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <input value="{{ data.get(d) }}" class="form-control" name="{{ d }}"
-                                           placeholder="מספר סים" type="text"
+                                           placeholder="מספר סים" type="number"
                                            required="required" autocomplete="off"/>
                                     <input
                                             class="form-control" name="phone_num{{ d[-1] }}"
@@ -244,7 +244,7 @@
         var div = document.createElement('div');
         connections += 1;
         var start_sim = document.getElementsByName('sim_num1')[0].value;
-        var html = '<div class="panel panel-primary"><div class="panel-heading"><span>מסלול</span><span class="pull-left">' + connections + '</span></div><div class="panel-body"><input value="' + start_sim + '" class="form-control" name="sim_num' + connections.toString() + '" placeholder="מספר סים" type="text" required="required" autocomplete="off"/><input class="form-control" name="phone_num' + connections.toString() + '" placeholder="מספר לניוד" type="text" autocomplete="off"/></div></div>';
+        var html = '<div class="panel panel-primary"><div class="panel-heading"><span>מסלול</span><span class="pull-left">' + connections + '</span></div><div class="panel-body"><input value="' + start_sim + '" class="form-control" name="sim_num' + connections.toString() + '" placeholder="מספר סים" type="number" required="required" autocomplete="off"/><input class="form-control" name="phone_num' + connections.toString() + '" placeholder="מספר לניוד" type="text" autocomplete="off"/></div></div>';
         div.innerHTML = html;
         container.appendChild(div);
     }
