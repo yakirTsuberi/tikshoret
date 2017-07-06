@@ -68,7 +68,7 @@
             <div class="form-group" id="client_input">
                 <label>פרטי לקוח</label>
                 <input class="form-control {{ 'form-error' if 'client_id' in errors }}" name="client_id"
-                       placeholder="תעודת זהות" type="text" value="{{ data.get('client_id') or '' }}"
+                       placeholder="תעודת זהות" type="number" value="{{ data.get('client_id') or '' }}"
                        required="required" autocomplete="off"/>
                 <input class="form-control {{ 'form-error' if 'first_name' in errors }}" name="first_name"
                        placeholder="שם פרטי" type="text"
@@ -84,7 +84,7 @@
                        type="text" autocomplete="off"/>
                 <input class="form-control {{ 'form-error' if 'phone' in errors }}" name="phone" placeholder="טלפון"
                        value="{{ data.get('phone') or '' }}"
-                       type="text" autocomplete="off"/>
+                       type="number" autocomplete="off"/>
                 <input class="form-control {{ 'form-error' if 'email' in errors }}" name="email"
                        placeholder="אימייל" value="{{ data.get('email') or '' }}"
                        type="email" autocomplete="off"/>
@@ -136,21 +136,21 @@
 
             <div class="form-group" id="credit_card_input">
                 <label>כרטיס אשראי</label>
-                <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="text" name="credit_card"
+                <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="number" name="credit_card"
                        placeholder="מספר כרטיס"/>
                 <div class="row" style="margin: 0">
                     <div class="col-xs-4 nopadding">
-                        <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="text"
+                        <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="number"
                                name="month" placeholder="חודש" value="{{ data.get('month') or '' }}"
                                autocomplete="off"/>
                     </div>
                     <div class="col-xs-4 nopadding">
-                        <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="text"
+                        <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="number"
                                name="year" placeholder="שנה" value="{{ data.get('year') or '' }}" autocomplete="off"/>
 
                     </div>
                     <div class="col-xs-4 nopadding">
-                        <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="text" name="cvv"
+                        <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="number" name="cvv"
                                placeholder="CVV" value="{{ data.get('cvv') or '' }}" autocomplete="off"/>
 
                     </div>
@@ -160,14 +160,14 @@
                 <label>חשבון בנק</label>
                 <div class="row" style="margin: 0">
                     <div class="col-xs-6 nopadding">
-                        <input class="form-control {{ 'form-error' if 'bank' in errors }}" type="text"
+                        <input class="form-control {{ 'form-error' if 'bank' in errors }}" type="number"
                                value="{{ data.get('account_num') or '' }}"
                                name="account_num"
                                placeholder="מספר חשבון"
                                autocomplete="off"/>
                     </div>
                     <div class="col-xs-4 nopadding">
-                        <input class="form-control {{ 'form-error' if 'bank' in errors }}" type="text"
+                        <input class="form-control {{ 'form-error' if 'bank' in errors }}" type="number"
                                value="{{ data.get('brunch') or '' }}" name="brunch"
                                placeholder="סניף"/>
 
