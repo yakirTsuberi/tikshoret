@@ -489,10 +489,13 @@ def status_sales():
         db.update_transactions(tran_id, {'status': int(status),
                                          'comment': comment})
         tran_data = db.get_transaction(tran_id)
-        subject = 'מצב חיבור ללקוח: {} -{}-.'.format(tran_data.client_id,
-                                                     'הצליח' if int(status) == 1 else 'נכשל')
+        client = db.get_client(tran_data.client_id)
+
+        contents = 'מצב חיבור: -{}-,\n הערה: {}'.format('הצליח' if int(status) == 1 else 'נכשל', comment)
+        subject = 'חיבור חדש ללקוח: {} {}'.format(client.first_name, client.last_name)
+
         send_basic_mail(to=tran_data.agent_id, subject=subject,
-                        contents='הערה: {}'.format(comment))
+                        contents=contents)
     sales = db.get_status_sales()
     return render_template('status_sales.xhtml', sales=sales)
 
