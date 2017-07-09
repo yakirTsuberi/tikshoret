@@ -491,7 +491,9 @@ def status_sales():
         tran_data = db.get_transaction(tran_id)
         client = db.get_client(tran_data.client_id)
 
-        contents = 'מצב חיבור: -{}-,\n הערה: {}'.format('הצליח' if int(status) == 1 else 'נכשל', comment)
+        contents = 'מצב חיבור לקו: {} -{}-,\n הערה: {}'.format(tran_data.phone_num,
+                                                               'הצליח' if int(status) == 1 else 'נכשל',
+                                                               comment)
         subject = 'חיבור חדש ללקוח: {} {}'.format(client.first_name, client.last_name)
 
         send_basic_mail(to=tran_data.agent_id, subject=subject,
