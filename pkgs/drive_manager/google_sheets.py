@@ -1,7 +1,7 @@
 from __future__ import print_function
 import httplib2
 import os
-import pathlib
+from pathlib import Path
 
 from apiclient import discovery
 from oauth2client import client
@@ -37,7 +37,7 @@ class Sheets:
         store = Storage(credential_path)
         credentials = store.get()
         if not credentials or credentials.invalid:
-            flow = client.flow_from_clientsecrets(self.client_secret_file, self.scope)
+            flow = client.flow_from_clientsecrets(str(Path(__file__).parent / self.client_secret_file), self.scope)
             flow.user_agent = self.application_name
             credentials = tools.run_flow(flow, store, flags)
 
