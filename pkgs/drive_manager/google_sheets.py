@@ -58,9 +58,7 @@ class Sheets:
 
 
 def main():
-    s = Sheets()
-    # s.write([['hello']])
-    print(s.read())
+    pass
 
 
 if __name__ == '__main__':

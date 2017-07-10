@@ -16,12 +16,14 @@ from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
     get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents
+from .pkgs.drive_manager.google_sheets import Sheets
 
 login_manager = LoginManager()
-
 app = Flask(__name__)
-
 login_manager.init_app(app)
+
+s = Sheets()
+print(s.read())
 
 
 class User(UserMixin):
