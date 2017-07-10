@@ -58,7 +58,7 @@ class Sheets:
 
 
 def main():
-    pass
+    s = Sheets()
 
 
 if __name__ == '__main__':
