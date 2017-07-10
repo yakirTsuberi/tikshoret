@@ -59,6 +59,7 @@ class Sheets:
 
 def main():
     s = Sheets()
+    print(s.read())
 
 
 if __name__ == '__main__':
