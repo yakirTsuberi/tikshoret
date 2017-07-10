@@ -3,6 +3,7 @@
 import sys
 import logging
 import datetime
+from pathlib import Path
 
 from dateutil.relativedelta import relativedelta
 from flask import Flask, request, redirect, url_for, render_template, abort
@@ -123,7 +124,7 @@ def index():
         return redirect(url_for('login'))
     db = DBGroups(current_user.group)
     user = db.get_agent(current_user.id)
-    logging.error(str(__file__))
+    logging.error(str(Path(__file__).parent))
     return render_template('index.xhtml', user=user, news=get_news())
 
 
