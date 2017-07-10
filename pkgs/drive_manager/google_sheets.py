@@ -27,9 +27,7 @@ class Sheets:
         self.service = self._get_service()
 
     def _get_credentials(self):
-        home_dir = os.path.expanduser('~')
-        print(home_dir)
-        credential_dir = os.path.join(home_dir, '.credentials')
+        credential_dir = '/root/.credentials'
         if not os.path.exists(credential_dir):
             os.makedirs(credential_dir)
         credential_path = os.path.join(credential_dir, self.client_secret_file)
