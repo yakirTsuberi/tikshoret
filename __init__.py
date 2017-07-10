@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import os
 import logging
 import datetime
 from pathlib import Path
@@ -124,7 +125,8 @@ def index():
         return redirect(url_for('login'))
     db = DBGroups(current_user.group)
     user = db.get_agent(current_user.id)
-    logging.error(str(Path(__file__).parent))
+    p = str(Path(__file__).parent / 'pkgs' / 'drive_manager' / 'google_sheets.py')
+    logging.error(os.popen('python3 ' + p).read())
     return render_template('index.xhtml', user=user, news=get_news())
 
 
