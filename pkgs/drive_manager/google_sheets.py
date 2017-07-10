@@ -1,6 +1,7 @@
 from __future__ import print_function
 import httplib2
 import os
+import pathlib
 
 from apiclient import discovery
 from oauth2client import client
@@ -27,6 +28,7 @@ class Sheets:
 
     def _get_credentials(self):
         home_dir = os.path.expanduser('~')
+        print(home_dir)
         credential_dir = os.path.join(home_dir, '.credentials')
         if not os.path.exists(credential_dir):
             os.makedirs(credential_dir)
@@ -35,7 +37,7 @@ class Sheets:
         store = Storage(credential_path)
         credentials = store.get()
         if not credentials or credentials.invalid:
-            flow = client.flow_from_clientsecrets(credential_path, self.scope)
+            flow = client.flow_from_clientsecrets(self.client_secret_file, self.scope)
             flow.user_agent = self.application_name
             credentials = tools.run_flow(flow, store, flags)
 
