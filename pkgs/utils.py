@@ -14,6 +14,7 @@ import yagmail
 
 from groups_database import DBGroups, Transactions, Tracks, and_
 from users_database import DBUsers
+from drive_manager.google_sheets import Sheets
 
 LOCAL_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
@@ -181,6 +182,10 @@ def get_contents(agent_connect, form, company):
     html = open(LOCAL_PATH + '/email_syntax.html', encoding="utf8").read().format(agent, client_name, client_id,
                                                                                   client_adders, company, tran, sims)
     return html
+
+
+def write_to_drive(values=None):
+    return Sheets().read()
 
 
 if __name__ == '__main__':

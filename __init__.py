@@ -4,7 +4,6 @@ import sys
 import os
 import logging
 import datetime
-from pathlib import Path
 
 from dateutil.relativedelta import relativedelta
 from flask import Flask, request, redirect, url_for, render_template, abort
@@ -17,7 +16,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
-    get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents
+    get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents, write_to_drive
 
 login_manager = LoginManager()
 app = Flask(__name__)
@@ -125,8 +124,7 @@ def index():
         return redirect(url_for('login'))
     db = DBGroups(current_user.group)
     user = db.get_agent(current_user.id)
-    p = str(Path(__file__).parent / 'pkgs' / 'drive_manager' / 'google_sheets.py')
-    logging.error(os.popen('python3 ' + p).read())
+    logging.error(write_to_drive())
     return render_template('index.xhtml', user=user, news=get_news())
 
 
