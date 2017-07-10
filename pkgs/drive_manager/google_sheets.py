@@ -35,7 +35,7 @@ class Sheets:
         store = Storage(credential_path)
         credentials = store.get()
         if not credentials or credentials.invalid:
-            flow = client.flow_from_clientsecrets(self.client_secret_file, self.scope)
+            flow = client.flow_from_clientsecrets(credential_path, self.scope)
             flow.user_agent = self.application_name
             credentials = tools.run_flow(flow, store, flags)
 
