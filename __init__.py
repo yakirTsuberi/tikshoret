@@ -124,7 +124,6 @@ def index():
         return redirect(url_for('login'))
     db = DBGroups(current_user.group)
     user = db.get_agent(current_user.id)
-    logging.error(write_to_drive())
     return render_template('index.xhtml', user=user, news=get_news())
 
 
