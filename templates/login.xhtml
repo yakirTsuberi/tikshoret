@@ -40,19 +40,42 @@
     <div class="col-md-4"></div>
     <div class="col-md-4">
         <form action="/login" method="post">
-            <input type="email" class="form-control" name="email" placeholder="כתובת אימייל" required="required"
-                   autofocus="autofocus"/>
-            <br/>
-            <input type="password" class="form-control" name="pw" placeholder="סיסמה" required="required"/>
-            <br/>
-            <div class="checkbox">
-                <label class="checkbox" for="rememberMe"> זכור אותי
-                    <input type="checkbox" id="rememberMe" name="rememberMe" checked="checked"/>
+            {% if groups %}
+                <input type="email" class="form-control" name="email" placeholder="כתובת אימייל" required="required"
+                       autofocus="autofocus" value="{{ groups[0].email }}"/>
+                <br/>
+                <input type="password" class="form-control" name="pw" placeholder="סיסמה"
+                       required="required" value="{{ groups[0].pw }}"/>
+                <br/>
+                <div class="checkbox">
+                    <label class="checkbox" for="rememberMe"> זכור אותי
+                        <input type="checkbox" id="rememberMe" name="rememberMe" checked="checked"/>
+                    </label>
+                </div>
+                <label>בחר קבוצה:
+                    <select name="group" class="form-control">
+                        {% for group in groups %}
+                            <option value="{{ group }}">{{ group.group }}</option>
+                        {% endfor %}
+                    </select>
                 </label>
-            </div>
+            {% else %}
+                <input type="email" class="form-control" name="email" placeholder="כתובת אימייל" required="required"
+                       autofocus="autofocus"/>
+                <br/>
+                <input type="password" class="form-control" name="pw" placeholder="סיסמה" required="required"/>
+                <br/>
+                <div class="checkbox">
+                    <label class="checkbox" for="rememberMe"> זכור אותי
+                        <input type="checkbox" id="rememberMe" name="rememberMe" checked="checked"/>
+                    </label>
+                </div>
+            {% endif %}
+
             {% if massage == 'True' %}
                 <h5 class="text-danger">שם משתמש או סיסמה שגויים.</h5>
             {% endif %}
+
             <button class="btn btn-lg btn-primary btn-block" type="submit">הכנס</button>
         </form>
         <a href="/forget_my_password">שכחתי סיסמה</a>

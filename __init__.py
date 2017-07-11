@@ -27,13 +27,14 @@ class User(UserMixin):
 
 
 @login_manager.user_loader
-def user_loader(email):
+def user_loader(id):
     db = DBUsers()
-    user_db = db.get_user(email)
+    user_db = db.get_user(id=id)
     if not user_db:
         return
     user = User()
-    user.id = user_db.email
+    user.id = user_db.id
+    user.email = user_db.email
     user.group = user_db.group
     return user
 
@@ -46,12 +47,24 @@ def login():
     email = request.form.get('email')
     password = request.form.get('pw')
     remember = request.form.getlist('rememberMe')
-    user_db = db.get_user(email)
+    user_db = db.get_all_users(email)
+    group = request.form.get('group')
+    print(group)
+    if len(user_db) > 1 and not group:
+        print(user_db)
+        return render_template('login.xhtml', massage='False', groups=user_db)
     if user_db:
-        if user_db.pw == password:
+        if user_db[0].pw == password:
             user = User()
-            user.id = email
-            user.group = user_db.group
+            if group:
+                group = eval(group)
+                user.id = group[0]
+                user.email = email
+                user.group = group[3]
+            else:
+                user.id = user_db[0].id
+                user.email = email
+                user.group =  user_db[0].group
             login_user(user, remember=bool(remember))
             return redirect(url_for('index'))
     return render_template('login.xhtml', massage='True')
@@ -122,7 +135,7 @@ def index():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     db = DBGroups(current_user.group)
-    user = db.get_agent(current_user.id)
+    user = db.get_agent(current_user.email)
     return render_template('index.xhtml', user=user, news=get_news())
 
 
@@ -137,10 +150,11 @@ def setting():
 @login_required
 def my_sales(agent_id):
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.id).manager > 1:
-        agent_id = agent_id or current_user.id
+    print(current_user.group)
+    if db.get_agent(current_user.email).manager > 1:
+        agent_id = agent_id or current_user.email
     else:
-        agent_id = current_user.id
+        agent_id = current_user.email
     month = request.args.get('month')
     year = request.args.get('year')
     action = request.args.get('action')
@@ -256,7 +270,7 @@ def set_company(company):
                     db.set_bank_account(client_id, account_num, brunch, bank)
                 account_num_id = db.get_bank_account(client_id).id
             db.set_transactions(
-                current_user.id,
+                current_user.email,
                 db.get_track(company=company, name=track).id,
                 client_id,
                 credit_card_id,
@@ -266,13 +280,13 @@ def set_company(company):
                 request.form.get('phone_num' + str(i)),
                 0,
                 comment)
-        agent_connect = db.get_agent(current_user.id)
+        agent_connect = db.get_agent(current_user.email)
         c = get_contents(agent_connect, request.form, company)
         subject = 'חיבור חדש ללקוח: {} {}'.format(first_name, last_name)
         for agent in db.get_all_agents(manager=2):
             send_basic_mail(to=agent.email, subject=subject, contents=c)
         if agent_connect.manager < 2:
-            send_basic_mail(to=current_user.id, subject=subject, contents=c)
+            send_basic_mail(to=current_user.email, subject=subject, contents=c)
         if email:
             send_basic_mail(to=email, subject=subject, contents=c)
         return redirect(url_for('index'))
@@ -292,7 +306,7 @@ def tracks_manger():
 def list_tracks(company):
     db = DBGroups(current_user.group)
 
-    agent = db.get_agent(current_user.id)
+    agent = db.get_agent(current_user.email)
     tracks = db.get_all_tracks(company=company)
     tags = db.get_all_tags()
     return render_template('list_tracks.xhtml', company=company, tracks=tracks, user=agent, tags=tags)
@@ -304,7 +318,7 @@ def new_track(company):
     if request.method == 'POST':
         db = DBGroups(current_user.group)
 
-        agent = db.get_agent(current_user.id)
+        agent = db.get_agent(current_user.email)
         if agent.manager > 1:
             price = request.form.get('price')
             name = request.form.get('name')
@@ -326,7 +340,7 @@ def edit_track(track_id):
     track = db.get_track(_id=track_id)
     tags = db.get_all_tags(track_id=track.id)
     if request.method == 'POST':
-        agent = db.get_agent(current_user.id)
+        agent = db.get_agent(current_user.email)
         if agent.manager > 1:
             tmp = {}
             for k, v in request.form.items():
@@ -350,7 +364,7 @@ def edit_track(track_id):
 def delete_track(track_id):
     db = DBGroups(current_user.group)
     track = db.get_track(_id=track_id)
-    agent = db.get_agent(current_user.id)
+    agent = db.get_agent(current_user.email)
     if agent.manager > 1:
         db.delete_track(track_id)
     return redirect(url_for('list_tracks', company=track.company))
@@ -360,9 +374,9 @@ def delete_track(track_id):
 @login_required
 def clients():
     db = DBGroups(current_user.group)
-    agent = db.get_agent(current_user.id)
+    agent = db.get_agent(current_user.email)
     if agent.manager < 1:
-        clients_list = [client.Clients for client in db.get_all_clients(current_user.id)]
+        clients_list = [client.Clients for client in db.get_all_clients(current_user.email)]
     else:
         clients_list = db.get_all_clients()
     return render_template('list_clients.xhtml', clients_list=clients_list, sum_clients=len(clients_list))
@@ -395,7 +409,7 @@ def edit_client(client_id):
 @login_required
 def agents():
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.id).manager < 2:
+    if db.get_agent(current_user.email).manager < 2:
         return 'Not Found', 404
     agents_list = db.get_all_agents()
     return render_template('list_agents.xhtml', agents_list=agents_list)
@@ -405,7 +419,7 @@ def agents():
 @login_required
 def new_agent():
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.id).manager < 2:
+    if db.get_agent(current_user.email).manager < 2:
         return 'Not Found', 404
     if request.method == 'POST':
         email = request.form.get('email')
@@ -423,7 +437,7 @@ def new_agent():
 @login_required
 def edit_agent(agent_id):
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.id).manager < 2:
+    if db.get_agent(current_user.email).manager < 2:
         return 'Not Found', 404
     agent = db.get_agent(agent_id)
     if request.method == 'POST':
@@ -450,7 +464,7 @@ def forget_my_password():
 @login_required
 def reward_and_expectation():
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.id).manager < 2:
+    if db.get_agent(current_user.email).manager < 2:
         return 'Not Found', 404
     month = request.args.get('month')
     year = request.args.get('year')
@@ -477,7 +491,7 @@ def reward_and_expectation():
 @login_required
 def status_sales():
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.id).manager < 1:
+    if db.get_agent(current_user.email).manager < 1:
         return 'Not Found', 404
     if request.method == 'POST':
         status = request.form.get('status')
@@ -524,8 +538,8 @@ def status_sales():
 @login_required
 def remove_sale(_id):
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.id).manager > 1:
-        remove_full_stack_transaction(current_user.id, _id)
+    if db.get_agent(current_user.email).manager > 1:
+        remove_full_stack_transaction(current_user.email, _id)
     return redirect(url_for('status_sales'))
 
 
@@ -533,7 +547,7 @@ def remove_sale(_id):
 @login_required
 def massages():
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.id).manager < 2:
+    if db.get_agent(current_user.email).manager < 2:
         return redirect(url_for('index'))
     if request.method == 'POST':
         set_news([v for _, v in request.form.items()])
