@@ -205,11 +205,21 @@ class DBGroups:
     def get_client(self, client_id):
         return self.session.query(*Clients.__table__.columns).filter(Clients.client_id == client_id).first()
 
-    def get_all_clients(self, by_agent=None):
+    def get_all_clients(self, by_agent=None, search=None):
         if by_agent is not None:
-            return self.session.query(Transactions, Clients).join(Clients).filter(
-                Transactions.agent_id == by_agent).group_by(Clients.client_id).all()
-        return self.session.query(*Clients.__table__.columns).all()
+            q = self.session.query(Transactions, Clients).join(Clients).filter(
+                Transactions.agent_id == by_agent)
+            if search is not None:
+                q = q.filter(or_(Clients.first_name.like('%' + search + '%'),
+                                 Clients.last_name.like('%' + search + '%'),
+                                 Clients.client_id.like('%' + search + '%')))
+            return q.group_by(Clients.client_id).all()
+        q = self.session.query(*Clients.__table__.columns)
+        if search is not None:
+            q = q.filter(or_(Clients.first_name.like('%' + search + '%'),
+                             Clients.last_name.like('%' + search + '%'),
+                             Clients.client_id.like('%' + search + '%')))
+        return q.all()
 
     def update_client(self, client_id, values):
         try:
@@ -407,5 +417,3 @@ class DBGroups:
 if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction')
     pass
-
-

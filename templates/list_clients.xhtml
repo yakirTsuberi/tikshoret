@@ -42,6 +42,10 @@
         <div>
             <h2 class="text-center"><span>סה"כ לקוחות: </span><strong>{{ sum_clients }}</strong></h2>
         </div>
+        <form action="/clients" class="form-group">
+            <input type="search" name="search" class="form-control" placeholder="חיפוש"/>
+            <input type="submit" hidden="hidden"/>
+        </form>
         <div>
             {% for client in clients_list %}
                 <div class="list-sales clearfix">

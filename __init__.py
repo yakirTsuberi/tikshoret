@@ -375,10 +375,11 @@ def delete_track(track_id):
 def clients():
     db = DBGroups(current_user.group)
     agent = db.get_agent(current_user.email)
+    search = request.args.get('search')
     if agent.manager < 1:
-        clients_list = [client.Clients for client in db.get_all_clients(current_user.email)]
+        clients_list = [client.Clients for client in db.get_all_clients(current_user.email, search)]
     else:
-        clients_list = db.get_all_clients()
+        clients_list = db.get_all_clients(search=search)
     return render_template('list_clients.xhtml', clients_list=clients_list, sum_clients=len(clients_list))
 
 
