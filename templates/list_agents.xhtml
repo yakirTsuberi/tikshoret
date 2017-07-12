@@ -43,9 +43,15 @@
         <div>
             {% for agent in agents_list %}
                 <div class="list-sales">
-                    <a href="/edit_agent/{{ agent.email }}" class="btn btn-primary pull-left">
-                        <i class="fa fa-pencil fa-2x" aria-hidden="true"> </i>
-                    </a>
+                    <div class="btn-group pull-left">
+                        <a href="/edit_agent/{{ agent.email }}" class="btn btn-primary pull-left">
+                            <i class="fa fa-pencil" aria-hidden="true"> </i>
+                        </a>
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#myModal"
+                                data-book-id="{{ agent.email }}">
+                            <i class="fa fa-trash" aria-hidden="true"> </i>
+                        </button>
+                    </div>
                     <span><strong>אימייל: </strong><a href="/my_sales/{{ agent.email }}">{{ agent.email }}</a></span>
                     <br/>
                     <span><strong>שם סוכן: </strong>{{ agent.first_name }} {{ agent.last_name }}</span>
@@ -73,5 +79,39 @@
     <div class="col-xs-4">
     </div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">מחק מסלול</h4>
+            </div>
+            <div class="modal-body">
+                <p>בטוח שברצונך למחוק?</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger" id="delete">מחק</a>
+                <button type="button" class="btn btn-success" data-dismiss="modal">לא, אל תמחק</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    var descriptions = document.getElementsByTagName('description');
+    console.log(descriptions);
+    $('#myModal').on('show.bs.modal', function (e) {
+
+        //get data-id attribute of the clicked element
+        var bookId = $(e.relatedTarget).data('book-id');
+        //populate the textbox
+        $(e.currentTarget).find('a[id="delete"]').attr("href", "/delete_agent/" + bookId);
+    });
+</script>
 </body>
 </html>

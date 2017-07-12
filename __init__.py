@@ -15,7 +15,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
-    get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents, write_to_drive
+    get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents, write_to_drive, remove_user
 
 login_manager = LoginManager()
 app = Flask(__name__)
@@ -64,7 +64,7 @@ def login():
             else:
                 user.id = user_db[0].id
                 user.email = email
-                user.group =  user_db[0].group
+                user.group = user_db[0].group
             login_user(user, remember=bool(remember))
             return redirect(url_for('index'))
     return render_template('login.xhtml', massage='True')
@@ -368,6 +368,16 @@ def delete_track(track_id):
     if agent.manager > 1:
         db.delete_track(track_id)
     return redirect(url_for('list_tracks', company=track.company))
+
+
+@app.route('/delete_agent/<agent_id>')
+@login_required
+def delete_agent(agent_id):
+    db = DBGroups(current_user.group)
+    agent = db.get_agent(current_user.email)
+    if agent.manager > 1:
+        remove_user(agent_id)
+    return redirect(url_for('agents'))
 
 
 @app.route('/clients')
