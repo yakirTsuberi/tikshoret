@@ -57,7 +57,7 @@
                 <i class="fa fa-users"></i><br/>לקוחות
             </a>
         </div>
-        {% if user.manager > 1 %}
+        {% if user.manager > 0 %}
             <div class="col-xs-6">
                 <a href="/agents" class="btn btn-default btn-block">
                     <i class="fa fa-address-card" aria-hidden="true"></i><br/>ניהול סוכנים
@@ -68,14 +68,13 @@
                     <i class="fa fa-table" aria-hidden="true"></i><br/>תגמול וצפי
                 </a>
             </div>
+        {% endif %}
+        {% if user.manager > 1 %}
             <div class="col-xs-6">
                 <a href="/massages" class="btn btn-default btn-block">
                     <i class="fa fa-commenting-o" aria-hidden="true"></i><br/>עריכת עדכונים
                 </a>
             </div>
-
-        {% endif %}
-        {% if user.manager > 0 %}
             <div class="col-xs-6">
                 <a href="/status_sales" class="btn btn-default btn-block">
                     <i class="fa fa-usd" aria-hidden="true"></i><br/>מצב מכירות

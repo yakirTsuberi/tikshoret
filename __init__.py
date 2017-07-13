@@ -424,9 +424,14 @@ def edit_client(client_id):
 @login_required
 def agents():
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.email).manager < 1:
+    agent = db.get_agent(current_user.email)
+    if agent.manager == 0:
         return 'Not Found', 404
-    agents_list = db.get_all_agents()
+    agents_list = []
+    if agent.manager == 1:
+        agents_list = db.get_all_agents(manager=0)
+    if agent.manager == 2:
+        agents_list = db.get_all_agents()
     return render_template('list_agents.xhtml', agents_list=agents_list)
 
 
@@ -434,31 +439,41 @@ def agents():
 @login_required
 def new_agent():
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.email).manager < 1:
+    agent_manager = db.get_agent(current_user.email).manager
+    if agent_manager < 1:
         return 'Not Found', 404
     if request.method == 'POST':
         email = request.form.get('email')
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         manager = request.form.get('manager')
+        if manager is None:
+            manager = 0
         phone = request.form.get('phone')
         db.set_agent(email=email, first_name=first_name, last_name=last_name, manager=manager, phone=phone or None)
         send_mail(current_user.group, email, request.host_url + 'signup')
         return redirect(url_for('agents'))
-    return render_template('new_agent.xhtml')
+    return render_template('new_agent.xhtml', agent_manager=agent_manager)
 
 
 @app.route('/edit_agent/<agent_id>', methods=['GET', 'POST'])
 @login_required
 def edit_agent(agent_id):
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.email).manager < 1:
+    agent_manager = db.get_agent(current_user.email).manager
+    if agent_manager < 1:
         return 'Not Found', 404
     agent = db.get_agent(agent_id)
     if request.method == 'POST':
-        db.update_agent(agent_id, {k: v for k, v in request.form.items()})
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        phone = request.form.get('phone')
+        manager = request.form.get('manager')
+        if manager is None:
+            manager = 0
+        db.update_agent(agent_id, dict(first_name=first_name, last_name=last_name, phone=phone, manager=manager))
         return redirect(url_for('agents'))
-    return render_template('edit_agent.xhtml', agent=agent)
+    return render_template('edit_agent.xhtml', agent=agent, agent_manager=agent_manager)
 
 
 @app.route('/forget_my_password', methods=['GET', 'POST'])
@@ -479,7 +494,7 @@ def forget_my_password():
 @login_required
 def reward_and_expectation():
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.email).manager < 2:
+    if db.get_agent(current_user.email).manager < 1:
         return 'Not Found', 404
     month = request.args.get('month')
     year = request.args.get('year')
