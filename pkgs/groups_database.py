@@ -92,6 +92,7 @@ class DBGroups:
         os.system('chown -R www-data ' + LOCAL_PATH + '/data')
         session = sessionmaker(bind=self.engine)
         self.session = session()
+        self.group = group_id
 
     def create_all_tables(self):
         Base.metadata.create_all(self.engine, checkfirst=True)
@@ -327,32 +328,6 @@ class DBGroups:
             list_agent.append(('sum', sum([i[1] for i in list_agent])))
             name_agent = _agent.first_name[0] + '.' + _agent.last_name
             result[name_agent] = list_agent
-        return result
-
-    def get_status_sales(self):
-        q = self.session.query(*Transactions.__table__.columns) \
-            .filter(or_(Transactions.status == 0, Transactions.status == 2)).all()
-        result = []
-        for k, i in enumerate(q):
-            exist = False
-            for t in result:
-                if t['Transaction'].track == i.track and t['Transaction'].client_id == i.client_id:
-                    t['sim_num'] = t['sim_num'] + (i.sim_num,)
-                    t['phone_num'] = t['phone_num'] + (i.phone_num,)
-                    t['len'] = [c for c in range(len(t['phone_num']))]
-                    exist = True
-            if not exist:
-                tmp = {'Transaction': i,
-                       'Track': self.get_track(_id=i.track),
-                       'Client': self.get_client(i.client_id),
-                       'sim_num': (i.sim_num,),
-                       'phone_num': (i.phone_num,),
-                       'len': [0]}
-                if i.credit_card_id:
-                    tmp['CreditCard'] = self.get_credit_card(i[3])
-                elif [5]:
-                    tmp['BankAccount'] = self.get_bank_account(i[3])
-                result.append(tmp)
         return result
 
     def delete_track(self, track_id):

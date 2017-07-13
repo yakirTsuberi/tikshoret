@@ -14,8 +14,9 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
-from .pkgs.utils import check_client, check_credit_card, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
-    get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents, write_to_drive, remove_user
+from .pkgs.utils import check_client, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
+    get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents, write_to_drive, remove_user, \
+    update_all_tracks, set_all_tracks, get_status_sales
 
 login_manager = LoginManager()
 app = Flask(__name__)
@@ -27,9 +28,9 @@ class User(UserMixin):
 
 
 @login_manager.user_loader
-def user_loader(id):
+def user_loader(_id):
     db = DBUsers()
-    user_db = db.get_user(id=id)
+    user_db = db.get_user(id=_id)
     if not user_db:
         return
     user = User()
@@ -192,9 +193,9 @@ def set_company(company):
     db = DBGroups(current_user.group)
     all_c = db.get_all_clients()
     clients_list = []
-    for c in all_c:
-        ba = db.get_bank_account(c.client_id) or []
-        cc = db.get_credit_card(c.client_id) or []
+    for contents in all_c:
+        ba = db.get_bank_account(contents.client_id) or []
+        cc = db.get_credit_card(contents.client_id) or []
         if cc:
             tmp = []
             for k, v in enumerate(cc):
@@ -203,7 +204,7 @@ def set_company(company):
                 else:
                     tmp.append(v)
             cc = tmp
-        clients_list.append([c, ba, cc])
+        clients_list.append([contents, ba, cc])
     tracks = db.get_all_tracks(company)
     if request.method == 'POST':
 
@@ -281,14 +282,14 @@ def set_company(company):
                 0,
                 comment)
         agent_connect = db.get_agent(current_user.email)
-        c = get_contents(agent_connect, request.form, company)
+        contents = get_contents(agent_connect, request.form, company)
         subject = 'חיבור חדש ללקוח: {} {}'.format(first_name, last_name)
         for agent in db.get_all_agents(manager=2):
-            send_basic_mail(to=agent.email, subject=subject, contents=c)
+            send_basic_mail(to=agent.email, subject=subject, contents=contents)
         if agent_connect.manager < 2:
-            send_basic_mail(to=current_user.email, subject=subject, contents=c)
+            send_basic_mail(to=current_user.email, subject=subject, contents=contents)
         if email:
-            send_basic_mail(to=email, subject=subject, contents=c)
+            send_basic_mail(to=email, subject=subject, contents=contents)
         return redirect(url_for('index'))
     track_specific = request.args.get('track_specific')
     return render_template('new_connect.xhtml', tracks=tracks, company=company, track_specific=track_specific,
@@ -325,7 +326,8 @@ def new_track(company):
             tag = request.form.get('tag')
             description = request.form.get('description')
 
-            db.set_track(company, price, name, description)
+            set_all_tracks(company, price, name, description)
+            # db.set_track(company, price, name, description)
             track_id = db.get_track(company=company, name=name).id
             if tag:
                 db.set_tag(tag, track_id)
@@ -341,19 +343,21 @@ def edit_track(track_id):
     tags = db.get_all_tags(track_id=track.id)
     if request.method == 'POST':
         agent = db.get_agent(current_user.email)
-        if agent.manager > 1:
-            tmp = {}
-            for k, v in request.form.items():
-                if str(k).startswith('tag'):
-                    tag_id = int(k.replace('tag', ''))
-                    if tag_id > 0:
-                        db.update_tag(tag_id, {'name': v})
-                    else:
-                        if v:
-                            db.set_tag(v, track_id)
+        if agent.manager < 2:
+            return 'Permission Denied', 404
+        tmp = {}
+        for k, v in request.form.items():
+            if str(k).startswith('tag'):
+                tag_id = int(k.replace('tag', ''))
+                if tag_id > 0:
+                    db.update_tag(tag_id, {'name': v})
                 else:
-                    tmp[k] = v
-            db.update_track(track_id, {k: v for k, v in tmp.items()})
+                    if v:
+                        db.set_tag(v, track_id)
+            else:
+                tmp[k] = v
+        update_all_tracks(track_id, {k: v for k, v in tmp.items()})
+        # db.update_track(track_id, {k: v for k, v in tmp.items())
 
         return redirect(url_for('list_tracks', company=track.company))
     return render_template('edit_track.xhtml', track=track, tags=tags)
@@ -375,7 +379,7 @@ def delete_track(track_id):
 def delete_agent(agent_id):
     db = DBGroups(current_user.group)
     agent = db.get_agent(current_user.email)
-    if agent.manager > 1:
+    if agent.manager > 0:
         remove_user(agent_id)
     return redirect(url_for('agents'))
 
@@ -420,7 +424,7 @@ def edit_client(client_id):
 @login_required
 def agents():
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.email).manager < 2:
+    if db.get_agent(current_user.email).manager < 1:
         return 'Not Found', 404
     agents_list = db.get_all_agents()
     return render_template('list_agents.xhtml', agents_list=agents_list)
@@ -430,7 +434,7 @@ def agents():
 @login_required
 def new_agent():
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.email).manager < 2:
+    if db.get_agent(current_user.email).manager < 1:
         return 'Not Found', 404
     if request.method == 'POST':
         email = request.form.get('email')
@@ -448,7 +452,7 @@ def new_agent():
 @login_required
 def edit_agent(agent_id):
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.email).manager < 2:
+    if db.get_agent(current_user.email).manager < 1:
         return 'Not Found', 404
     agent = db.get_agent(agent_id)
     if request.method == 'POST':
@@ -502,13 +506,15 @@ def reward_and_expectation():
 @login_required
 def status_sales():
     db = DBGroups(current_user.group)
-    if db.get_agent(current_user.email).manager < 1:
+    if db.get_agent(current_user.email).manager < 2:
         return 'Not Found', 404
     if request.method == 'POST':
         status = request.form.get('status')
         comment = request.form.get('comment')
         tran_id = int(request.form.get('tran_id'))
+        group = request.form.get('group')
 
+        db = DBGroups(group)
         db.update_transactions(tran_id, {'status': int(status),
                                          'comment': comment})
         tran_data = db.get_transaction(tran_id)
@@ -541,8 +547,7 @@ def status_sales():
                              '',
                              str(datetime.datetime.now().date())
                              ]])
-    sales = db.get_status_sales()
-    return render_template('status_sales.xhtml', sales=sales)
+    return render_template('status_sales.xhtml', get_status_sales=get_status_sales())
 
 
 @app.route('/remove_sale/<_id>', methods=['GET'])

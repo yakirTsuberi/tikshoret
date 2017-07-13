@@ -11,6 +11,7 @@ import googlemaps
 import pycard
 from dateutil.relativedelta import relativedelta
 import yagmail
+from sqlalchemy import or_
 
 from groups_database import DBGroups, Transactions, Tracks, and_
 from users_database import DBUsers
@@ -141,6 +142,7 @@ def set_up_group(group, email, pw, first_name, last_name, manager=2, phone=None)
     db_users = DBUsers()
     db_users.create_all_tables()
     db_users.set_user(email, pw, group)
+    _copy_tracks(group)
 
 
 def sum_connections(forms):
@@ -186,6 +188,68 @@ def get_contents(agent_connect, form, company):
     return html
 
 
+def get_all_db():
+    for i in os.listdir(LOCAL_PATH + '/data'):
+        if i.endswith('.db') and i != 'users.db':
+            yield DBGroups(i.replace('.db', ''))
+
+
+def update_all_tracks(track_id, values):
+    for db in get_all_db():
+        db.update_track(track_id, values)
+
+
+def set_all_tracks(company, price, name, description):
+    for db in get_all_db():
+        db.set_track(company, price, name, description)
+
+
+def _copy_all_tracks():
+    master_db = DBGroups('yishaiphone-prodaction')
+    for db in get_all_db():
+        if db.group != 'yishaiphone-prodaction':
+            for track in master_db.get_all_tracks():
+                print(track)
+                db.set_track(*track[1:])
+
+
+def _copy_tracks(group):
+    master_db = DBGroups('yishaiphone-prodaction')
+    db = DBGroups(group)
+    for track in master_db.get_all_tracks():
+        print(track)
+        db.set_track(*track[1:])
+
+
+def get_status_sales():
+    for db in get_all_db():
+        q = db.session.query(*Transactions.__table__.columns) \
+            .filter(or_(Transactions.status == 0, Transactions.status == 2)).all()
+        result = []
+        for k, i in enumerate(q):
+            exist = False
+            for t in result:
+                if t['Transaction'].track == i.track and t['Transaction'].client_id == i.client_id:
+                    t['sim_num'] = t['sim_num'] + (i.sim_num,)
+                    t['phone_num'] = t['phone_num'] + (i.phone_num,)
+                    t['len'] = [c for c in range(len(t['phone_num']))]
+                    exist = True
+            if not exist:
+                tmp = {'Transaction': i,
+                       'Track': db.get_track(_id=i.track),
+                       'Client': db.get_client(i.client_id),
+                       'sim_num': (i.sim_num,),
+                       'phone_num': (i.phone_num,),
+                       'len': [0],
+                       'group': db.group}
+                if i.credit_card_id:
+                    tmp['CreditCard'] = db.get_credit_card(i[3])
+                elif [5]:
+                    tmp['BankAccount'] = db.get_bank_account(i[3])
+                result.append(tmp)
+        yield result
+
+
 def write_to_drive(values):
     S.write(values)
 
@@ -194,4 +258,4 @@ if __name__ == '__main__':
     # set_up_group('yishaiphone-prodaction', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
     # remove_user('tsuberyr@gmail.com')
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
-    pass
+    _copy_all_tracks()

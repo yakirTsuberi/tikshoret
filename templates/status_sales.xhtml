@@ -41,91 +41,95 @@
     <div class="col-md-3"></div>
     <div class="col-md-6">
         <div>
-            {% for sale in sales %}
-                <div class="list-sales pay-status{{ sale['Transaction'].status }}">
-                    <span><strong>תאריך ושעה: </strong>{{ sale['Transaction'].date_time }}</span>
-                    <br/>
-                    <span><strong>סוכן: </strong><a href="/my_sales/{{ sale['Transaction'].agent_id }}">{{ sale['Transaction'].agent_id }}</a></span>
-                    <br/>
-                    <span><strong>שם לקוח: </strong>
+            {% for sales in get_status_sales %}
+                {% for sale in sales %}
+                    <div class="list-sales pay-status{{ sale['Transaction'].status }}">
+                        <span><strong>תאריך ושעה: </strong>{{ sale['Transaction'].date_time }}</span>
+                        <br/>
+                        <span><strong>סוכן: </strong><a
+                                href="/my_sales/{{ sale['Transaction'].agent_id }}">{{ sale['Transaction'].agent_id }}</a></span>
+                        <br/>
+                        <span><strong>שם לקוח: </strong>
                     <a data-toggle="tooltip" data-placement="left" title="העתק!"
                        onclick="copyToClipboard('{{ sale['Client'].first_name }} {{ sale['Client'].last_name }}')">
                                 {{ sale['Client'].first_name }} {{ sale['Client'].last_name }}</a>
                     </span>
-                    <br/>
-                    <span><strong>כתובת: </strong>
+                        <br/>
+                        <span><strong>כתובת: </strong>
                     <a data-toggle="tooltip" data-placement="left" title="העתק!"
                        onclick="copyToClipboard('{{ sale['Client'].address }} {{ sale['Client'].city }}')">
                                 {{ sale['Client'].address }} {{ sale['Client'].city }}</a>
                     </span>
-                    <br/>
-                    <span><strong>תעודת זהות: </strong><a data-toggle="tooltip" data-placement="left" title="העתק!"
-                                                          onclick="copyToClipboard('{{ sale['Client'].client_id }}')">
+                        <br/>
+                        <span><strong>תעודת זהות: </strong><a data-toggle="tooltip" data-placement="left" title="העתק!"
+                                                              onclick="copyToClipboard('{{ sale['Client'].client_id }}')">
                                     {{ sale['Client'].client_id }}</a></span>
-                    <br/>
-                    <strong>מסלול: </strong>
-                    {{ sale['Track'].company }} {{ sale['Track'].name }}
-                    <span class="pull-left">{{ sale['Track'].price }} ש"ח</span>
-                    <br/>
-                    <h4>חיבורים</h4>
-                    {% for sim in sale['len'] %}
-                        <div>
+                        <br/>
+                        <strong>מסלול: </strong>
+                        {{ sale['Track'].company }} {{ sale['Track'].name }}
+                        <span class="pull-left">{{ sale['Track'].price }} ש"ח</span>
+                        <br/>
+                        <h4>חיבורים</h4>
+                        {% for sim in sale['len'] %}
+                            <div>
                         <span><strong>מס' סים: </strong><a data-toggle="tooltip"
                                                            data-placement="left" title="העתק!"
                                                            onclick="copyToClipboard('{{ sale['sim_num'][sim] }}')">
                                     {{ sale['sim_num'][sim] }}</a></span>
-                            <span><strong>מס' טלפון: </strong><a data-toggle="tooltip"
-                                                                 data-placement="left" title="העתק!"
-                                                                 onclick="copyToClipboard('{{ sale['phone_num'][sim] }}')">
+                                <span><strong>מס' טלפון: </strong><a data-toggle="tooltip"
+                                                                     data-placement="left" title="העתק!"
+                                                                     onclick="copyToClipboard('{{ sale['phone_num'][sim] }}')">
                                     {{ sale['phone_num'][sim] }}</a></span>
-                        </div>
-                    {% endfor %}
-                    <br/>
-                    {% if sale.get('CreditCard') %}
-                        <div class="pay_style">
-                            <h4>כרטיס אשראי</h4>
-                            <span><strong>מספר כרטיס: </strong>
+                            </div>
+                        {% endfor %}
+                        <br/>
+                        {% if sale.get('CreditCard') %}
+                            <div class="pay_style">
+                                <h4>כרטיס אשראי</h4>
+                                <span><strong>מספר כרטיס: </strong>
                                 <a data-toggle="tooltip" data-placement="left" title="העתק!"
                                    onclick="copyToClipboard({{ sale['CreditCard'].card_number }})">
                                 {{ sale['CreditCard'].card_number }}</a></span>
-                            <br/>
-                            <p>
-                                <strong>תוקף: </strong><span>{{ sale['CreditCard'].month }}/{{ sale['CreditCard'].year }}</span>
-                                <strong>cvv: </strong>{{ sale['CreditCard'].cvv }}</p>
-                        </div>
-                    {% endif %}
-                    {% if sale.get('BankAccount') %}
-                        <div class="pay_style">
-                            <h4>חשבון בנק</h4>
-                            <span><strong>מספר חשבון: </strong>
+                                <br/>
+                                <p>
+                                    <strong>תוקף: </strong><span>{{ sale['CreditCard'].month }}/{{ sale['CreditCard'].year }}</span>
+                                    <strong>cvv: </strong>{{ sale['CreditCard'].cvv }}</p>
+                            </div>
+                        {% endif %}
+                        {% if sale.get('BankAccount') %}
+                            <div class="pay_style">
+                                <h4>חשבון בנק</h4>
+                                <span><strong>מספר חשבון: </strong>
                                 <a data-toggle="tooltip" data-placement="left" title="העתק!"
                                    onclick="copyToClipboard({{ sale['BankAccount'].account_num }})">
                                     {{ sale['BankAccount'].account_num }}</a></span>
+                                <br/>
+                                <p><strong>סניף: </strong><span>{{ sale['BankAccount'].brunch }}</span>
+                                    <strong>בנק: </strong>{{ sale['BankAccount'].bank_num }}</p>
+                            </div>
+                        {% endif %}
+                        <form action="/status_sales" method="post" class="form-group" style="margin-top: 10px">
+                            <div class="btn-group">
+                                <button type="submit" name="status" value="1" class="btn btn-success"><i
+                                        class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>
+                                <button type="submit" name="status" value="2" class="btn btn-warning"><i
+                                        class="fa fa-thumbs-o-down" aria-hidden="true"></i></button>
+                                <button class="btn btn-danger" data-toggle="modal" data-target="#myModal"
+                                        data-book-id="{{ sale['Transaction'].id }}" type="button">
+                                    <i class="fa fa-trash-o" aria-hidden="true"> </i>
+                                </button>
+                            </div>
                             <br/>
-                            <p><strong>סניף: </strong><span>{{ sale['BankAccount'].brunch }}</span>
-                                <strong>בנק: </strong>{{ sale['BankAccount'].bank_num }}</p>
-                        </div>
-                    {% endif %}
-                    <form action="/status_sales" method="post" class="form-group" style="margin-top: 10px">
-                        <div class="btn-group">
-                            <button type="submit" name="status" value="1" class="btn btn-success"><i
-                                    class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>
-                            <button type="submit" name="status" value="2" class="btn btn-warning"><i
-                                    class="fa fa-thumbs-o-down" aria-hidden="true"></i></button>
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModal"
-                                    data-book-id="{{ sale['Transaction'].id }}" type="button">
-                                <i class="fa fa-trash-o" aria-hidden="true"> </i>
-                            </button>
-                        </div>
-                        <br/>
-                        <label>הערה:
-                            <textarea class="form-control" name="comment">{{ sale['Transaction'].comment }}</textarea>
-                        </label>
-                        <input type="hidden" name="tran_id" value="{{ sale['Transaction'].id }}"/>
-                    </form>
-                </div>
+                            <label>הערה:
+                                <textarea class="form-control"
+                                          name="comment">{{ sale['Transaction'].comment }}</textarea>
+                            </label>
+                            <input type="hidden" name="tran_id" value="{{ sale['Transaction'].id }}"/>
+                            <input type="hidden" name="group" value="{{ sale['group'] }}"/>
+                        </form>
+                    </div>
+                {% endfor %}
             {% endfor %}
-
         </div>
     </div>
     <div class="col-md-3"></div>
