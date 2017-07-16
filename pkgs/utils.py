@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 import random
 import re
 import hashlib
@@ -11,9 +12,8 @@ import googlemaps
 import pycard
 from dateutil.relativedelta import relativedelta
 import yagmail
-from sqlalchemy import or_
 
-from groups_database import DBGroups, Transactions, Tracks, and_
+from groups_database import DBGroups, Transactions, Tracks, and_, or_
 from users_database import DBUsers
 from drive_manager.google_sheets import Sheets
 
@@ -164,7 +164,6 @@ def remove_full_stack_transaction(email, _id=None):
     db = DBGroups(user.group)
     transaction = db.session.query(Transactions)
     ta = transaction.all()
-    print(ta)
     if _id is not None:
         transaction = transaction.filter(Transactions.id == _id)
     for t in transaction.all():
@@ -224,7 +223,8 @@ def _copy_tracks(group):
 def get_status_sales():
     for db in get_all_db():
         q = db.session.query(*Transactions.__table__.columns) \
-            .filter(or_(Transactions.status == 0, Transactions.status == 2)).all()
+            .filter(or_(Transactions.status == 0, Transactions.status == 2)) \
+            .filter(or_(Transactions.reminds <= datetime.datetime.now().date(), Transactions.reminds == None)).all()
         result = []
         for k, i in enumerate(q):
             exist = False

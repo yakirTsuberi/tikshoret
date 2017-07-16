@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css"/>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.5.6/themes/classic.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.5.6/themes/classic.date.css"/>
+
     <link rel="stylesheet" href="/static/style.css"/>
     <script>
         (function (i, s, o, g, r, a, m) {
@@ -119,6 +123,11 @@
                                     <i class="fa fa-trash-o" aria-hidden="true"> </i>
                                 </button>
                             </div>
+                            <div class="form-group pull-left">
+                                <label>תזכורת:
+                                    <input class="datepicker form-group" name="reminds"/>
+                                </label>
+                            </div>
                             <br/>
                             <label>הערה:
                                 <textarea class="form-control"
@@ -126,6 +135,10 @@
                             </label>
                             <input type="hidden" name="tran_id" value="{{ sale['Transaction'].id }}"/>
                             <input type="hidden" name="group" value="{{ sale['group'] }}"/>
+                            <div>
+                                <button type="submit" class="btn pull-left">שמור</button>
+                            </div>
+
                         </form>
                     </div>
                 {% endfor %}
@@ -166,6 +179,9 @@
 
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.5.6/picker.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.5.6/picker.date.js"></script>
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.5.6/translations/he_IL.js"></script>#}
 <script>
 
     $('#myModal').on('show.bs.modal', function (e) {
@@ -195,6 +211,8 @@
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
+
+    $('.datepicker').pickadate({min: new Date()})
 </script>
 </body>
 </html>

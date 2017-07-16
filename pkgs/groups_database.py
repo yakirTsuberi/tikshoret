@@ -2,7 +2,7 @@ import os
 
 import logging
 from dateutil.relativedelta import relativedelta
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime, and_, or_, func
+from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime, Date, and_, or_, func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -80,6 +80,7 @@ class Transactions(Base):
     phone_num = Column(String)
     status = Column(Integer)  # 0=new, 1=success, 2=fail
     comment = Column(String, nullable=True)
+    reminds = Column(Date)
 
 
 class DBGroups:
@@ -264,7 +265,7 @@ class DBGroups:
 
     # Transactions
     def set_transactions(self, agent_id, track, client_id, credit_card_id,
-                         bank_account_id, date_time, sim_num, phone_num, status, comment=None):
+                         bank_account_id, date_time, sim_num, phone_num, status, comment=None, reminds=None):
         try:
             self.session.add(Transactions(agent_id=agent_id,
                                           track=track,
@@ -275,7 +276,8 @@ class DBGroups:
                                           sim_num=sim_num,
                                           phone_num=phone_num,
                                           status=status,
-                                          comment=comment))
+                                          comment=comment,
+                                          reminds=reminds))
             self.session.commit()
         except Exception as e:
             logging.error(e)
@@ -390,5 +392,7 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-    # db = DBGroups('yishaiphone-prodaction')
+    # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
+    # db = DBGroups('test').add_column(Transactions, Column('reminds', Date))
+    # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
     pass
