@@ -16,7 +16,7 @@ from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
     get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents, write_to_drive, remove_user, \
-    update_all_tracks, set_all_tracks, get_status_sales
+    update_all_tracks, set_all_tracks, get_status_sales, get_later_sales
 
 login_manager = LoginManager()
 app = Flask(__name__)
@@ -577,6 +577,17 @@ def status_sales():
                                  str(datetime.datetime.now().date())
                                  ]])
     return render_template('status_sales.xhtml', get_status_sales=get_status_sales())
+
+
+@app.route('/later_sales', methods=['GET', 'POST'])
+@login_required
+def later_sales():
+    if request.method == 'POST':
+        print(request.form)
+        db = DBGroups(request.form.get('group'))
+        db.update_transactions(request.form.get('id'), {'reminds': None, 'status': 0})
+        return redirect(url_for('status_sales'))
+    return render_template('later_sales.xhtml', data=get_later_sales())
 
 
 @app.route('/remove_sale/<_id>', methods=['GET'])

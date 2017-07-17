@@ -13,7 +13,7 @@ import pycard
 from dateutil.relativedelta import relativedelta
 import yagmail
 
-from groups_database import DBGroups, Transactions, Tracks, and_, or_
+from groups_database import DBGroups, Transactions, Tracks, Agents, Clients, and_, or_
 from users_database import DBUsers
 from drive_manager.google_sheets import Sheets
 
@@ -223,7 +223,7 @@ def _copy_tracks(group):
 def get_status_sales():
     for db in get_all_db():
         q = db.session.query(*Transactions.__table__.columns) \
-            .filter(or_(Transactions.status == 0, Transactions.status == 2)) \
+            .filter(Transactions.status == 0) \
             .filter(or_(Transactions.reminds <= datetime.datetime.now().date(), Transactions.reminds == None)).all()
         result = []
         for k, i in enumerate(q):
@@ -250,6 +250,15 @@ def get_status_sales():
         yield result
 
 
+def get_later_sales():
+    for db in get_all_db():
+        q = db.session.query(*Transactions.__table__.columns, Agents.first_name, Agents.last_name,
+                             Clients.first_name, Clients.last_name).join(Agents, Clients) \
+            .filter(or_(Transactions.status == 2,
+                        Transactions.reminds > datetime.datetime.now().date())).all()
+        yield dict(data=q, group=db.group)
+
+
 def write_to_drive(values):
     S.write(values)
 
@@ -259,4 +268,5 @@ if __name__ == '__main__':
     # remove_user('tsuberyr@gmail.com')
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
-    pass
+    for i in get_later_sales():
+        print(i['result'])
