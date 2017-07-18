@@ -209,6 +209,7 @@ def set_company(company):
     if request.method == 'POST':
 
         track = request.form.get('track')
+        passport = request.form.get('passport')
 
         # Client
         client_id = request.form.get('client_id')
@@ -234,7 +235,8 @@ def set_company(company):
         comment = request.form.get('comment')
 
         # Check Client
-        errors = check_client(client_id, first_name, last_name, address, city, phone, email)
+        errors = check_client(client_id if passport != 'on' else None, first_name, last_name, address, city, phone,
+                              email)
 
         # Check CreditCard
         if all([credit_card, month, year, cvv]):

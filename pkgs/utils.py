@@ -75,8 +75,9 @@ def check_email(email):
 
 def check_client(_id, first_name, last_name, address, city, phone, email):
     errors = []
-    if not check_client_id(_id):
-        errors.append('client_id')
+    if _id is not None:
+        if not check_client_id(_id):
+            errors.append('client_id')
     if not check_first_name(first_name):
         errors.append('first_name')
     if not check_last_name(last_name):

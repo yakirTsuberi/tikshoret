@@ -70,7 +70,7 @@
                 <input class="form-control {{ 'form-error' if 'client_id' in errors }}" name="client_id"
                        placeholder="תעודת זהות" type="number" value="{{ data.get('client_id') or '' }}"
                        required="required" autocomplete="off"/>
-                <label><input type="checkbox" name="passport"/> דרכון (המערכת לא יבדוק את תקינות המספר)</label>
+                <label><input type="checkbox" name="passport"/> דרכון (המערכת לא תבדוק את תקינות המספר)</label>
                 <input class="form-control {{ 'form-error' if 'first_name' in errors }}" name="first_name"
                        placeholder="שם פרטי" type="text"
                        value="{{ data.get('first_name') or '' }}" required="required" autocomplete="off"/>
@@ -223,14 +223,13 @@
         }
     }
     exist_client.addEventListener('change', function () {
-        var client_input = document.getElementById('client_input').getElementsByTagName('input');
+        var client_input = document.getElementById('client_input').getElementsByClassName('form-control');
         var credit_card_input = document.getElementById('credit_card_input').getElementsByTagName('input');
         var bank_input = document.getElementById('bank_input').getElementsByTagName('input');
         var shownVal = document.getElementById("client").value;
         var value2send = document.querySelector("#clients option[value='" + shownVal + "']");
         if (value2send) {
             var data_client = JSON.parse(value2send.dataset.value.split('(').join('[').split(')').join(']').split("'").join('"'));
-
             fill_all(client_input, data_client[0], 1);
             fill_all(bank_input, data_client[1], 2);
             fill_all(credit_card_input, data_client[2], 2);
