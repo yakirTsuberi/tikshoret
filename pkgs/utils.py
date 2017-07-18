@@ -227,7 +227,7 @@ def get_status_sales():
     for db in get_all_db():
         q = db.session.query(*Transactions.__table__.columns) \
             .filter(Transactions.status == 0) \
-            .filter(or_(Transactions.reminds <= datetime.datetime.now().date(), Transactions.reminds is None)).all()
+            .filter(or_(Transactions.reminds <= datetime.datetime.now().date(), Transactions.reminds == None)).all()
         result = []
         for k, item in enumerate(q):
             exist = False
