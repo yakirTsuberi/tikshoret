@@ -266,9 +266,10 @@ def set_company(company):
                 db_credit_card = db.get_credit_card(client_id)
                 if not db_credit_card:
                     db.set_credit_card(client_id, credit_card, month, year, cvv)
-                if credit_card[-4:] != db_credit_card.card_number[-4:] and len(credit_card) > 4:
-                    db.update_credit_card(db_credit_card.id,
-                                          {'card_number': credit_card, 'month': month, 'year': year, 'cvv': cvv})
+                if db_credit_card:
+                    if credit_card[-4:] != db_credit_card.card_number[-4:] and len(credit_card) > 4:
+                        db.update_credit_card(db_credit_card.id,
+                                              {'card_number': credit_card, 'month': month, 'year': year, 'cvv': cvv})
                 credit_card_id = db.get_credit_card(client_id).id
             if account_num:
                 if not db.get_bank_account(client_id):

@@ -70,6 +70,7 @@
                 <input class="form-control {{ 'form-error' if 'client_id' in errors }}" name="client_id"
                        placeholder="תעודת זהות" type="number" value="{{ data.get('client_id') or '' }}"
                        required="required" autocomplete="off"/>
+                <label><input type="checkbox" name="passport"/> דרכון (המערכת לא יבדוק את תקינות המספר)</label>
                 <input class="form-control {{ 'form-error' if 'first_name' in errors }}" name="first_name"
                        placeholder="שם פרטי" type="text"
                        value="{{ data.get('first_name') or '' }}" required="required" autocomplete="off"/>
