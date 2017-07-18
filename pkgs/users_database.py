@@ -41,11 +41,11 @@ class DBUsers:
         self.session.add(Users(email=email, pw=pw, group=group))
         self.session.commit()
 
-    def get_user(self, email=None, id=None):
+    def get_user(self, email=None, _id=None):
         if email is not None:
             return self.session.query(*Users.__table__.columns).filter(Users.email == email).first()
-        if id is not None:
-            return self.session.query(*Users.__table__.columns).filter(Users.id == id).first()
+        if _id is not None:
+            return self.session.query(*Users.__table__.columns).filter(Users.id == _id).first()
 
     def get_all_users(self, email=None):
         q = self.session.query(*Users.__table__.columns)

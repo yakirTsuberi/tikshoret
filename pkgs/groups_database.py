@@ -399,6 +399,7 @@ class DBGroups:
         self.engine.execute('ALTER TABLE {} ADD COLUMN {} {}'.format(table.__tablename__, column_name, column_type))
 
 
+# noinspection SpellCheckingInspection
 if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('test').add_column(Transactions, Column('reminds', Date))

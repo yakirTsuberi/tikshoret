@@ -30,7 +30,7 @@ class User(UserMixin):
 @login_manager.user_loader
 def user_loader(_id):
     db = DBUsers()
-    user_db = db.get_user(id=_id)
+    user_db = db.get_user(_id=_id)
     if not user_db:
         return
     user = User()

@@ -1,3 +1,6 @@
+oauth2client
+apiclient
+httplib2
 pycard
 dateutil
 Flask

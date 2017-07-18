@@ -47,8 +47,8 @@ def check_client_id(client_id):
         return False
     client_id = ''.join(['0' for _ in range(9 - len_id)]) + client_id
     sum_id = 0
-    for i in range(len(client_id)):
-        tmp = str(int(client_id[i]) * (i % 2 + 1))
+    for item in range(len(client_id)):
+        tmp = str(int(client_id[item]) * (item % 2 + 1))
         if len(tmp) > 1:
             tmp = int(tmp[0]) + int(tmp[1])
         sum_id += int(tmp)
@@ -61,7 +61,7 @@ def check_phone(phone: str):
     return phone[:2] in num and 11 > len(phone) > 7
 
 
-# noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences,SpellCheckingInspection
 def check_address(address, city):
     gmaps = googlemaps.Client('AIzaSyDv4GEWHbxhtpmMBkf4lNIP6wwi5nXwlfM')
     if gmaps.geocode('Israel, ' + city + ', ' + address) and not address.isdigit():
@@ -110,13 +110,13 @@ def get_my_sales(group_id, agent_id, date_filter):
         and_(Transactions.date_time < date_filter + relativedelta(months=1),
              Transactions.date_time >= date_filter)
     ).all()
-    result = [(db.session.query(Tracks.company, Tracks.name, Tracks.price).filter(Tracks.id == i.track).first(),
-               db.get_client(i.client_id),
-               i.date_time.strftime("%Y-%m-%d %H:%M %p"),
-               i.sim_num,
-               i.phone_num,
-               i.status,
-               i.comment) for i in data]
+    result = [(db.session.query(Tracks.company, Tracks.name, Tracks.price).filter(Tracks.id == item.track).first(),
+               db.get_client(item.client_id),
+               item.date_time.strftime("%Y-%m-%d %H:%M %p"),
+               item.sim_num,
+               item.phone_num,
+               item.status,
+               item.comment) for item in data]
     return result
 
 
@@ -147,7 +147,7 @@ def set_up_group(group, email, pw, first_name, last_name, manager=2, phone=None)
 
 
 def sum_connections(forms):
-    return len([i for i in forms if str(i).startswith('sim_num')])
+    return len([item for item in forms if str(item).startswith('sim_num')])
 
 
 def remove_user(email):
@@ -164,7 +164,6 @@ def remove_full_stack_transaction(email, _id=None):
     user = user_db.get_user(email)
     db = DBGroups(user.group)
     transaction = db.session.query(Transactions)
-    ta = transaction.all()
     if _id is not None:
         transaction = transaction.filter(Transactions.id == _id)
     for t in transaction.all():
@@ -180,8 +179,9 @@ def get_contents(agent_connect, form, company):
     client_id = form.get('client_id')
     client_adders = form.get('address') + ' ' + form.get('city')
     basic_sim = '<strong>סים: </strong><span>{}</span> <strong>פלאפון: </strong><span>{}</span><br/>'
-    sims = ''.join([basic_sim.format(form.get('sim_num' + str(i)),
-                                     form.get('phone_num' + str(i))) for i in range(1, sum_connections(form) + 1)])
+    sims = ''.join([basic_sim.format(form.get('sim_num' + str(item)),
+                                     form.get('phone_num' + str(item))) for item in range(1, sum_connections(form) + 1)]
+                   )
     tran = form.get('track')
     html = open(LOCAL_PATH + '/email_syntax.html', encoding="utf8").read().format(agent, client_name, client_id,
                                                                                   client_adders, company, tran, sims)
@@ -189,9 +189,9 @@ def get_contents(agent_connect, form, company):
 
 
 def get_all_db():
-    for i in os.listdir(LOCAL_PATH + '/data'):
-        if i.endswith('.db') and i != 'users.db':
-            yield DBGroups(i.replace('.db', ''))
+    for item in os.listdir(LOCAL_PATH + '/data'):
+        if item.endswith('.db') and item != 'users.db':
+            yield DBGroups(item.replace('.db', ''))
 
 
 def update_all_tracks(track_id, values):
@@ -204,6 +204,7 @@ def set_all_tracks(company, price, name, description):
         db.set_track(company, price, name, description)
 
 
+# noinspection SpellCheckingInspection
 def _copy_all_tracks():
     master_db = DBGroups('yishaiphone-prodaction')
     for db in get_all_db():
@@ -213,6 +214,7 @@ def _copy_all_tracks():
                 db.set_track(*track[1:])
 
 
+# noinspection SpellCheckingInspection
 def _copy_tracks(group):
     master_db = DBGroups('yishaiphone-prodaction')
     db = DBGroups(group)
@@ -225,28 +227,28 @@ def get_status_sales():
     for db in get_all_db():
         q = db.session.query(*Transactions.__table__.columns) \
             .filter(Transactions.status == 0) \
-            .filter(or_(Transactions.reminds <= datetime.datetime.now().date(), Transactions.reminds == None)).all()
+            .filter(or_(Transactions.reminds <= datetime.datetime.now().date(), Transactions.reminds is None)).all()
         result = []
-        for k, i in enumerate(q):
+        for k, item in enumerate(q):
             exist = False
             for t in result:
-                if t['Transaction'].track == i.track and t['Transaction'].client_id == i.client_id:
-                    t['sim_num'] = t['sim_num'] + (i.sim_num,)
-                    t['phone_num'] = t['phone_num'] + (i.phone_num,)
+                if t['Transaction'].track == item.track and t['Transaction'].client_id == item.client_id:
+                    t['sim_num'] = t['sim_num'] + (item.sim_num,)
+                    t['phone_num'] = t['phone_num'] + (item.phone_num,)
                     t['len'] = [c for c in range(len(t['phone_num']))]
                     exist = True
             if not exist:
-                tmp = {'Transaction': i,
-                       'Track': db.get_track(_id=i.track),
-                       'Client': db.get_client(i.client_id),
-                       'sim_num': (i.sim_num,),
-                       'phone_num': (i.phone_num,),
+                tmp = {'Transaction': item,
+                       'Track': db.get_track(_id=item.track),
+                       'Client': db.get_client(item.client_id),
+                       'sim_num': (item.sim_num,),
+                       'phone_num': (item.phone_num,),
                        'len': [0],
                        'group': db.group}
-                if i.credit_card_id:
-                    tmp['CreditCard'] = db.get_credit_card(i[3])
+                if item.credit_card_id:
+                    tmp['CreditCard'] = db.get_credit_card(item[3])
                 elif [5]:
-                    tmp['BankAccount'] = db.get_bank_account(i[3])
+                    tmp['BankAccount'] = db.get_bank_account(item[3])
                 result.append(tmp)
         yield result
 
@@ -264,10 +266,10 @@ def write_to_drive(values):
     S.write(values)
 
 
+# noinspection SpellCheckingInspection
 if __name__ == '__main__':
     # set_up_group('yishaiphone-prodaction', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
     # remove_user('tsuberyr@gmail.com')
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
-    for i in get_later_sales():
-        print(i['result'])
+    pass
