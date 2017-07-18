@@ -248,6 +248,14 @@ class DBGroups:
         q = self.session.query(*CreditCard.__table__.columns).filter(CreditCard.client_id == client_id).first()
         return q
 
+    def update_credit_card(self, _id, values):
+        try:
+            self.session.query(CreditCard).filter(CreditCard.id == _id).update(values)
+            self.session.commit()
+        except Exception as e:
+            logging.error(e)
+            self.session.rollback()
+
     # BankAccount
     def set_bank_account(self, client_id, account_num, brunch, bank_num):
         try:
