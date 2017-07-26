@@ -257,7 +257,8 @@ def set_company(company):
                                    errors=errors,
                                    data=tmp,
                                    start_sim=SIM_START_WITH.get(company),
-                                   clients=clients_list)
+                                   clients=clients_list,
+                                   track_specific=track)
 
         credit_card_id = None
         account_num_id = None
