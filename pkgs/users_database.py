@@ -89,4 +89,4 @@ def copy_db():
 
 
 if __name__ == '__main__':
-    copy_db()
+    pass

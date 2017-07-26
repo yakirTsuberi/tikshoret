@@ -24,11 +24,19 @@
     margin-right: 20px;
     border-radius: 0 5px 15px 5px;
 }
-.other .agent-name{
+
+.other .agent-name {
     text-align: left;
 }
 
-
-.msg > time{
+.msg > time {
     color: #777;
+}
+
+.search {
+    position: fixed;
+    top: 60px;
+    right: 20%;
+    left: 20%;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }

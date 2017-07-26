@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 pkgs/data/
 pkgs/news.txt
+/tmp/

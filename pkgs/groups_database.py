@@ -83,6 +83,14 @@ class Transactions(Base):
     reminds = Column(Date)
 
 
+class Forum(Base):
+    __tablename__ = 'Forum'
+    id = Column(Integer, primary_key=True)
+    agent_id = Column(String, ForeignKey(Agents.email))
+    date_time = Column(DateTime)
+    massage = Column(String)
+
+
 class DBGroups:
     def __init__(self, group_id):
         if not os.path.exists(LOCAL_PATH + '/data'):
@@ -318,6 +326,25 @@ class DBGroups:
         except Exception as e:
             logging.error(e)
             self.session.rollback()
+
+    # Forum
+    # id = Column(Integer, primary_key=True)
+    # agent_id = Column(String, ForeignKey(Agents.email))
+    # date_time = Column(DateTime)
+    # massage = Column(String)
+    def set_massage(self, agent_id, date_time, massage):
+        try:
+            self.session.add(Forum(agent_id=agent_id, date_time=date_time, massage=massage))
+            self.session.commit()
+        except Exception as e:
+            logging.error(e)
+            self.session.rollback()
+
+    def get_all_massage(self, search=None):
+        q = self.session.query(Forum.agent_id, Forum.date_time, Forum.massage, Agents.first_name, Agents.last_name).join(Agents)
+        if search is not None:
+            q = q.filter(Forum.massage.like('%' + search + '%'))
+        return q.order_by(Forum.date_time).all()
 
     # Global
     def get_reward(self, date_filter=None):
