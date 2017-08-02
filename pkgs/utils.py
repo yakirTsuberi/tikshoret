@@ -17,8 +17,6 @@ from groups_database import DBGroups, Transactions, Tracks, Agents, Clients, and
 from users_database import DBUsers
 from drive_manager.google_sheets import Sheets
 
-S = Sheets()
-
 LOCAL_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
 SIM_START_WITH = {'cellcom': '89972020', 'partner': '89972010', '012': '89972010', 'pelephone': '8997250',
@@ -263,7 +261,8 @@ def get_later_sales():
 
 
 def write_to_drive(values):
-    S.write(values)
+    s = Sheets()
+    s.write(values)
 
 
 # noinspection SpellCheckingInspection
