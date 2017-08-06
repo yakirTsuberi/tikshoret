@@ -621,7 +621,7 @@ def massages():
 @app.route('/forum')
 @login_required
 def forum():
-    return render_template('forum.xhtml')
+    return render_template('forum_tmp.xhtml')
 
 
 @app.route('/forum_data', methods=['GET', 'POST'])
