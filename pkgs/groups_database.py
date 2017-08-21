@@ -360,7 +360,8 @@ class DBGroups:
                 )
 
             list_db = list_db.group_by(Tracks.company).all()
-            print(_agent.email)
+            if _agent.email == 'a0533162082@gmail.com':
+                print(list_db)
             list_agent = []
             for company in ['cellcom', 'partner', 'pelephone', '012', 'hot', 'rami_levi', 'golan']:
                 tmp = [(i[1], i[2]) for i in list_db if company == i[1]]
