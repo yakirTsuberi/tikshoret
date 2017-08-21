@@ -137,7 +137,7 @@ body {
     padding: 1px;
 }
 
-tbody td:last-child, tbody tr:last-child, th:last-child {
+.table tbody td:last-child, .table tbody tr:last-child, .table th:last-child {
     background-color: rgba(41, 43, 44, 0.7);
     color: white
 }
