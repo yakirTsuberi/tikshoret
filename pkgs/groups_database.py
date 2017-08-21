@@ -360,7 +360,7 @@ class DBGroups:
                 )
             list_db = list_db.group_by(Tracks.company).all()
             list_agent = []
-            for company in ['cellcom', 'partner', 'pelephone', '012', 'hot']:
+            for company in ['cellcom', 'partner', 'pelephone', '012', 'hot', 'rami_levi', 'golan']:
                 tmp = [(i[1], i[2]) for i in list_db if company == i[1]]
                 list_agent.append(tmp[0] if tmp else (company, 0))
             list_agent.append(('sum', sum([i[1] for i in list_agent])))
