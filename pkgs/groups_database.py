@@ -341,7 +341,8 @@ class DBGroups:
             self.session.rollback()
 
     def get_all_massage(self, search=None):
-        q = self.session.query(Forum.agent_id, Forum.date_time, Forum.massage, Agents.first_name, Agents.last_name).join(Agents)
+        q = self.session.query(Forum.agent_id, Forum.date_time, Forum.massage, Agents.first_name,
+                               Agents.last_name).join(Agents)
         if search is not None:
             q = q.filter(Forum.massage.like('%' + search + '%'))
         return q.order_by(Forum.date_time).all()
@@ -431,4 +432,5 @@ if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('test').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
+    db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
     pass
