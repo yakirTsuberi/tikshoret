@@ -77,6 +77,34 @@
                 </tbody>
             </table>
         </div>
+        <div>
+            <h3 style="text-align: center">מכירות היום</h3>
+            <table id="month" class="table table-striped" style="font-size: 12px;">
+                <thead>
+                <tr>
+                    <th>סוכן</th>
+                    <th>סלקום</th>
+                    <th>פרטנר</th>
+                    <th>פלאפון</th>
+                    <th>012</th>
+                    <th>הוט</th>
+                    <th>רמי לוי</th>
+                    <th>גולן</th>
+                    <th>סה"כ</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for k, v in data_today.items() %}
+                    <tr>
+                        <td>{{ k }}</td>
+                        {% for i in v %}
+                            <td>{{ i[1] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="col-md-3"></div>
 </div>
@@ -97,16 +125,15 @@
     for (i = 1; i < tr[0].children.length; i++) {
         var tmp = 0;
         for (j = 1; j < tr.length; j++) {
-            console.log(tr[j].children[i]);
             tmp += parseInt(tr[j].children[i].textContent)
         }
-        console.log(tmp);
         sum_column.push(tmp);
     }
     var row = table_month.insertRow(-1);
-    for (var i = 0; i < sum_column.length; i++) {row.insertCell(i).innerHTML = sum_column[i]}
+    for (var i = 0; i < sum_column.length; i++) {
+        row.insertCell(i).innerHTML = sum_column[i]
+    }
     row.insertCell(0).innerHTML = 'סה"כ';
-    console.log(sum_column);
 </script>
 </body>
 </html>

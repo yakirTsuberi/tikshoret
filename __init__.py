@@ -522,7 +522,8 @@ def reward_and_expectation():
         month = date_filter.month
         year = date_filter.year
     data = db.get_reward(date_filter)
-    return render_template('reward_and_expectation.xhtml', month=month, year=year, data=data)
+    data_today = db.get_reward(datetime.datetime.now())
+    return render_template('reward_and_expectation.xhtml', month=month, year=year, data=data, data_today=data_today)
 
 
 @app.route('/status_sales', methods=['GET', 'POST'])
