@@ -365,6 +365,8 @@ class DBGroups:
             list_agent = []
             for company in ['cellcom', 'partner', 'pelephone', '012', 'hot', 'rami_levi', 'golan']:
                 tmp = [(i[1], i[2]) for i in list_db if company == i[1]]
+                if _agent.email == 'a0533162082@gmail.com':
+                    print(company, tmp)
                 list_agent.append(tmp[0] if tmp else (company, 0))
             list_agent.append(('sum', sum([i[1] for i in list_agent])))
             name_agent = _agent.first_name[0] + '.' + _agent.last_name
