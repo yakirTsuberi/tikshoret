@@ -432,5 +432,5 @@ if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('test').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
-    db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
+    # db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
     pass
