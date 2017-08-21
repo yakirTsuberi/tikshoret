@@ -432,9 +432,11 @@ class DBGroups:
 
 # noinspection SpellCheckingInspection
 if __name__ == '__main__':
+    import datetime
+
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('test').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
-    db = DBGroups('yishaiphone-prodaction').get_reward()
+    db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
     pass
