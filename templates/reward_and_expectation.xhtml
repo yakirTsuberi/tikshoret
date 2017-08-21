@@ -79,7 +79,7 @@
         </div>
         <div>
             <h3 style="text-align: center">מכירות היום</h3>
-            <table id="month" class="table table-striped" style="font-size: 12px;">
+            <table id="today" class="table table-striped" style="font-size: 12px;">
                 <thead>
                 <tr>
                     <th>סוכן</th>
@@ -119,21 +119,26 @@
     </div>
 </div>
 <script>
-    var table_month = document.getElementById('month');
-    var tr = table_month.getElementsByTagName('tr');
-    var sum_column = [];
-    for (i = 1; i < tr[0].children.length; i++) {
-        var tmp = 0;
-        for (j = 1; j < tr.length; j++) {
-            tmp += parseInt(tr[j].children[i].textContent)
+    function add_sum(id) {
+        var table_month = document.getElementById(id);
+        var tr = table_month.getElementsByTagName('tr');
+        var sum_column = [];
+        for (i = 1; i < tr[0].children.length; i++) {
+            var tmp = 0;
+            for (j = 1; j < tr.length; j++) {
+                tmp += parseInt(tr[j].children[i].textContent)
+            }
+            sum_column.push(tmp);
         }
-        sum_column.push(tmp);
+        var row = table_month.insertRow(-1);
+        for (var i = 0; i < sum_column.length; i++) {
+            row.insertCell(i).innerHTML = sum_column[i]
+        }
+        row.insertCell(0).innerHTML = 'סה"כ';
     }
-    var row = table_month.insertRow(-1);
-    for (var i = 0; i < sum_column.length; i++) {
-        row.insertCell(i).innerHTML = sum_column[i]
-    }
-    row.insertCell(0).innerHTML = 'סה"כ';
+    add_sum('month');
+    add_sum('today');
+
 </script>
 </body>
 </html>
