@@ -358,7 +358,9 @@ class DBGroups:
                     and_(Transactions.date_time < date_filter + relativedelta(months=1),
                          Transactions.date_time >= date_filter)
                 )
+
             list_db = list_db.group_by(Tracks.company).all()
+            print(list_db)
             list_agent = []
             for company in ['cellcom', 'partner', 'pelephone', '012', 'hot', 'rami_levi', 'golan']:
                 tmp = [(i[1], i[2]) for i in list_db if company == i[1]]
