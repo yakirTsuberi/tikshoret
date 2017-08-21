@@ -360,14 +360,14 @@ class DBGroups:
                 )
 
             list_db = list_db.group_by(Tracks.company).all()
-            print(list_db)
-            list_agent = []
-            for company in ['cellcom', 'partner', 'pelephone', '012', 'hot', 'rami_levi', 'golan']:
-                tmp = [(i[1], i[2]) for i in list_db if company == i[1]]
-                list_agent.append(tmp[0] if tmp else (company, 0))
-            list_agent.append(('sum', sum([i[1] for i in list_agent])))
-            name_agent = _agent.first_name[0] + '.' + _agent.last_name
-            result[name_agent] = list_agent
+            if list_db:
+                list_agent = []
+                for company in ['cellcom', 'partner', 'pelephone', '012', 'hot', 'rami_levi', 'golan']:
+                    tmp = [(i[1], i[2]) for i in list_db if company == i[1]]
+                    list_agent.append(tmp[0] if tmp else (company, 0))
+                list_agent.append(('sum', sum([i[1] for i in list_agent])))
+                name_agent = _agent.first_name[0] + '.' + _agent.last_name
+                result[name_agent] = list_agent
         return result
 
     def delete_track(self, track_id):
@@ -431,11 +431,9 @@ class DBGroups:
 
 # noinspection SpellCheckingInspection
 if __name__ == '__main__':
-    import datetime
-
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('test').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
-    db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
+    # db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
     pass
