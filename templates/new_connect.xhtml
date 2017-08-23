@@ -16,8 +16,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -97,8 +97,9 @@
                         <div class="panel-body">
                             <input value="{{ start_sim }}" class="form-control" name="sim_num1"
                                    placeholder="מספר סים" type="number" required="required" autocomplete="off"/>
-                            <input class="form-control" name="phone_num1" placeholder="מספר לניוד" type="text"
+                            <input class="form-control" name="phone_num1" placeholder="מספר לניוד" type="number"
                                    autocomplete="off"/>
+                            <label><input type="checkbox"/> מספר חדש</label>
                         </div>
                     </div>
                 </div>
@@ -116,7 +117,8 @@
                                     <input
                                             class="form-control" name="phone_num{{ d[-1] }}"
                                             value="{{ data.get('phone_num' + d[-1]) }}"
-                                            placeholder="מספר לניוד" type="text" autocomplete="off"/>
+                                            placeholder="מספר לניוד" type="number" autocomplete="off"/>
+                                    <label><input type="checkbox"/> מספר חדש</label>
                                 </div>
                             </div>
                         {% endif %}
@@ -137,7 +139,8 @@
 
             <div class="form-group" id="credit_card_input">
                 <label>כרטיס אשראי</label>
-                <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="text" name="credit_card"
+                <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="number"
+                       name="credit_card"
                        placeholder="מספר כרטיס"/>
                 <div class="row" style="margin: 0">
                     <div class="col-xs-4 nopadding">
@@ -151,7 +154,8 @@
 
                     </div>
                     <div class="col-xs-4 nopadding">
-                        <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="number" name="cvv"
+                        <input class="form-control {{ 'form-error' if 'credit_card' in errors }}" type="number"
+                               name="cvv"
                                placeholder="CVV" value="{{ data.get('cvv') or '' }}" autocomplete="off"/>
 
                     </div>
@@ -205,6 +209,15 @@
 </div>
 <script>
     var exist_client = document.getElementsByName("exist_client")[0];
+
+    function changeInputType(oldObjects, oType) {
+        var result = [];
+        for (var o in oldObjects) {
+            console.log(oldObjects[o]);
+            oldObjects[o].type = oType;
+        }
+    }
+
     function fill_all(inputs, data, cnt) {
         for (var i in inputs) {
             if (data[i] !== undefined) {
@@ -214,6 +227,7 @@
 
         }
     }
+
     function clean_all() {
         var all_input = document.getElementsByTagName('input');
         for (i in all_input) {
@@ -222,9 +236,11 @@
             }
         }
     }
+
     exist_client.addEventListener('change', function () {
         var client_input = document.getElementById('client_input').getElementsByClassName('form-control');
         var credit_card_input = document.getElementById('credit_card_input').getElementsByTagName('input');
+        changeInputType(credit_card_input, 'text')
         var bank_input = document.getElementById('bank_input').getElementsByTagName('input');
         var shownVal = document.getElementById("client").value;
         var value2send = document.querySelector("#clients option[value='" + shownVal + "']");
@@ -240,14 +256,16 @@
 
     var connections = document.querySelectorAll('input[name^="sim_num"]').length;
     var container = document.getElementById('container');
+
     function add_connect() {
         var div = document.createElement('div');
         connections += 1;
         var start_sim = document.getElementsByName('sim_num1')[0].value;
-        var html = '<div class="panel panel-primary"><div class="panel-heading"><span>מסלול</span><span class="pull-left">' + connections + '</span></div><div class="panel-body"><input value="' + start_sim + '" class="form-control" name="sim_num' + connections.toString() + '" placeholder="מספר סים" type="number" required="required" autocomplete="off"/><input class="form-control" name="phone_num' + connections.toString() + '" placeholder="מספר לניוד" type="text" autocomplete="off"/></div></div>';
+        var html = '<div class="panel panel-primary"><div class="panel-heading"><span>מסלול</span><span class="pull-left">' + connections + '</span></div><div class="panel-body"><input value="' + start_sim + '" class="form-control" name="sim_num' + connections.toString() + '" placeholder="מספר סים" type="number" required="required" autocomplete="off"/><input class="form-control" name="phone_num' + connections.toString() + '" placeholder="מספר לניוד" type="number" autocomplete="off"/><label><input type="checkbox"/> מספר חדש</label></div></div>';
         div.innerHTML = html;
         container.appendChild(div);
     }
+
     function remove_connect() {
         if (container.children.length > 1) {
             container.removeChild(container.lastElementChild);

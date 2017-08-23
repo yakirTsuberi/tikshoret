@@ -16,7 +16,7 @@ from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
     get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents, write_to_drive, remove_user, \
-    update_all_tracks, set_all_tracks, get_status_sales, get_later_sales
+    update_all_tracks, set_all_tracks, get_status_sales, get_later_sales, check_credit_card
 
 login_manager = LoginManager()
 app = Flask(__name__)
@@ -242,7 +242,7 @@ def set_company(company):
         if all([credit_card, month, year, cvv]):
             if '*' in credit_card:
                 credit_card = db.get_secure_credit_card(credit_card[-4:])
-            checked_credit_card = True  # check_credit_card(credit_card, month, year, cvv)
+            checked_credit_card = check_credit_card(credit_card, month, year, cvv)
             if not checked_credit_card:
                 errors.append('credit_card')
         if not all([credit_card, month, year, cvv]) and not all([account_num, brunch, bank]):
