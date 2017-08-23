@@ -5,7 +5,7 @@ import logging
 import datetime
 
 from dateutil.relativedelta import relativedelta
-from flask import Flask, request, redirect, url_for, render_template, abort, jsonify
+from flask import Flask, request, redirect, url_for, render_template, abort
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
 from htmlmin.main import minify
 
@@ -618,23 +618,6 @@ def massages():
     if request.method == 'POST':
         set_news([v for _, v in request.form.items()])
     return render_template('massages.xhtml', massage=[(k, v) for k, v in enumerate(get_news())])
-
-
-@app.route('/forum')
-@login_required
-def forum():
-    return render_template('forum_tmp.xhtml')
-
-
-@app.route('/forum_data', methods=['GET', 'POST'])
-@login_required
-def forum_data():
-    db = DBGroups(current_user.group)
-    if request.method == 'POST':
-        db.set_massage(current_user.email, datetime.datetime.now(), request.json.get('massage'))
-    data = db.get_all_massage()
-    # print(data)
-    return jsonify(data=data, user=current_user.email)
 
 
 @app.after_request

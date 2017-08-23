@@ -328,10 +328,6 @@ class DBGroups:
             self.session.rollback()
 
     # Forum
-    # id = Column(Integer, primary_key=True)
-    # agent_id = Column(String, ForeignKey(Agents.email))
-    # date_time = Column(DateTime)
-    # massage = Column(String)
     def set_massage(self, agent_id, date_time, massage):
         try:
             self.session.add(Forum(agent_id=agent_id, date_time=date_time, massage=massage))
