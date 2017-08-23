@@ -398,10 +398,10 @@ def clients():
     db = DBGroups(current_user.group)
     agent = db.get_agent(current_user.email)
     search = request.args.get('search')
-    if agent.manager < 1:
-        clients_list = [client.Clients for client in db.get_all_clients(current_user.email, search)]
-    else:
+    if agent.manager > 0:
         clients_list = db.get_all_clients(search=search)
+    else:
+        clients_list = [client.Clients for client in db.get_all_clients(current_user.email, search)]
     return render_template('list_clients.xhtml', clients_list=clients_list, sum_clients=len(clients_list))
 
 
