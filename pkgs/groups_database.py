@@ -239,7 +239,11 @@ class DBGroups:
         if search is not None:
             q = q.filter(or_(Clients.first_name.like('%' + search + '%'),
                              Clients.last_name.like('%' + search + '%'),
-                             Clients.client_id.like('%' + search + '%')))
+                             Clients.client_id.like('%' + search + '%'),
+                             Clients.address.like('%' + search + '%'),
+                             Clients.city.like('%' + search + '%'),
+                             Clients.phone.like('%' + search + '%'),
+                             Clients.email.like('%' + search + '%')))
         return q.all()
 
     def update_client(self, client_id, values):
