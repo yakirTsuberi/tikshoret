@@ -279,16 +279,16 @@ def set_company(company):
                     db.set_bank_account(client_id, account_num, brunch, bank)
                 account_num_id = db.get_bank_account(client_id).id
             db.set_transactions(
-                current_user.email,
-                db.get_track(company=company, name=track).id,
-                client_id,
-                credit_card_id,
-                account_num_id,
-                datetime.datetime.today(),
-                request.form.get('sim_num' + str(i)),
-                request.form.get('phone_num' + str(i)),
-                0,
-                comment)
+                agent_id=current_user.email,
+                track=db.get_track(company=company, name=track).id,
+                client_id=client_id,
+                credit_card_id=credit_card_id,
+                bank_account_id=account_num_id,
+                date_time=datetime.datetime.utcnow() + datetime.timedelta(hours=3),
+                sim_num=request.form.get('sim_num' + str(i)),
+                phone_num=request.form.get('phone_num' + str(i)),
+                status=0,
+                comment=comment)
         agent_connect = db.get_agent(current_user.email)
         contents = get_contents(agent_connect, request.form, company)
         subject = 'חיבור חדש ללקוח: {} {}'.format(first_name, last_name)
