@@ -215,6 +215,13 @@ class DBGroups:
     def get_client(self, client_id):
         return self.session.query(*Clients.__table__.columns).filter(Clients.client_id == client_id).first()
 
+    '''first_name = Column(String)
+    last_name = Column(String)
+    address = Column(String)
+    city = Column(String)
+    phone = Column(String)
+    email = Column(String, nullable=True)'''
+
     def get_all_clients(self, by_agent=None, search=None):
         if by_agent is not None:
             q = self.session.query(Transactions, Clients).join(Clients).filter(
@@ -222,7 +229,11 @@ class DBGroups:
             if search is not None:
                 q = q.filter(or_(Clients.first_name.like('%' + search + '%'),
                                  Clients.last_name.like('%' + search + '%'),
-                                 Clients.client_id.like('%' + search + '%')))
+                                 Clients.client_id.like('%' + search + '%'),
+                                 Clients.address.like('%' + search + '%'),
+                                 Clients.city.like('%' + search + '%'),
+                                 Clients.phone.like('%' + search + '%'),
+                                 Clients.email.like('%' + search + '%')))
             return q.group_by(Clients.client_id).all()
         q = self.session.query(*Clients.__table__.columns)
         if search is not None:
