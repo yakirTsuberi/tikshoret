@@ -175,14 +175,16 @@ def get_contents(agent_connect, form, company):
     agent = agent_connect.first_name + ' ' + agent_connect.last_name + ' ' + agent_connect.email
     client_name = form.get('first_name') + ' ' + form.get('last_name') + ' ' + form.get('email')
     client_id = form.get('client_id')
+    client_phone = form.get('phone')
     client_adders = form.get('address') + ' ' + form.get('city')
-    basic_sim = '<strong>סים: </strong><span>{}</span> <strong>פלאפון: </strong><span>{}</span><br/>'
+    basic_sim = '<strong>סים: </strong><span>{}</span> <strong>מספר ניוד: </strong><span>{}</span><br/>'
     sims = ''.join([basic_sim.format(form.get('sim_num' + str(item)),
                                      form.get('phone_num' + str(item))) for item in range(1, sum_connections(form) + 1)]
                    )
     tran = form.get('track')
     html = open(LOCAL_PATH + '/email_syntax.html', encoding="utf8").read().format(agent, client_name, client_id,
-                                                                                  client_adders, company, tran, sims)
+                                                                                  client_phone, client_adders, company,
+                                                                                  tran, sims)
     return html
 
 
