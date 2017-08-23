@@ -48,7 +48,7 @@
             {% for sales in get_status_sales %}
                 {% for sale in sales %}
                     <div class="list-sales pay-status{{ sale['Transaction'].status }}">
-                        <span><strong>תאריך ושעה: </strong>{{ sale['Transaction'].date_time }}</span>
+                        <span><strong>תאריך ושעה: </strong>{{ sale['Transaction'].date_time.replace(microsecond=0) }}</span>
                         <br/>
                         <span><strong>סוכן: </strong><a
                                 href="/my_sales/{{ sale['Transaction'].agent_id }}">{{ sale['Transaction'].agent_id }}</a></span>
