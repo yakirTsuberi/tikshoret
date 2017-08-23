@@ -43,7 +43,7 @@
         {% for sales in data %}
             {% for sale in sales['data'] %}
                 <div class="list-sales pay-status{{ sale.status }}">
-                    <span><strong>תאריך ושעה: </strong>{{ sale.date_time }}</span><br/>
+                    <span><strong>תאריך ושעה: </strong>{{ sale.date_time.replace(microsecond=0) }}</span><br/>
                     <span><strong>סוכן: </strong>{{ sale[-4] }} {{ sale[-3] }}</span><br/>
                     <span><strong>שם לקוח: </strong>{{ sale[-2] }} {{ sale[-1] }}</span><br/>
                     <span><strong>מס' סים: </strong>{{ sale.sim_num }}</span><br/>
