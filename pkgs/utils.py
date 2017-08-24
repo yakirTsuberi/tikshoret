@@ -96,10 +96,12 @@ def check_credit_card(number, month, year, cvv):
         return False
     if int(month) > 12 or int(month) < 1 or int(year) < 1:
         return False
-    card = pycard.Card(number, int(month), int(year), cvv)
-    if card.brand != 'unknown':
+    card = pycard.Card(number, int(month), int(year), int(cvv))
+    if len(number) > 8:
         return card.is_mod10_valid and card.is_valid
-    return True
+    elif len(number) == 8:
+        return True
+    return False
 
 
 def get_my_sales(group_id, agent_id, date_filter):
