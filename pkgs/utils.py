@@ -97,11 +97,11 @@ def check_credit_card(number, month, year, cvv):
         return False
     if int(month) > 12 or int(month) < 1 or int(year) < 1:
         return False
+    if len(year) == 2:
+        year = '20' + year
     card = pycard.Card(number, int(month), int(year), int(cvv))
     print(card.brand)
     if len(number) >= 8:
-        if len(year) == 2:
-            year = '20' + year
         if card.brand == 'unknown':
             today = datetime.datetime.utcnow()
             credit_date = datetime.datetime(int(year), int(month), 1)
