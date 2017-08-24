@@ -92,6 +92,7 @@ def check_client(_id, first_name, last_name, address, city, phone, email):
 
 
 def check_credit_card(number, month, year, cvv):
+    print(number, month, year, cvv)
     if not number.isdigit() or not month.isdigit() or not year.isdigit() or not cvv.isdigit():
         return False
     if int(month) > 12 or int(month) < 1 or int(year) < 1:
