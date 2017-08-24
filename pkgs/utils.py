@@ -92,7 +92,6 @@ def check_client(_id, first_name, last_name, address, city, phone, email):
 
 
 def check_credit_card(number, month, year, cvv):
-    print(number, month, year, cvv)
     if not number.isdigit() or not month.isdigit() or not year.isdigit() or not cvv.isdigit():
         return False
     if int(month) > 12 or int(month) < 1 or int(year) < 1:
@@ -100,10 +99,10 @@ def check_credit_card(number, month, year, cvv):
     card = pycard.Card(number, int(month), int(year), int(cvv))
     print(card.brand)
     if len(number) >= 8:
+        if len(year) == 2:
+            year = '20' + year
         if card.brand == 'unknown':
             today = datetime.datetime.utcnow()
-            if len(year) == 2:
-                year = '20' + year
             credit_date = datetime.datetime(int(year), int(month), 1)
             return today < credit_date
         return card.is_mod10_valid and card.is_valid
