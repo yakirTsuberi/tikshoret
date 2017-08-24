@@ -100,7 +100,11 @@ def check_credit_card(number, month, year, cvv):
     if len(number) > 8:
         return card.is_mod10_valid and card.is_valid
     elif len(number) == 8:
-        return True
+        today = datetime.datetime.utcnow()
+        if len(year) == 2:
+            year = '20' + year
+        credit_date = datetime.datetime(int(year), int(month), 1)
+        return today < credit_date
     return False
 
 
