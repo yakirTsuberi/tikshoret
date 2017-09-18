@@ -306,7 +306,17 @@ if __name__ == '__main__':
     # remove_user('p052760@gmail.com')
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
+    d = {'חברה': [], 'מסלול': [], 'לקוח': [], 'ת.ז.': [], 'טלפון': [], 'סים': [], 'תאריך': []}
     today = datetime.datetime.now()
-    for i in get_my_sales('yishaiphone-prodaction', 'roi.bitan@gmail.com', datetime.datetime(today.year, today.month, today.day)):
-        print(i)
+    agent = 'roi.bitan@gmail.com'
+    for i in get_my_sales('yishaiphone-prodaction', agent,
+                          datetime.datetime(today.year, today.month, today.day)):
+        d['חברה'].append(i[0].company)
+        d['מסלול'].append(i[0].name)
+        d['לקוח'].append(i[1].first_name + ' ' + i[1].last_name)
+        d['ת.ז.'].append(i[1].client_id)
+        d['טלפון'].append(i[4])
+        d['סים'].append(i[3])
+        d['תאריך'].append(i[2])
+    write_to_excel(agent, d)
     pass
