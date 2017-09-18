@@ -5,6 +5,8 @@ import logging
 import datetime
 
 import os
+from pathlib import Path
+
 from dateutil.relativedelta import relativedelta
 from flask import Flask, request, redirect, url_for, render_template, abort, send_from_directory
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
@@ -623,8 +625,9 @@ def massages():
 
 @app.route('/download_excel/<agent>/<date>')
 def download_excel(agent, date):
-    os.system('python3 pkgs/write_to_excel.py ' + agent + ' ' + date)
-    return send_from_directory(directory='static/excel_tmp', filename=agent + '.xlsx')
+    path = Path.home() / 'FlaskApp' / 'FlaskApp'
+    os.system('python3 ' + str(Path(path / 'pkgs' / 'write_to_excel.py')) + ' ' + agent + ' ' + date)
+    return send_from_directory(directory=str(Path(path / 'static' / 'excel_tmp')), filename=agent + '.xlsx')
 
 
 @app.after_request
