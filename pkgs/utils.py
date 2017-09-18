@@ -114,14 +114,17 @@ def check_credit_card(number, month, year, cvv):
     return False
 
 
-def get_my_sales(group_id, agent_id, date_filter):
+def get_my_sales(group_id, agent_id, date_filter, succsess=False):
     db = DBGroups(group_id)
     data = db.session.query(
         *Transactions.__table__.columns).filter(
         Transactions.agent_id == agent_id).filter(
         and_(Transactions.date_time < date_filter + relativedelta(months=1),
              Transactions.date_time >= date_filter)
-    ).all()
+    )
+    if succsess:
+        data = data.filter(Transactions.status == 1)
+    data = data.all()
     result = [(db.session.query(Tracks.company, Tracks.name, Tracks.price).filter(Tracks.id == item.track).first(),
                db.get_client(item.client_id),
                item.date_time.strftime("%Y-%m-%d %H:%M %p"),
@@ -289,7 +292,7 @@ def write_to_excel(agent, date) -> Path:
     worksheet = workbook.add_worksheet()
     data = {'חברה': [], 'מסלול': [], 'לקוח': [], 'ת.ז.': [], 'טלפון': [], 'סים': [], 'תאריך': []}
     col = 0
-    for i in get_my_sales('yishaiphone-prodaction', agent, date_filter):
+    for i in get_my_sales('yishaiphone-prodaction', agent, date_filter, succsess=True):
         data['חברה'].append(i[0].company)
         data['מסלול'].append(i[0].name)
         data['לקוח'].append(i[1].first_name + ' ' + i[1].last_name)
