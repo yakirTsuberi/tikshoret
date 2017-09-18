@@ -1,3 +1,4 @@
+xlsxwriter
 pyPdf2
 pdfrw
 oauth2client
