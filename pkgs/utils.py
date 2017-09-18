@@ -282,7 +282,7 @@ def write_to_drive(values):
 
 
 def write_to_excel(agent) -> Path:
-    path = str(Path.cwd() / 'excel_tmp' / (agent + '.xlsx'))
+    path = str(Path.cwd().parent / 'static' / (agent + '.xlsx'))
     workbook = xlsxwriter.Workbook(path)
     worksheet = workbook.add_worksheet()
     data = {'חברה': [], 'מסלול': [], 'לקוח': [], 'ת.ז.': [], 'טלפון': [], 'סים': [], 'תאריך': []}
