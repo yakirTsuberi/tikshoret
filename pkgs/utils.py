@@ -288,7 +288,6 @@ def write_to_excel(agent, date) -> Path:
     workbook = xlsxwriter.Workbook(path)
     worksheet = workbook.add_worksheet()
     data = {'חברה': [], 'מסלול': [], 'לקוח': [], 'ת.ז.': [], 'טלפון': [], 'סים': [], 'תאריך': []}
-    row = 0
     col = 0
     for i in get_my_sales('yishaiphone-prodaction', agent, date_filter):
         data['חברה'].append(i[0].company)
@@ -299,6 +298,7 @@ def write_to_excel(agent, date) -> Path:
         data['סים'].append(i[3])
         data['תאריך'].append(i[2])
     for key in data.keys():
+        row = 0
         worksheet.write(row, col, key)
         for item in data[key]:
             row += 1
