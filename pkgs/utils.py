@@ -314,4 +314,4 @@ if __name__ == '__main__':
     # remove_user('p052760@gmail.com')
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
-    pass
+    write_to_excel('roi.bitan@gmail.com')
