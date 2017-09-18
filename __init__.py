@@ -19,7 +19,7 @@ from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
     get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents, write_to_drive, remove_user, \
-    update_all_tracks, set_all_tracks, get_status_sales, get_later_sales, check_credit_card
+    update_all_tracks, set_all_tracks, get_status_sales, get_later_sales, check_credit_card, write_to_excel
 
 login_manager = LoginManager()
 app = Flask(__name__)
@@ -626,7 +626,7 @@ def massages():
 @app.route('/download_excel/<agent>/<date>')
 def download_excel(agent, date):
     path = Path.home() / 'FlaskApp' / 'FlaskApp'
-    os.system('python3 ' + str(Path(path / 'pkgs' / 'write_to_excel.py')) + ' "' + agent + '" "' + date + '"')
+    write_to_excel(agent, date)
     return send_from_directory(directory=str(Path(path / 'static' / 'excel_tmp')), filename=agent + '.xlsx')
 
 
