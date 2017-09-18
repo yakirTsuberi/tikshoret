@@ -307,5 +307,6 @@ if __name__ == '__main__':
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
     today = datetime.datetime.now()
-    print(get_my_sales('yishaiphone-prodaction', 'roi.bitan@gmail.com', datetime.datetime(today.year, today.month, today.day)))
+    for i in get_my_sales('yishaiphone-prodaction', 'roi.bitan@gmail.com', datetime.datetime(today.year, today.month, today.day)):
+        print(i)
     pass
