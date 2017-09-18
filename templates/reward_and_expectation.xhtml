@@ -69,7 +69,7 @@
                 <tbody>
                 {% for k, v in data.items() %}
                     <tr>
-                        <td><a href="/download_excel/{{ [0][1] }}">{{ v[0][0] }}</a></td>
+                        <td><a href="/download_excel/{{ v[0][1] }}">{{ v[0][0] }}</a></td>
                         <td>{{ k }}</td>
                         {% for i in v[1:] %}
                             <td>{{ i[1] }}</td>
