@@ -12,6 +12,7 @@ import googlemaps
 import pycard
 from dateutil.relativedelta import relativedelta
 import yagmail
+import xlsxwriter
 
 from groups_database import DBGroups, Transactions, Tracks, Agents, Clients, and_, or_
 from users_database import DBUsers
@@ -279,10 +280,32 @@ def write_to_drive(values):
     s.write(values)
 
 
+def get_sale_by_agent():
+    pass
+
+
+def write_to_excel(agent, data):
+    workbook = xlsxwriter.Workbook(agent + '.xlsx')
+    worksheet = workbook.add_worksheet()
+
+    row = 0
+    col = 0
+
+    for key in data.keys():
+        row += 1
+        worksheet.write(row, col, key)
+        for item in data[key]:
+            worksheet.write(row, col + 1, item)
+            row += 1
+    workbook.close()
+
+
 # noinspection SpellCheckingInspection
 if __name__ == '__main__':
     # set_up_group('yishaiphone-prodaction', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
     # remove_user('p052760@gmail.com')
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
+    today = datetime.datetime.now()
+    print(get_my_sales('yishaiphone-prodaction', 'roi.bitan@gmail.com', datetime.datetime(today.year, today.month, today.day)))
     pass
