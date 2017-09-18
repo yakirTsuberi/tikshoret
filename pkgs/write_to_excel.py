@@ -1,5 +1,5 @@
 import datetime
-import sys
+import argparse
 from pathlib import Path
 
 import xlsxwriter
@@ -34,5 +34,8 @@ def write_to_excel(agent, date) -> Path:
 
 
 if __name__ == '__main__':
-    args = sys.argv
-    write_to_excel(agent=args[1], date=args[2])
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-a", "--agent", help="fully automatized upgrade")
+    parser.add_argument("-d", "--date", help="fully automatized upgrade")
+    args = parser.parse_args()
+    write_to_excel(agent=args.agent, date=args.date)
