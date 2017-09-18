@@ -54,6 +54,7 @@
             <table id="month" class="table table-striped" style="font-size: 12px;">
                 <thead>
                 <tr>
+                    <th>הורד</th>
                     <th>סוכן</th>
                     <th>סלקום</th>
                     <th>פרטנר</th>
@@ -68,8 +69,9 @@
                 <tbody>
                 {% for k, v in data.items() %}
                     <tr>
+                        <td><a href="v/download_excel/{{ [0][1] }}">{{ v[0][0] }}</a></td>
                         <td>{{ k }}</td>
-                        {% for i in v %}
+                        {% for i in v[1:] %}
                             <td>{{ i[1] }}</td>
                         {% endfor %}
                     </tr>
@@ -82,6 +84,7 @@
             <table id="today" class="table table-striped" style="font-size: 12px;">
                 <thead>
                 <tr>
+                    <th>הורד</th>
                     <th>סוכן</th>
                     <th>סלקום</th>
                     <th>פרטנר</th>
@@ -96,7 +99,6 @@
                 <tbody>
                 {% for k, v in data_today.items() %}
                     <tr>
-                        <td><a href="v/download_excel/{{ [0][1] }}">v[0][0]</a></td>
                         <td>{{ k }}</td>
                         {% for i in v[1:] %}
                             <td>{{ i[1] }}</td>
