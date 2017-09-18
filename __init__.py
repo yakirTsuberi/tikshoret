@@ -620,9 +620,11 @@ def massages():
     return render_template('massages.xhtml', massage=[(k, v) for k, v in enumerate(get_news())])
 
 
-@app.route('/download_excel/<agent>')
-def download_excel(agent):
-    path = write_to_excel(agent)
+@app.route('/download_excel/<agent>/<date>')
+def download_excel(agent, date):
+    date = date.split('-')
+    date_filter = datetime.datetime(int(date[0]), int(date[1]), 1)
+    path = write_to_excel(agent, date_filter)
     return send_from_directory(directory=path.parent, filename=path.name)
 
 
