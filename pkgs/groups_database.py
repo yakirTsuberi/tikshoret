@@ -363,7 +363,7 @@ class DBGroups:
         result = {}
         for _agent in self.get_all_agents():
             list_db = self.session.query(Transactions, Tracks.company, func.count()).join(Tracks).filter(
-                Transactions.agent_id == _agent.email)
+                and_(Transactions.agent_id == _agent.email, Transactions.status == 1))
             if date_filter is not None:
                 list_db = list_db.filter(
                     and_(Transactions.date_time < date_filter + relativedelta(months=1),
