@@ -282,9 +282,9 @@ def write_to_drive(values):
 
 
 def write_to_excel(agent, date) -> Path:
+    path = str(Path.home() / 'FlaskApp' / 'FlaskApp' / 'static' / 'excel_tmp' / (agent + date + '.xlsx'))
     date = date.split('-')
     date_filter = datetime.datetime(int(date[1]), int(date[0]), 1)
-    path = str(Path.home() / 'FlaskApp' / 'FlaskApp' / 'static' / 'excel_tmp' / (agent + '.xlsx'))
     workbook = xlsxwriter.Workbook(path)
     worksheet = workbook.add_worksheet()
     data = {'חברה': [], 'מסלול': [], 'לקוח': [], 'ת.ז.': [], 'טלפון': [], 'סים': [], 'תאריך': []}

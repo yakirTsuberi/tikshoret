@@ -625,9 +625,8 @@ def massages():
 
 @app.route('/download_excel/<agent>/<date>')
 def download_excel(agent, date):
-    path = Path.home() / 'FlaskApp' / 'FlaskApp'
-    write_to_excel(agent, date)
-    return send_from_directory(directory=str(Path(path / 'static' / 'excel_tmp')), filename=agent + '.xlsx')
+    path = write_to_excel(agent, date)
+    return send_from_directory(directory=path.parent, filename=path.name)
 
 
 @app.after_request
