@@ -626,7 +626,7 @@ def massages():
 @app.route('/download_excel/<agent>/<date>')
 def download_excel(agent, date):
     path = write_to_excel(agent, date)
-    return send_from_directory(directory=path.parent, filename=path.name)
+    return send_from_directory(directory=str(path.parent), filename=str(path.name))
 
 
 @app.after_request
