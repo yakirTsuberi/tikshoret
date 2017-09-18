@@ -163,7 +163,7 @@ def sum_connections(forms):
 def remove_user(email):
     user_db = DBUsers()
     user = user_db.get_user(email)
-    agent_db = DBGroups('yishaiphone-prodaction')
+    agent_db = DBGroups(user.group)
 
     agent_db.delete_agent(email)
     user_db.delete_user(email)
@@ -282,7 +282,7 @@ def write_to_drive(values):
 # noinspection SpellCheckingInspection
 if __name__ == '__main__':
     # set_up_group('yishaiphone-prodaction', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
-    remove_user('p052760@gmail.com')
+    # remove_user('p052760@gmail.com')
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
     pass
