@@ -96,8 +96,9 @@
                 <tbody>
                 {% for k, v in data_today.items() %}
                     <tr>
+                        <td><a href="v/download_excel/{{ [0][1] }}">v[0][0]</a></td>
                         <td>{{ k }}</td>
-                        {% for i in v %}
+                        {% for i in v[1:] %}
                             <td>{{ i[1] }}</td>
                         {% endfor %}
                     </tr>

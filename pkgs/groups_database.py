@@ -372,7 +372,7 @@ class DBGroups:
 
             list_db = list_db.group_by(Tracks.company).all()
             if list_db:
-                list_agent = []
+                list_agent = [('הורד', _agent.email)]
                 for company in ['cellcom', 'partner', 'pelephone', '012', 'hot', 'rami_levi', 'golan']:
                     tmp = [(i[1], i[2]) for i in list_db if company == i[1]]
                     list_agent.append(tmp[0] if tmp else (company, 0))

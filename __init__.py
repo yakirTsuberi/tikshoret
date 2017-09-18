@@ -5,7 +5,7 @@ import logging
 import datetime
 
 from dateutil.relativedelta import relativedelta
-from flask import Flask, request, redirect, url_for, render_template, abort
+from flask import Flask, request, redirect, url_for, render_template, abort, send_from_directory
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
 from htmlmin.main import minify
 
@@ -16,7 +16,7 @@ from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
     get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents, write_to_drive, remove_user, \
-    update_all_tracks, set_all_tracks, get_status_sales, get_later_sales, check_credit_card
+    update_all_tracks, set_all_tracks, get_status_sales, get_later_sales, check_credit_card, write_to_excel
 
 login_manager = LoginManager()
 app = Flask(__name__)
@@ -618,6 +618,12 @@ def massages():
     if request.method == 'POST':
         set_news([v for _, v in request.form.items()])
     return render_template('massages.xhtml', massage=[(k, v) for k, v in enumerate(get_news())])
+
+
+@app.route('/download_excel/<agent>')
+def download_excel(agent):
+    path = write_to_excel(agent)
+    return send_from_directory(directory=path.parent, filename=path.name)
 
 
 @app.after_request
