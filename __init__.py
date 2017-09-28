@@ -624,6 +624,7 @@ def massages():
 
 
 @app.route('/download_excel/<agent>/<date>')
+@login_required
 def download_excel(agent, date):
     db = DBGroups(current_user.group)
     if db.get_agent(current_user.email).manager < 1 and agent != current_user.email:
