@@ -16,8 +16,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -44,6 +44,11 @@
         <h3 class="text-center">תאריך: {{ month }}/{{ year }}</h3>
         <div style="color: #333">
             <h4 class="pull-right"><span>סה"כ מכירות: </span><strong>{{ sum_sale }}</strong></h4>
+            <h4 class="center-block">
+                <a href="/download_excel/{{ agent_id }}/{{ month }}-{{ year }}">
+                    <i class="fa fa-file-excel-o" aria-hidden="true" style="color: #1d7044"></i>
+                </a>
+            </h4>
             <h4 class="pull-left"><span>סה"כ בש"ח: </span><strong>{{ sum_price }}</strong></h4>
         </div>
         <div class="btn-group btn-group-justified">
