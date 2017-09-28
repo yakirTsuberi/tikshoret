@@ -625,6 +625,9 @@ def massages():
 
 @app.route('/download_excel/<agent>/<date>')
 def download_excel(agent, date):
+    db = DBGroups(current_user.group)
+    if db.get_agent(current_user.email).manager < 1 and agent != current_user.email:
+        return '', 404
     path = write_to_excel(agent, date)
     return send_from_directory(directory=str(path.parent), filename=str(path.name))
 
