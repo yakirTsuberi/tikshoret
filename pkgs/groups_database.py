@@ -474,8 +474,8 @@ if __name__ == '__main__':
                            client.first_name + ' ' + client.last_name,
                            i.client_id,
                            cc,
-                           i.phone_num,
-                           i.date_time]
+                           str(i.phone_num),
+                           str(i.date_time)]
 
                     writer.writerow(row)
                     print(row)
