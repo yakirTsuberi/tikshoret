@@ -452,7 +452,7 @@ if __name__ == '__main__':
     db = DBGroups('yishaiphone-prodaction')
     import csv
 
-    with open('hot.csv', "wb") as csv_file:
+    with open('hot.csv', "w") as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         for i in db.session.query(Transactions.agent_id, Transactions.track, Transactions.client_id, Transactions.phone_num,
                                   Transactions.date_time).all():
