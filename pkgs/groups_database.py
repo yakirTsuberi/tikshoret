@@ -462,7 +462,7 @@ if __name__ == '__main__':
             row = [agent.first_name + ' ' + agent.last_name,
                    client.first_name + ' ' + client.last_name,
                    i.client_id,
-                   cc.card_number[-4:],
+                   cc,
                    i.phone_num,
                    i.date_time]
             print(row)
