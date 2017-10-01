@@ -452,7 +452,10 @@ if __name__ == '__main__':
                               Transactions.date_time).all():
         track = db.get_track(_id=i.track)
         if track.company == 'hot':
-            if db.session.query(Tags.name).filter(Tags.track_id == i.track).first() == 'כשר':
+            f = db.session.query(Tags.name)
+            print(f)
+            f = f.filter(Tags.track_id == i.track).first()
+            if f.name == 'כשר':
                 agent = db.get_agent(i.agent_id)
                 client = db.get_client(i.client_id)
                 cc = db.get_credit_card(i.client_id)
