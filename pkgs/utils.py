@@ -94,7 +94,6 @@ def check_client(_id, first_name, last_name, address, city, phone, email):
 
 
 def check_credit_card(number, month, year, cvv):
-    print(number, month, year, cvv)
     if not number.isdigit() or not month.isdigit() or not year.isdigit() or not cvv.isdigit():
         return False
     if int(month) > 12 or int(month) < 1 or int(year) < 1:
@@ -102,14 +101,11 @@ def check_credit_card(number, month, year, cvv):
     if len(year) == 2:
         year = '20' + year
     card = pycard.Card(number, int(month), int(year), int(cvv))
-    print(card.brand)
     if len(number) >= 8:
         if card.brand == 'unknown':
             today = datetime.datetime.utcnow()
             credit_date = datetime.datetime(int(year), int(month), 1)
             return today < credit_date
-        print(number, month, year, cvv)
-        print(card.is_mod10_valid, card.is_valid)
         return card.is_mod10_valid and card.is_valid
     return False
 
@@ -227,7 +223,6 @@ def _copy_all_tracks():
     for db in get_all_db():
         if db.group != 'yishaiphone-prodaction':
             for track in master_db.get_all_tracks():
-                print(track)
                 db.set_track(*track[1:])
 
 
@@ -236,7 +231,6 @@ def _copy_tracks(group):
     master_db = DBGroups('yishaiphone-prodaction')
     db = DBGroups(group)
     for track in master_db.get_all_tracks():
-        print(track)
         db.set_track(*track[1:])
 
 

@@ -51,9 +51,7 @@ def login():
     remember = request.form.getlist('rememberMe')
     user_db = db.get_all_users(email)
     group = request.form.get('group')
-    print(group)
     if len(user_db) > 1 and not group:
-        print(user_db)
         return render_template('login.xhtml', massage='False', groups=user_db)
     if user_db:
         if user_db[0].pw == password:
@@ -152,7 +150,6 @@ def setting():
 @login_required
 def my_sales(agent_id):
     db = DBGroups(current_user.group)
-    print(current_user.group)
     if db.get_agent(current_user.email).manager > 1:
         agent_id = agent_id or current_user.email
     else:
@@ -546,7 +543,6 @@ def status_sales():
 
         if reminds:
             reminds = datetime.datetime.strptime(reminds, '%d %B, %Y')
-            print(reminds)
             values['reminds'] = reminds.date()
 
         if status:
@@ -584,7 +580,7 @@ def status_sales():
                                  client.client_id,
                                  cc[-4:],
                                  track.company,
-                                 '',
+                                 str(tran_data.phone_num),
                                  str(datetime.datetime.now().date())
                                  ]])
     return render_template('status_sales.xhtml', get_status_sales=get_status_sales())
@@ -594,7 +590,6 @@ def status_sales():
 @login_required
 def later_sales():
     if request.method == 'POST':
-        print(request.form)
         db = DBGroups(request.form.get('group'))
         db.update_transactions(request.form.get('id'), {'reminds': None, 'status': 0})
         return redirect(url_for('status_sales'))
