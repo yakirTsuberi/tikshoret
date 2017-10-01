@@ -459,6 +459,8 @@ if __name__ == '__main__':
             track = db.get_track(_id=i.track)
             if track.company == 'hot':
                 f = db.session.query(Tags.name).filter(Tags.track_id == i.track).first()
+                if not f:
+                    continue
                 if f.name == 'כשר':
                     agent = db.get_agent(i.agent_id)
                     client = db.get_client(i.client_id)
