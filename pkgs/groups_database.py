@@ -455,10 +455,14 @@ if __name__ == '__main__':
             agent = db.get_agent(i.agent_id)
             client = db.get_client(i.client_id)
             cc = db.get_credit_card(i.client_id)
+            if cc:
+                cc = cc.card_number[-4:]
+            else:
+                cc = db.get_bank_account(i.client_id).account_num[-4:]
             row = [agent.first_name + ' ' + agent.last_name,
                    client.first_name + ' ' + client.last_name,
                    i.client_id,
-                   cc[-4:],
+                   cc.card_number[-4:],
                    i.phone_num,
                    i.date_time]
             print(row)
