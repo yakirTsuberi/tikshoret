@@ -1,6 +1,8 @@
 import os
 
 import logging
+
+import xlsxwriter
 from dateutil.relativedelta import relativedelta
 from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime, Date, and_, or_, func
 from sqlalchemy.orm import sessionmaker
@@ -448,13 +450,14 @@ if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
     # db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
     db = DBGroups('yishaiphone-prodaction')
+    workbook = xlsxwriter.Workbook('hot.xlsx')
+    worksheet = workbook.add_worksheet()
+    r = 0
     for i in db.session.query(Transactions.agent_id, Transactions.track, Transactions.client_id, Transactions.phone_num,
                               Transactions.date_time).all():
         track = db.get_track(_id=i.track)
         if track.company == 'hot':
-            f = db.session.query(Tags.name)
-            print(f)
-            f = f.filter(Tags.track_id == i.track).first()
+            f = db.session.query(Tags.name).filter(Tags.track_id == i.track).first()
             if f.name == 'כשר':
                 agent = db.get_agent(i.agent_id)
                 client = db.get_client(i.client_id)
@@ -463,12 +466,16 @@ if __name__ == '__main__':
                     cc = cc.card_number[-4:]
                 else:
                     cc = db.get_bank_account(i.client_id).account_num[-4:]
+
                 row = [agent.first_name + ' ' + agent.last_name,
                        client.first_name + ' ' + client.last_name,
                        i.client_id,
                        cc,
                        i.phone_num,
                        i.date_time]
+                for c, item in enumerate(row):
+                    worksheet.write(c, r, item)
+                r += 1
                 print(row)
-
+    workbook.close()
     pass
