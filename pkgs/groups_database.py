@@ -457,7 +457,7 @@ if __name__ == '__main__':
             cc = db.get_credit_card(i.client_id)
             row = [agent.first_name + ' ' + agent.last_name,
                    client.first_name + ' ' + client.last_name,
-                   i.clent_id,
+                   i.client_id,
                    cc[-4:],
                    i.phone_num,
                    i.date_time]
