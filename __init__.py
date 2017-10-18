@@ -600,6 +600,7 @@ def later_sales():
 @login_required
 def remove_sale(_id):
     db = DBGroups(current_user.group)
+    print(db.get_agent(current_user.email))
     if db.get_agent(current_user.email).manager > 1:
         remove_full_stack_transaction(current_user.email, _id)
     return redirect(url_for('status_sales'))
