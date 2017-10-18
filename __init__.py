@@ -16,7 +16,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
-    get_news, set_news, remove_full_stack_transaction, send_basic_mail, get_contents, write_to_drive, remove_user, \
+    get_news, set_news, send_basic_mail, get_contents, write_to_drive, remove_user, \
     update_all_tracks, set_all_tracks, get_status_sales, get_later_sales, check_credit_card, write_to_excel
 
 login_manager = LoginManager()
@@ -603,7 +603,6 @@ def remove_sale(_id):
     print(db.get_agent(current_user.email))
     if db.get_agent(current_user.email).manager > 1:
         db.delete_transaction(_id)
-        # remove_full_stack_transaction(current_user.email, _id)
     return redirect(url_for('status_sales'))
 
 
