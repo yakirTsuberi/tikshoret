@@ -38,7 +38,7 @@ class DBUsers:
         os.system('chown -R www-data ' + LOCAL_PATH + '/data')
 
     def set_user(self, email, pw, group):
-        self.session.add(Users(email=email, pw=pw, group=group))
+        self.session.add(Users(email=email.lower(), pw=pw, group=group))
         self.session.commit()
 
     def get_user(self, email=None, _id=None):
