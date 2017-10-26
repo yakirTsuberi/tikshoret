@@ -164,7 +164,7 @@ def sum_connections(forms):
 def remove_user(email):
     user_db = DBUsers()
     user = user_db.get_user(email)
-    agent_db = DBGroups(user.group)
+    agent_db = DBGroups('yishaiphone-prodaction')
 
     user_db.delete_user(email)
     agent_db.delete_agent(email)
