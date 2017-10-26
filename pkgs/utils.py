@@ -308,7 +308,7 @@ def write_to_excel(agent, date) -> Path:
 # noinspection SpellCheckingInspection
 if __name__ == '__main__':
     # set_up_group('yishaiphone-prodaction', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
-    # remove_user('Shmulik792@gmail.com')
+    remove_user('shmulik792@gmail.com')
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
     pass
