@@ -121,7 +121,6 @@ class DBGroups:
             self.session.rollback()
 
     def get_agent(self, email):
-        print(self.session.query(*Agents.__table__.columns).filter(Agents.email == email).all())
         return self.session.query(*Agents.__table__.columns).filter(Agents.email == email).first()
 
     def get_all_agents(self, manager=None):
