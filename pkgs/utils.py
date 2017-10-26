@@ -166,8 +166,8 @@ def remove_user(email):
     user = user_db.get_user(email)
     agent_db = DBGroups(user.group)
 
-    agent_db.delete_agent(email)
     user_db.delete_user(email)
+    agent_db.delete_agent(email)
 
 
 def remove_full_stack_transaction(email, _id=None):
