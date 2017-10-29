@@ -175,8 +175,8 @@ class DBGroups:
         return q.all()
 
     def get_all_tracks_json(self, company=None):
-        return json.dumps(
-            [{k.name: getattr(t, k.name) for k in Tracks.__table__.columns} for t in self.get_all_tracks(company)],
+        return json.dumps({'tracks':
+            [{k.name: getattr(t, k.name) for k in Tracks.__table__.columns} for t in self.get_all_tracks(company)]},
             ensure_ascii=False)
 
     # Tags
