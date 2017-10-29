@@ -610,8 +610,7 @@ def api_list_tracks(company):
     db = DBGroups('yishaiphone-prodaction')
 
     tracks = db.get_all_tracks(company=company)
-    tags = db.get_all_tags()
-    return json.dumps({'tracks': tracks, 'tags': tags})
+    return json.dumps({'tracks': tracks}, ensure_ascii=False)
 
 
 @app.route('/download_excel/<agent>/<date>')
