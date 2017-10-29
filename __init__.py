@@ -5,7 +5,7 @@ import logging
 import datetime
 
 from dateutil.relativedelta import relativedelta
-from flask import Flask, request, redirect, url_for, render_template, abort, send_from_directory
+from flask import Flask, request, redirect, url_for, render_template, abort, send_from_directory, jsonify
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
 from htmlmin.main import minify
 
@@ -608,9 +608,8 @@ def remove_sale(_id):
 @app.route('/api/list_tracks/<company>')
 def api_list_tracks(company):
     db = DBGroups('yishaiphone-prodaction')
-
     tracks = db.get_all_tracks(company=company)
-    return json.dumps({'tracks': tracks}, ensure_ascii=False)
+    return json.dumps({'tracks': [dict(r) for r in tracks]}, ensure_ascii=False)
 
 
 @app.route('/download_excel/<agent>/<date>')
