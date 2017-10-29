@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-
+import json
 import sys
 import logging
 import datetime
-
 
 from dateutil.relativedelta import relativedelta
 from flask import Flask, request, redirect, url_for, render_template, abort, send_from_directory
@@ -606,15 +605,13 @@ def remove_sale(_id):
     return redirect(url_for('status_sales'))
 
 
-@app.route('/massages', methods=['GET', 'POST'])
-@login_required
-def massages():
-    db = DBGroups(current_user.group)
-    if db.get_agent(current_user.email).manager < 2:
-        return redirect(url_for('index'))
-    if request.method == 'POST':
-        set_news([v for _, v in request.form.items()])
-    return render_template('massages.xhtml', massage=[(k, v) for k, v in enumerate(get_news())])
+@app.route('api/list_tracks/<company>')
+def api_list_tracks(company):
+    db = DBGroups('yishaiphone-prodaction')
+
+    tracks = db.get_all_tracks(company=company)
+    tags = db.get_all_tags()
+    return json.dumps({'tracks': tracks, 'tags': tags})
 
 
 @app.route('/download_excel/<agent>/<date>')
