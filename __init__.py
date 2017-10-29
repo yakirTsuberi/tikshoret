@@ -605,7 +605,7 @@ def remove_sale(_id):
     return redirect(url_for('status_sales'))
 
 
-@app.route('api/list_tracks/<company>')
+@app.route('/api/list_tracks/<company>')
 def api_list_tracks(company):
     db = DBGroups('yishaiphone-prodaction')
 
