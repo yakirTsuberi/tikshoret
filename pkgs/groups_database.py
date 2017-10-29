@@ -122,7 +122,7 @@ class DBGroups:
             self.session.rollback()
 
     def get_agent(self, email):
-        return self.session.query(*Agents.__table__.columns).filter(Agents.email == email).first()
+        return self.session.query(*Agents.__table__.columns).filter(Agents.email == email.lower()).first()
 
     def get_all_agents(self, manager=None):
         q = self.session.query(*Agents.__table__.columns)
@@ -132,7 +132,7 @@ class DBGroups:
 
     def update_agent(self, agent_id, values):
         try:
-            self.session.query(Agents).filter(Agents.email == agent_id).update(values)
+            self.session.query(Agents).filter(Agents.email == agent_id.lower()).update(values)
             self.session.commit()
         except Exception as e:
             logging.error(e)

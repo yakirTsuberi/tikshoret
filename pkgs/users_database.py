@@ -43,18 +43,18 @@ class DBUsers:
 
     def get_user(self, email=None, _id=None):
         if email is not None:
-            return self.session.query(*Users.__table__.columns).filter(Users.email == email).first()
+            return self.session.query(*Users.__table__.columns).filter(Users.email == email.lower()).first()
         if _id is not None:
             return self.session.query(*Users.__table__.columns).filter(Users.id == _id).first()
 
     def get_all_users(self, email=None):
         q = self.session.query(*Users.__table__.columns)
         if email is not None:
-            q = q.filter(Users.email == email)
+            q = q.filter(Users.email == email.lower())
         return q.all()
 
     def set_tmp(self, unique_id, email, group):
-        self.session.add(Tmp(unique_id=unique_id, email=email, group=group))
+        self.session.add(Tmp(unique_id=unique_id, email=email.lower(), group=group))
         self.session.commit()
 
     def get_tmp(self, unique_id):
@@ -65,11 +65,11 @@ class DBUsers:
         self.session.commit()
 
     def update_password(self, email, pw):
-        self.session.query(Users).filter(Users.email == email).update({'pw': pw})
+        self.session.query(Users).filter(Users.email == email.lower()).update({'pw': pw})
         self.session.commit()
 
     def delete_user(self, email):
-        self.session.query(Users).filter(Users.email == email).delete()
+        self.session.query(Users).filter(Users.email == email.lower()).delete()
         self.session.commit()
 
 
