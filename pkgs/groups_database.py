@@ -1,3 +1,4 @@
+import json
 import os
 
 import logging
@@ -172,6 +173,11 @@ class DBGroups:
         if company is not None:
             q = q.filter(Tracks.company == company)
         return q.all()
+
+    def get_all_tracks_json(self, company=None):
+        return json.dumps(
+            [{k.name: getattr(t, k.name) for k in Tracks.__table__.columns} for t in self.get_all_tracks(company)],
+            ensure_ascii=False)
 
     # Tags
     def set_tag(self, name, track_id):

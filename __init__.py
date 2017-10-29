@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import json
 import sys
 import logging
 import datetime
 
 from dateutil.relativedelta import relativedelta
-from flask import Flask, request, redirect, url_for, render_template, abort, send_from_directory, jsonify
+from flask import Flask, request, redirect, url_for, render_template, abort, send_from_directory
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
 from htmlmin.main import minify
 
@@ -15,7 +14,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
-    get_news, set_news, send_basic_mail, get_contents, write_to_drive, remove_user, \
+    get_news, send_basic_mail, get_contents, write_to_drive, remove_user, \
     update_all_tracks, set_all_tracks, get_status_sales, get_later_sales, check_credit_card, write_to_excel
 
 login_manager = LoginManager()
@@ -608,8 +607,7 @@ def remove_sale(_id):
 @app.route('/api/list_tracks/<company>')
 def api_list_tracks(company):
     db = DBGroups('yishaiphone-prodaction')
-    tracks = db.get_all_tracks(company=company)
-    return json.dumps({'tracks': [dict(r) for r in tracks]}, ensure_ascii=False)
+    return db.get_all_tracks_json(company=company)
 
 
 @app.route('/download_excel/<agent>/<date>')
