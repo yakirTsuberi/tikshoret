@@ -282,7 +282,7 @@ def set_company(company):
                 client_id=client_id,
                 credit_card_id=credit_card_id,
                 bank_account_id=account_num_id,
-                date_time=datetime.datetime.utcnow() + datetime.timedelta(hours=3),
+                date_time=datetime.datetime.utcnow() + datetime.timedelta(hours=2),
                 sim_num=request.form.get('sim_num' + str(i)),
                 phone_num=request.form.get('phone_num' + str(i)),
                 status=0,
