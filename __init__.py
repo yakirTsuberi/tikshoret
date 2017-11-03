@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 import sys
 import logging
 import datetime
@@ -604,12 +605,6 @@ def remove_sale(_id):
     return redirect(url_for('status_sales'))
 
 
-@app.route('/api/list_tracks/<company>')
-def api_list_tracks(company):
-    db = DBGroups('yishaiphone-prodaction')
-    return db.get_all_tracks_json(company=company)
-
-
 @app.route('/download_excel/<agent>/<date>')
 @login_required
 def download_excel(agent, date):
@@ -618,6 +613,25 @@ def download_excel(agent, date):
         return '', 404
     path = write_to_excel(agent, date)
     return send_from_directory(directory=str(path.parent), filename=str(path.name))
+
+
+@app.route('/api/list_tracks/<company>')
+def api_list_tracks(company):
+    db = DBGroups('yishaiphone-prodaction')
+    return db.get_all_tracks_json(company=company)
+
+
+@app.route('/api/auth/login', methods=['POST'])
+def api_authentication():
+    if request.method == 'POST':
+        db = DBUsers()
+        email = request.form.get('email')
+        password = request.form.get('pw')
+        user = db.get_user(email)
+        if user:
+            if user.pw == password:
+                return json.dumps({'auth': True})
+    return json.dumps({'auth': False})
 
 
 @app.after_request
