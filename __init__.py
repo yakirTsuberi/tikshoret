@@ -574,14 +574,14 @@ def status_sales():
                         cc = c.account_num
 
                 track = db.get_track(_id=tran_data.track)
-                write_to_drive([[agent.first_name + ' ' + agent.last_name,
-                                 client.first_name + ' ' + client.last_name,
-                                 client.client_id,
-                                 cc[-4:],
-                                 track.company,
-                                 str(tran_data.phone_num),
-                                 str(datetime.datetime.now().date())
-                                 ]])
+                # write_to_drive([[agent.first_name + ' ' + agent.last_name,
+                #                  client.first_name + ' ' + client.last_name,
+                #                  client.client_id,
+                #                  cc[-4:],
+                #                  track.company,
+                #                  str(tran_data.phone_num),
+                #                  str(datetime.datetime.now().date())
+                #                  ]])
     return render_template('status_sales.xhtml', get_status_sales=get_status_sales())
 
 
