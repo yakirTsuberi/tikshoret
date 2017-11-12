@@ -171,10 +171,9 @@ def my_sales(agent_id):
         month = date_filter.month
         year = date_filter.year
     sales = get_my_sales(current_user.group, agent_id, date_filter)
-    sum_price = sum([i[0].price for i in sales])
     return render_template('my_sales.xhtml', sales=sales,
                            month=month, year=year,
-                           sum_sale=len(sales), sum_price=sum_price,
+                           sum_sale=len(sales),
                            agent_id=agent_id)
 
 
