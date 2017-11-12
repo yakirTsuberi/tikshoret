@@ -311,9 +311,9 @@ def report_month(date_s, date_e, company):
     q = q.filter(and_(Transactions.date_time >= date_s, Transactions.date_time < date_e))
     for i in q.all():
         t = db.session.query(Tracks.name).filter(Tracks.id == i.track).first()
-        print(t.name)
+        print(t.company)
         if t:
-            if t.name == company:
+            if t.company == company:
                 print(i)
 
 
