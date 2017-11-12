@@ -315,7 +315,7 @@ def report_month(date_s, date_e, company):
         if t:
             if t.company == company:
                 agent = db.get_agent(i.agent_id)
-                data['סוכן'].append(agent.fierst_name + ' ' + agent.last_name)
+                data['סוכן'].append(agent.first_name + ' ' + agent.last_name)
                 client = db.get_client(i.client_id)
                 data['לקוח'].append(client.first_name + ' ' + client.last_name)
                 data['ת.ז.'].append(client.client_id)
