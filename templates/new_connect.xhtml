@@ -44,7 +44,8 @@
         <form action="/new_connect/{{ company }}" method="post">
             <div class="form-group">
                 <label>בחר מסלול</label>
-                <select name="track" class="form-control" autofocus="autofocus">
+                <select name="track" class="form-control {{ 'form-error' if 'track' in errors }}" autofocus="autofocus">
+                    <option></option>
                     {% for track in tracks %}
                         {% if track_specific == track.name %}
                             <option selected="selected" value="{{ track.name }}">{{ track.name }}</option>

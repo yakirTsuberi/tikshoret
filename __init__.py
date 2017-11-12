@@ -244,6 +244,8 @@ def set_company(company):
         if not all([credit_card, month, year, cvv]) and not all([account_num, brunch, bank]):
             errors.append('credit_card')
             errors.append('bank')
+        if not track:
+            errors.append('track')
 
         if errors:
             tmp = {k: v for k, v in request.form.items() if k != 'credit_card'}
