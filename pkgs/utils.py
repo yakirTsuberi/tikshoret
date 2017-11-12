@@ -309,12 +309,29 @@ def report_month(date_s, date_e, company):
     db = DBGroups('yishaiphone-prodaction')
     q = db.session.query(*Transactions.__table__.columns)
     q = q.filter(and_(Transactions.date_time >= date_s, Transactions.date_time < date_e))
+    data = {'סוכן': [], 'לקוח': [], 'ת.ז.': [], 'טלפון': [], 'תאריך': []}
     for i in q.all():
         t = db.session.query(Tracks.company).filter(Tracks.id == i.track).first()
-        print(t.company)
         if t:
             if t.company == company:
-                print(i)
+                agent = db.get_agent(i.agent_id)
+                data['סוכן'].append(agent.fierst_name + ' ' + agent.last_name)
+                client = db.get_client(i.client_id)
+                data['לקוח'].append(client.first_name + ' ' + client.last_name)
+                data['ת.ז.'].append(client.client_id)
+                data['טלפון'].append(i.phone_num)
+                data['תאריך'].append(i.date_time)
+    workbook = xlsxwriter.Workbook('hot.xlsx')
+    worksheet = workbook.add_worksheet()
+    col = 0
+    for key in data.keys():
+        row = 0
+        worksheet.write(row, col, key)
+        for item in data[key]:
+            row += 1
+            worksheet.write(row, col, item)
+        col += 1
+    workbook.close()
 
 
 # noinspection SpellCheckingInspection
