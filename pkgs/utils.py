@@ -320,7 +320,7 @@ def report_month(date_s, date_e, company):
                 data['לקוח'].append(client.first_name + ' ' + client.last_name)
                 data['ת.ז.'].append(client.client_id)
                 data['טלפון'].append(i.phone_num)
-                data['תאריך'].append(i.date_time)
+                data['תאריך'].append(str(i.date_time))
     workbook = xlsxwriter.Workbook('hot.xlsx')
     worksheet = workbook.add_worksheet()
     col = 0
