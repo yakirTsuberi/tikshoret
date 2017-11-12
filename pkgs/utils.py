@@ -305,13 +305,26 @@ def write_to_excel(agent, date) -> Path:
     return Path(path)
 
 
+def report_month(date_s, date_e, company):
+    db = DBGroups('yishaiphone-prodaction')
+    q = db.session.query(*Transactions.__table__.columns)
+    q = q.filter(and_(Transactions.date_time > date_s, Transactions.date_time < date_e))
+    for i in q.all():
+        t = db.session.query(Tracks.name).filter(Tracks.id == i.track).first()
+        if t.name == company:
+            print(i)
+
+
 # noinspection SpellCheckingInspection
 if __name__ == '__main__':
     # set_up_group('yishaiphone-prodaction', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
-    remove_user('tzppi238@walla.com')
-    remove_user('a0527117718@gamil.com')
+    # remove_user('tzppi238@walla.com')
+    # remove_user('a0527117718@gamil.com')
 
 
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
+    report_month(datetime.datetime(2017, 6, 1),
+                 datetime.datetime(2017, 9, 1),
+                 'hot')
     pass
