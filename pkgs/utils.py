@@ -309,9 +309,9 @@ def report_month(date_s, date_e, company):
     db = DBGroups('yishaiphone-prodaction')
     q = db.session.query(*Transactions.__table__.columns)
     q = q.filter(and_(Transactions.date_time >= date_s, Transactions.date_time < date_e))
-    data = {'סוכן': [], 'לקוח': [], 'ת.ז.': [], 'טלפון': [], 'תאריך': []}
+    data = {'סוכן': [], 'לקוח': [], 'ת.ז.': [], 'טלפון': [], 'תאריך': [], 'מסלול': []}
     for i in q.all():
-        t = db.session.query(Tracks.company).filter(Tracks.id == i.track).first()
+        t = db.session.query(Tracks.company, Tracks.name).filter(Tracks.id == i.track).first()
         if t:
             if t.company == company:
                 agent = db.get_agent(i.agent_id)
@@ -321,6 +321,7 @@ def report_month(date_s, date_e, company):
                 data['ת.ז.'].append(client.client_id)
                 data['טלפון'].append(i.phone_num)
                 data['תאריך'].append(str(i.date_time))
+                data['מסלול'].append(t.name)
     workbook = xlsxwriter.Workbook('hot.xlsx')
     worksheet = workbook.add_worksheet()
     col = 0
