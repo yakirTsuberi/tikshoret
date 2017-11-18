@@ -345,6 +345,6 @@ if __name__ == '__main__':
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
     report_month(datetime.datetime(2017, 6, 1),
-                 datetime.datetime(2017, 9, 1),
+                 datetime.datetime(2017, 10, 1),
                  'hot')
     pass
