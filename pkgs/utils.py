@@ -326,7 +326,7 @@ def report_month(date_s, date_e, company):
                 data['מסלול'].append(t.name)
                 if company == 'hot':
                     data['סים'].append(i.sim_num)
-    workbook = xlsxwriter.Workbook(company + '.xlsx')
+    workbook = xlsxwriter.Workbook(company + str(date_e.month) + '.xlsx')
     worksheet = workbook.add_worksheet()
     col = 0
     for key in data.keys():
