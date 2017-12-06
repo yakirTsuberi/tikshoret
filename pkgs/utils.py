@@ -310,6 +310,8 @@ def report_month(date_s, date_e, company):
     q = db.session.query(*Transactions.__table__.columns)
     q = q.filter(and_(Transactions.date_time >= date_s, Transactions.date_time < date_e))
     data = {'סוכן': [], 'לקוח': [], 'ת.ז.': [], 'טלפון': [], 'תאריך': [], 'מסלול': []}
+    if company == 'hot':
+        data['סים'] = []
     for i in q.all():
         t = db.session.query(Tracks.company, Tracks.name).filter(Tracks.id == i.track).first()
         if t:
@@ -322,6 +324,8 @@ def report_month(date_s, date_e, company):
                 data['טלפון'].append(i.phone_num)
                 data['תאריך'].append(str(i.date_time))
                 data['מסלול'].append(t.name)
+                if company == 'hot':
+                    data['סים'].append(i.sim_num)
     workbook = xlsxwriter.Workbook(company + '.xlsx')
     worksheet = workbook.add_worksheet()
     col = 0
@@ -345,7 +349,7 @@ if __name__ == '__main__':
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
     for i in SIM_START_WITH.keys():
-        report_month(datetime.datetime(2017, 9, 1),
-                     datetime.datetime(2017, 10, 1),
+        report_month(datetime.datetime(2017, 10, 1),
+                     datetime.datetime(2017, 11, 1),
                      i)
     pass
