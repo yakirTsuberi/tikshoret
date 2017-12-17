@@ -15,7 +15,7 @@ sys.path.insert(0, "/var/www/FlaskApp/FlaskApp/pkgs/")
 from .pkgs.groups_database import DBGroups
 from .pkgs.users_database import DBUsers
 from .pkgs.utils import check_client, get_my_sales, send_mail, sum_connections, SIM_START_WITH, \
-    get_news, send_basic_mail, get_contents, write_to_drive, remove_user, \
+    get_news, send_basic_mail, get_contents, remove_user, \
     update_all_tracks, set_all_tracks, get_status_sales, get_later_sales, check_credit_card, write_to_excel
 
 login_manager = LoginManager()
@@ -549,13 +549,14 @@ def status_sales():
             values['status'] = int(status)
 
         db = DBGroups(group)
+        tran_data_before = db.get_transaction(tran_id)
         db.update_transactions(tran_id, values)
 
         tran_data = db.get_transaction(tran_id)
 
         client = db.get_client(tran_data.client_id)
 
-        if status:
+        if status and status != tran_data_before.status:
             contents = 'מצב חיבור לקו: {} -{}-,\n הערה: {}'.format(tran_data.phone_num,
                                                                    'הצליח' if int(status) == 1 else 'נכשל',
                                                                    comment)
@@ -563,26 +564,6 @@ def status_sales():
 
             send_basic_mail(to=tran_data.agent_id, subject=subject,
                             contents=contents)
-            # if int(status) == 1:
-            #     agent = db.get_agent(tran_data.agent_id)
-            #     c = db.get_credit_card(client.client_id)
-            #     cc = '      '
-            #     if c:
-            #         cc = c.card_number
-            #     else:
-            #         c = db.get_bank_account(client.client_id)
-            #         if c:
-            #             cc = c.account_num
-            #
-            # track = db.get_track(_id=tran_data.track)
-            # write_to_drive([[agent.first_name + ' ' + agent.last_name,
-            #                  client.first_name + ' ' + client.last_name,
-            #                  client.client_id,
-            #                  cc[-4:],
-            #                  track.company,
-            #                  str(tran_data.phone_num),
-            #                  str(datetime.datetime.now().date())
-            #                  ]])
     return render_template('status_sales.xhtml', get_status_sales=get_status_sales())
 
 
