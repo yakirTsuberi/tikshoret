@@ -7,6 +7,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from flask import Flask, request, redirect, url_for, render_template, abort, send_from_directory
 from flask_login import LoginManager, login_user, logout_user, UserMixin, current_user, login_required
+from raven.contrib.flask import Sentry
 from htmlmin.main import minify
 
 logging.basicConfig(stream=sys.stderr)
@@ -21,6 +22,7 @@ from .pkgs.utils import check_client, get_my_sales, send_mail, sum_connections, 
 login_manager = LoginManager()
 app = Flask(__name__)
 login_manager.init_app(app)
+sentry = Sentry(app, dsn='https://a2a0beebf40e407fabbad479c250ee53:3c6a713f30c5433fab1d2accc05ce765@sentry.io/263698')
 
 
 class User(UserMixin):
