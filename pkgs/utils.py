@@ -351,4 +351,5 @@ if __name__ == '__main__':
     #     report_month(datetime.datetime(2017, 11, 1),
     #                  datetime.datetime(2017, 12, 1),
     #                  i)
+    remove_full_stack_transaction('h0547880191@gmail.com', DBGroups('yishaiphone-prodaction').get_all_transactions(client_id='027895309')[0].id)
     pass
