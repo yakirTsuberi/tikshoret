@@ -456,9 +456,4 @@ if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
     # db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
     # db = DBGroups('yishaiphone-prodaction')
-    s = DBGroups('yishaiphone-prodaction').session
-    for i in s.query(Transactions.id, Transactions.client_id, Transactions.status).filter(
-            Transactions.client_id == '028083970').all():
-        print(i)
-        s.query(Transactions).filter(Transactions.id == i.id).update({'status': 0})
-    s.commit()
+    pass
