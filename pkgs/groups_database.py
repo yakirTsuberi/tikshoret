@@ -176,8 +176,9 @@ class DBGroups:
 
     def get_all_tracks_json(self, company=None):
         return json.dumps({'tracks':
-            [{k.name: getattr(t, k.name) for k in Tracks.__table__.columns} for t in self.get_all_tracks(company)]},
-            ensure_ascii=False)
+                               [{k.name: getattr(t, k.name) for k in Tracks.__table__.columns} for t in
+                                self.get_all_tracks(company)]},
+                          ensure_ascii=False)
 
     # Tags
     def set_tag(self, name, track_id):
@@ -455,4 +456,5 @@ if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
     # db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
     # db = DBGroups('yishaiphone-prodaction')
-    pass
+    s = DBGroups('yishaiphone-prodaction').session
+    s.query(Transactions).filter(Transactions.client_id == '028083970').update({'status': 0})
