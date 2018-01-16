@@ -457,5 +457,5 @@ if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
     # db = DBGroups('yishaiphone-prodaction')
     s = DBGroups('yishaiphone-prodaction').session
-    for i in s.query(Transactions.client_id).filter(Transactions.client_id == '028083970').all():
+    for i in s.query(Transactions.client_id, Transactions.status).filter(Transactions.client_id == '028083970').all():
         print(i)
