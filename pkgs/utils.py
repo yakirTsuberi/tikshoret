@@ -317,13 +317,14 @@ def report_month(date_s, date_e, company):
         if t:
             if t.company == company:
                 agent = db.get_agent(i.agent_id)
-                data['סוכן'].append(agent.first_name + ' ' + agent.last_name)
-                client = db.get_client(i.client_id)
-                data['לקוח'].append(client.first_name + ' ' + client.last_name)
-                data['ת.ז.'].append(client.client_id)
-                data['טלפון'].append(i.phone_num)
-                data['תאריך'].append(str(i.date_time))
-                data['מסלול'].append(t.name)
+                if agent:
+                    data['סוכן'].append(agent.first_name + ' ' + agent.last_name)
+                    client = db.get_client(i.client_id)
+                    data['לקוח'].append(client.first_name + ' ' + client.last_name)
+                    data['ת.ז.'].append(client.client_id)
+                    data['טלפון'].append(i.phone_num)
+                    data['תאריך'].append(str(i.date_time))
+                    data['מסלול'].append(t.name)
                 if company == 'hot':
                     data['סים'].append(i.sim_num)
     workbook = xlsxwriter.Workbook(company + str(date_e.month) + '.xlsx')
