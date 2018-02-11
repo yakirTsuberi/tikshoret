@@ -348,7 +348,7 @@ if __name__ == '__main__':
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
     for i in SIM_START_WITH.keys():
-        report_month(datetime.datetime(2017, 10, 1),
+        report_month(datetime.datetime(2017, 12, 1),
                      datetime.datetime(2018, 1, 1),
                      i)
     pass
