@@ -309,6 +309,7 @@ def report_month(date_s, date_e, company):
     db = DBGroups('yishaiphone-prodaction')
     q = db.session.query(*Transactions.__table__.columns)
     q = q.filter(and_(Transactions.date_time >= date_s, Transactions.date_time < date_e))
+    q = q.filter(Transactions.status == 1)
     data = {'סוכן': [], 'לקוח': [], 'ת.ז.': [], 'טלפון': [], 'תאריך': [], 'מסלול': []}
     if company == 'hot':
         data['סים'] = []
@@ -349,7 +350,8 @@ if __name__ == '__main__':
     # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
     # _copy_all_tracks()
     for i in SIM_START_WITH.keys():
-        report_month(datetime.datetime(2017, 10, 1),
-                     datetime.datetime(2017, 11, 1),
-                     i)
+        for d in range(10, 12):
+            report_month(datetime.datetime(2017, d, 1),
+                         datetime.datetime(2017, d + 1, 1),
+                         i)
     pass
