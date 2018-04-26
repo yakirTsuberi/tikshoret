@@ -127,7 +127,8 @@ def get_my_sales(group_id, agent_id, date_filter, succsess=False):
                item.sim_num,
                item.phone_num,
                item.status,
-               item.comment) for item in data]
+               item.comment,
+               item.id) for item in data]
     return result
 
 
@@ -347,10 +348,10 @@ if __name__ == '__main__':
     # remove_user('tzppi238@walla.com')
     # remove_user('a0527117718@gamil.com')
 
-    # remove_full_stack_transaction('yakir@ravtech.co.il', '0')
+    remove_full_stack_transaction('h0547880191@gmail.com', '0')
     # _copy_all_tracks()
-    for i in SIM_START_WITH.keys():
-        report_month(datetime.datetime(2018, 1, 1),
-                     datetime.datetime(2018, 2, 1),
-                     i)
-    pass
+    # for i in SIM_START_WITH.keys():
+    #     report_month(datetime.datetime(2018, 1, 1),
+    #                  datetime.datetime(2018, 2, 1),
+    #                  i)
+    # pass
