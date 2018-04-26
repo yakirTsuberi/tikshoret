@@ -447,13 +447,18 @@ class DBGroups:
         column_type = column.type.compile(self.engine.dialect)
         self.engine.execute('ALTER TABLE {} ADD COLUMN {} {}'.format(table.__tablename__, column_name, column_type))
 
+    def get_transactions_by_client_id(self, _id):
+        return self.session.query(*Transactions.__table__.columns).filter(Transactions.client_id == _id).all()
 
-# noinspection SpellCheckingInspection
+    # noinspection SpellCheckingInspection
+
+
 if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('test').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
     # db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
-    # db = DBGroups('yishaiphone-prodaction')
+    db = DBGroups('yishaiphone-prodaction')
+    print(db.get_transactions_by_client_id('037278835'))
     pass
