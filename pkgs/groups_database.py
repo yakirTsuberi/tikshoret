@@ -460,5 +460,5 @@ if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
     # db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
     db = DBGroups('yishaiphone-prodaction')
-    print(db.get_transactions_by_client_id('037278835'))
-    pass
+    for track in db.get_all_tracks():
+        print(track)
