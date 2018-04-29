@@ -462,7 +462,7 @@ if __name__ == '__main__':
     import datetime
 
     db = DBGroups('yishaiphone-prodaction')
-    for track in db.get_all_tracks('hot'):
+    for track in db.get_all_tracks('012'):
         print(track)
         q = db.session.query(Transactions).filter(and_(Transactions.track == track.id,
                                                        Transactions.date_time < datetime.datetime(2018, 4, 27),
