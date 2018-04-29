@@ -459,6 +459,14 @@ if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
     # db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
     # db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
+    import datetime
+
     db = DBGroups('yishaiphone-prodaction')
     for track in db.get_all_tracks('hot'):
         print(track)
+        q = db.session.query(Transactions).filter(and_(Transactions.track == track.id,
+                                                       Transactions.date_time < datetime.datetime(2018, 4, 27),
+                                                       Transactions.date_time > datetime.datetime(2018, 4, 26)))
+        print(q.all())
+        q.update({'status': 0})
+    db.session.commit()
