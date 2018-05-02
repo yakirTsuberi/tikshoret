@@ -454,10 +454,10 @@ class DBGroups:
 
 
 if __name__ == '__main__':
-# db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
-# db = DBGroups('test').add_column(Transactions, Column('reminds', Date))
-# db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
-# db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
-# db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
+    # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
+    # db = DBGroups('test').add_column(Transactions, Column('reminds', Date))
+    # db = DBGroups('yishaiphone-prodaction').add_column(Transactions, Column('reminds', Date))
+    # db = DBGroups('yishaiphone-prodaction').delete_agent('yair.p.86@hotnail.com')
+    # db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
 
-# db = DBGroups('yishaiphone-prodaction')
+    db = DBGroups('yishaiphone-prodaction')
