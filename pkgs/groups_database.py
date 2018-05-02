@@ -462,5 +462,5 @@ if __name__ == '__main__':
     import datetime
 
     db = DBGroups('yishaiphone-prodaction')
-    t = db.get_transaction(3373)
-    print(db.update_transactions(3373, {'date_time': t.date_time.replace(day=30, month=4)}))
+    t = db.get_transaction(3374)
+    print(db.update_transactions(3374, {'date_time': t.date_time.replace(day=30, month=4)}))
