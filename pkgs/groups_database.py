@@ -461,3 +461,5 @@ if __name__ == '__main__':
     # db = DBGroups('yishaiphone-prodaction').get_reward(datetime.datetime(2017, 8, 1))
 
     db = DBGroups('yishaiphone-prodaction')
+    t = db.get_transaction(3391)
+    print(db.update_transactions(3391, {'date_time': t.date_time.replace(day=29, month=4)}))
