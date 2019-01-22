@@ -275,8 +275,7 @@ def set_company(company):
                                               {'card_number': credit_card, 'month': month, 'year': year, 'cvv': cvv})
                 credit_card_id = db.get_credit_card(client_id).id
             if account_num:
-                if not db.get_bank_account(client_id):
-                    db.set_bank_account(client_id, account_num, brunch, bank)
+                db.set_bank_account(client_id, account_num, brunch, bank)
                 account_num_id = db.get_bank_account(client_id).id
             db.set_transactions(
                 agent_id=current_user.email,
