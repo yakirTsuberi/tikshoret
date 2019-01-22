@@ -240,12 +240,12 @@ def set_company(company):
         if all([credit_card, month, year, cvv]):
             if '*' in credit_card:
                 credit_card = db.get_secure_credit_card(credit_card[-4:])
-            checked_credit_card = check_credit_card(credit_card, month, year, cvv)
-            if not checked_credit_card:
-                errors.append('credit_card')
-        if not all([credit_card, month, year, cvv]) and not all([account_num, brunch, bank]):
-            errors.append('credit_card')
-            errors.append('bank')
+            # checked_credit_card = check_credit_card(credit_card, month, year, cvv)
+            # if not checked_credit_card:
+            #     errors.append('credit_card')
+        # if not all([credit_card, month, year, cvv]) and not all([account_num, brunch, bank]):
+        #     errors.append('credit_card')
+        #     errors.append('bank')
         if not track:
             errors.append('track')
 
