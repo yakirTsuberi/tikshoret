@@ -342,16 +342,50 @@ def report_month(date_s, date_e, company):
     workbook.close()
 
 
+def report(date_s, date_e):
+    db = DBGroups('yishaiphone-prodaction')
+    q = db.session.query(*Transactions.__table__.columns)
+    q = q.filter(and_(Transactions.date_time >= date_s, Transactions.date_time < date_e))
+    q = q.filter(Transactions.status == 1)
+    data = {'סוכן': [], 'לקוח': [], 'ת.ז.': [], 'טלפון': [], 'תאריך': [], 'מסלול': [], 'סים': []}
+
+    for i in q.all():
+        t = db.session.query(Tracks.company, Tracks.name).filter(Tracks.id == i.track).first()
+        if t:
+            agent = db.get_agent(i.agent_id)
+            if agent:
+                data['סוכן'].append(agent.first_name + ' ' + agent.last_name)
+            client = db.get_client(i.client_id)
+            data['לקוח'].append(client.first_name + ' ' + client.last_name)
+            data['ת.ז.'].append(client.client_id)
+            data['טלפון'].append(i.phone_num)
+            data['תאריך'].append(str(i.date_time))
+            data['מסלול'].append(t.name)
+            data['סים'].append(i.sim_num)
+    workbook = xlsxwriter.Workbook(str(date_e.month) + '.xlsx')
+    worksheet = workbook.add_worksheet()
+    col = 0
+    for key in data.keys():
+        row = 0
+        worksheet.write(row, col, key)
+        for item in data[key]:
+            row += 1
+            worksheet.write(row, col, item)
+        col += 1
+    workbook.close()
+
+
 # noinspection SpellCheckingInspection
 if __name__ == '__main__':
     # set_up_group('yishaiphone-prodaction', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
     # remove_user('tzppi238@walla.com')
     # remove_user('a0527117718@gamil.com')
 
-    remove_full_stack_transaction('oshery121212@gmail.com', 3029)
+    # remove_full_stack_transaction('oshery121212@gmail.com', 3029)
     # _copy_all_tracks()
     # for i in SIM_START_WITH.keys():
     #     report_month(datetime.datetime(2018, 1, 1),
     #                  datetime.datetime(2018, 2, 1),
     #                  i)
     # pass
+    report(datetime.datetime(2017, 8, 1), datetime.datetime(2019, 2, 1))
