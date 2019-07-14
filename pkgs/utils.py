@@ -375,6 +375,14 @@ def report(date_s, date_e):
     workbook.close()
 
 
+def all_data():
+    db = DBGroups('yishaiphone-prodaction')
+    print(*Tracks.__table__.columns)
+    q = db.session.query(*Tracks.__table__.columns)
+    for i in q.all():
+        print(i)
+
+
 # noinspection SpellCheckingInspection
 if __name__ == '__main__':
     # set_up_group('yishaiphone-prodaction', 'yakir@ravtech.co.il', '71682547', 'יקיר', 'צוברי')
@@ -388,4 +396,5 @@ if __name__ == '__main__':
     #                  datetime.datetime(2018, 2, 1),
     #                  i)
     # pass
-    report(datetime.datetime(2017, 8, 1), datetime.datetime(2019, 2, 1))
+    # report(datetime.datetime(2017, 8, 1), datetime.datetime(2019, 2, 1))
+    all_data()
