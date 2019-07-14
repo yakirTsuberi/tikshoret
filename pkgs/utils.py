@@ -377,7 +377,7 @@ def report(date_s, date_e):
 
 def all_data():
     db = DBGroups('yishaiphone-prodaction')
-    print(*Tracks.__table__.columns)
+    print([x for x in *Tracks.__table__.columns])
     q = db.session.query(*Tracks.__table__.columns)
     for i in q.all():
         print(i)
