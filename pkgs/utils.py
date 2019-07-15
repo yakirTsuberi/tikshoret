@@ -397,4 +397,5 @@ if __name__ == '__main__':
     #                  i)
     # pass
     # report(datetime.datetime(2017, 8, 1), datetime.datetime(2019, 2, 1))
-    all_data()
+    for i in get_status_sales():
+        print(i)
